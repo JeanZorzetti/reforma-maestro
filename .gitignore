@@ -45,7 +45,6 @@ next-env.d.ts
 # Secrets
 reforma-maestro-mcp-b6cbb65a8a5e.json
 *.json
-!vercel.json
 !package.json
 !tsconfig.json
 
