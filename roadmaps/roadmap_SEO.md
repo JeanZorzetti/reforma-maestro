@@ -23,9 +23,9 @@ Essencial para o Google descobrir suas páginas.
 
 ### 1. Otimização para AI Overviews (SGE)
 A IA busca respostas diretas e confiáveis.
-- [ ] **Respostas Diretas:** O primeiro parágrafo de cada H2 deve responder à pergunta do título em 2-3 frases (estilo "Definição de Dicionário").
-- [ ] **Estrutura de Perguntas:** Usar H2 e H3 como perguntas reais dos usuários (ex: "Quanto custa reformar um banheiro?" em vez de "Custos de Banheiro").
-- [ ] **Listas e Tabelas:** A IA adora dados estruturados. Use bullet points e tabelas comparativas sempre que possível.
+- [x] **Respostas Diretas:** O primeiro parágrafo de cada H2 deve responder à pergunta do título em 2-3 frases (estilo "Definição de Dicionário").
+- [x] **Estrutura de Perguntas:** Usar H2 e H3 como perguntas reais dos usuários (ex: "Quanto custa reformar um banheiro?" em vez de "Custos de Banheiro").
+- [x] **Listas e Tabelas:** A IA adora dados estruturados. Use bullet points e tabelas comparativas sempre que possível.
 
 ### 2. E-E-A-T: O Fator "Experiência"
 O "E" extra de Experiência é o diferencial contra conteúdo gerado por IA genérica.

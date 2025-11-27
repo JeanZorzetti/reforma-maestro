@@ -18,29 +18,27 @@ export const blogPosts: BlogPost[] = [
     author: "Reforma Maestro",
     category: "Tutorial",
     content: `
-      <h2>O perigo do "caderninho"</h2>
-      <p>Você decidiu reformar. Comprou o primeiro saco de cimento, contratou o pedreiro e anotou tudo num caderno ou no bloco de notas do celular. Parece controle, certo? <strong>Errado.</strong></p>
-      <p>O problema do caderno é que ele não soma, não projeta e não avisa quando o dinheiro vai acabar. Ele é apenas um cemitério de números mortos.</p>
+      <h2>Por que anotar gastos no caderno é perigoso?</h2>
+      <p>Anotar gastos no caderno é perigoso porque ele não soma automaticamente, não projeta gastos futuros e não avisa quando o orçamento vai estourar. É um método passivo que apenas registra o prejuízo depois que ele já aconteceu.</p>
       
       <p>Para entender melhor onde o dinheiro some, leia nosso artigo sobre <a href="/blog/custos-invisiveis-obra">custos invisíveis na obra</a>.</p>
 
-      <h2>Previsto vs. Realizado: O segredo das construtoras</h2>
-      <p>Grandes construtoras não quebram porque elas usam um conceito simples: <strong>Previsto vs. Realizado</strong>.</p>
+      <h2>Qual a diferença entre Orçamento Previsto e Realizado?</h2>
+      <p>A diferença é simples: <strong>Previsto</strong> é quanto você planeja gastar antes de comprar, e <strong>Realizado</strong> é quanto efetivamente saiu do seu bolso. O segredo das construtoras é monitorar essa variação item a item para evitar surpresas.</p>
       
       <img src="/images/tabela-sinapi-excel.png" alt="Tabela SINAPI Excel para Orçamento de Obras" class="w-full rounded-lg my-6 shadow-md" />
 
       <ul>
-        <li><strong>Previsto:</strong> Quanto você PLANEJA gastar (ex: R$ 500,00 em tinta).</li>
-        <li><strong>Realizado:</strong> Quanto você REALMENTE gastou (ex: R$ 580,00 porque a tinta subiu).</li>
+        <li><strong>Previsto:</strong> Estimativa inicial (ex: R$ 500,00 em tinta).</li>
+        <li><strong>Realizado:</strong> Custo final com nota fiscal (ex: R$ 580,00).</li>
       </ul>
-      <p>Se você não monitora essa diferença item a item, no final da obra o rombo pode chegar a 30% ou 40% do valor total.</p>
+      <p>Se você não monitora essa diferença, no final da obra o rombo pode chegar a 30% ou 40% do valor total.</p>
 
-      <h2>Planilha Grátis vs. Sistema Especializado</h2>
-      <p>Existem milhares de planilhas grátis na internet. Elas quebram um galho, mas geralmente:</p>
+      <h2>Planilha grátis ou sistema pago: qual o melhor?</h2>
+      <p>Depende do seu conhecimento. Planilhas grátis geralmente exigem conhecimento avançado em Excel para não quebrar fórmulas. Sistemas pagos ou planilhas profissionais (como o Reforma Maestro) já vêm prontos, com relatórios automáticos e focados na usabilidade.</p>
       <ul>
-        <li>São complexas demais (feitas para engenheiros).</li>
-        <li>Ou simples demais (não têm relatórios).</li>
-        <li>Exigem que você saiba fórmulas de Excel.</li>
+        <li><strong>Planilhas Grátis:</strong> Complexas ou simplistas demais.</li>
+        <li><strong>Sistemas Profissionais:</strong> Prontos para uso e seguros.</li>
       </ul>
       
       <p>Veja nosso comparativo completo entre <a href="/blog/melhores-apps-gestao-obra-2024">Apps de Gestão vs Google Sheets</a>.</p>
@@ -82,13 +80,13 @@ export const blogPosts: BlogPost[] = [
     author: "Reforma Maestro",
     category: "Alerta",
     content: `
-      <h2>O mistério do dinheiro que some</h2>
-      <p>Você orçou o piso, a tinta e a mão de obra. A conta fechou. Mas no meio da obra, o dinheiro acabou. O que aconteceu?</p>
-      <p>Você foi vítima dos <strong>Custos Invisíveis</strong>.</p>
+      <h2>Por que o dinheiro da obra acaba antes do fim?</h2>
+      <p>O dinheiro acaba antes do fim principalmente por causa dos <strong>Custos Invisíveis</strong>: pequenos gastos não planejados (fretes, lanches, desperdício) que, somados, podem representar até 20% do valor total da obra e não estavam no orçamento inicial.</p>
       
       <p>Isso destrói qualquer <a href="/blog/como-fazer-fluxo-caixa-reforma">fluxo de caixa de reforma</a> bem planejado.</p>
 
-      <h2>Os 5 Vilões do Orçamento</h2>
+      <h2>Quais são os principais custos invisíveis de uma obra?</h2>
+      <p>Os 5 principais vilões são: Fretes, Caçambas, Alimentação da equipe, Desperdício de material e Pequenas ferramentas (miudezas).</p>
       
       <img src="/images/custos-invisiveis-obra.png" alt="Gráfico de custos invisíveis em obras" class="w-full rounded-lg my-6 shadow-md" />
 
@@ -107,8 +105,8 @@ export const blogPosts: BlogPost[] = [
       <h3>5. Pequenos Materiais (A "Miudeza")</h3>
       <p>Lixas, pregos, fitas, discos de corte. Parecem baratos, mas juntos formam uma bola de neve.</p>
 
-      <h2>Como evitar?</h2>
-      <p>A única forma é registrar TUDO. Até o parafuso de R$ 0,50.</p>
+      <h2>Como evitar custos extras na obra?</h2>
+      <p>A única forma é registrar TUDO. Até o parafuso de R$ 0,50. Tenha uma categoria de "Imprevistos" ou "Outros" no seu orçamento.</p>
       
       <p>Aprenda também <a href="/blog/guia-dono-obra-negociacao">como negociar com lojas</a> para reduzir esses impactos.</p>
 
@@ -146,21 +144,20 @@ export const blogPosts: BlogPost[] = [
     author: "Reforma Maestro",
     category: "Ferramentas",
     content: `
-      <h2>Softwares de Engenharia vs. Realidade</h2>
-      <p>Se você pesquisar "gestão de obras", vai encontrar softwares incríveis como Sienge ou Obra Prima. Eles são ótimos... para construtoras que gerenciam prédios inteiros.</p>
-      <p>Para quem está reformando um apartamento, eles são:</p>
+      <h2>Softwares de engenharia servem para pequenas reformas?</h2>
+      <p>Geralmente não. Softwares como Sienge ou Obra Prima são focados em grandes construtoras, sendo caros e complexos demais para quem vai reformar apenas um apartamento ou casa.</p>
       <ul>
         <li>Caros (mensalidades altas).</li>
         <li>Difíceis de configurar.</li>
-        <li>Cheios de funções inúteis para você.</li>
+        <li>Cheios de funções inúteis para o proprietário comum.</li>
       </ul>
 
-      <h2>O bom e velho Caderno?</h2>
-      <p>Já falamos dele. É arriscado, não faz backup e não calcula nada. Perdeu o caderno, perdeu o controle.</p>
+      <h2>Vale a pena usar caderno para gerenciar obra?</h2>
+      <p>Não vale a pena. O caderno é arriscado (pode ser perdido), não faz backup, não calcula totais automaticamente e dificulta a visualização do saldo disponível.</p>
       <p>Veja como fazer um <a href="/blog/como-fazer-fluxo-caixa-reforma">fluxo de caixa simples</a> sem depender de papel.</p>
 
       <h2>Por que o Google Sheets é o Campeão?</h2>
-      <p>O Google Sheets (planilhas do Google) é a ferramenta perfeita para o dono de obra moderna:</p>
+      <p>O Google Sheets é a melhor ferramenta para donos de obra porque une a flexibilidade do Excel com a mobilidade da nuvem, sendo gratuito e acessível pelo celular.</p>
       
       <img src="/images/google-sheets-obra.png" alt="Google Sheets para gestão de obras no celular" class="w-full rounded-lg my-6 shadow-md" />
 
@@ -211,26 +208,23 @@ export const blogPosts: BlogPost[] = [
     author: "Reforma Maestro",
     category: "Guia",
     content: `
-      <h2>Informação é Poder</h2>
-      <p>Imagine chegar na loja de materiais e o vendedor te oferecer um "desconto imperdível" se você levar o piso da marca X. Você aceita?</p>
-      <p>Se você não sabe quanto tem no orçamento para piso, você está negociando no escuro. Pode estar gastando o dinheiro da tinta sem saber.</p>
+      <h2>Por que ter dados ajuda na negociação?</h2>
+      <p>Ter dados ajuda na negociação porque transforma "achismos" em fatos. Quando você sabe exatamente quanto tem no orçamento para cada item, você negocia com segurança e evita gastar o dinheiro da tinta comprando um piso mais caro.</p>
       
       <p>Ter os dados na mão é melhor que qualquer <a href="/blog/melhores-apps-gestao-obra-2024">app de gestão</a> complicado.</p>
 
-      <h2>Como negociar com Pedreiros</h2>
-      <p>Pedreiros experientes sabem quando o cliente está perdido. Se você demonstra controle, o jogo muda.</p>
+      <h2>Como negociar com Pedreiros?</h2>
+      <p>Para negociar com pedreiros, demonstre organização. Estabeleça pagamentos atrelados a entregas (ex: "Pagamento X ao terminar o reboco") e registre tudo. Isso mostra profissionalismo e evita pedidos de adiantamento sem justificativa.</p>
       
       <img src="/images/negociacao-obra.png" alt="Negociando materiais de construção com dados" class="w-full rounded-lg my-6 shadow-md" />
 
-      <p>Ao fechar etapas (ex: "Pagamento de R$ 2.000,00 ao terminar o reboco"), registre isso. Se ele pedir adiantamento, mostre no sistema: "Olha, pelo nosso cronograma financeiro, o pagamento é só dia X".</p>
+      <p>Ao fechar etapas, registre isso. Se ele pedir adiantamento, mostre no sistema: "Olha, pelo nosso cronograma financeiro, o pagamento é só dia X".</p>
       <p>Isso tira o lado pessoal e coloca a "culpa" no sistema.</p>
       
       <p>Evite cair na armadilha dos <a href="/blog/custos-invisiveis-obra">custos extras não planejados</a>.</p>
 
-      <h2>Como negociar com Lojas</h2>
-      <p>Com o Gestor Financeiro, você sabe exatamente quanto pode gastar em cada categoria. Se a torneira custa R$ 500,00 e seu saldo para metais é R$ 400,00, você tem um argumento sólido:</p>
-      <p><em>"Amigo, meu teto para essa torneira é R$ 400,00. Se fizer por esse preço eu levo, senão estouro meu caixa."</em></p>
-      <p>Vendedores respeitam limites claros.</p>
+      <h2>Como negociar com Lojas de Material?</h2>
+      <p>Use o teto de gastos da categoria como argumento. Se a torneira custa R$ 500,00 e seu saldo é R$ 400,00, seja transparente: "Meu limite é R$ 400,00. Se chegar nesse preço, levo agora". Vendedores respeitam limites claros.</p>
 
       <p><strong>Chegue na loja com o orçamento na palma da mão. Baixe a <a href="/#pricing">Planilha de Orçamento de Obra</a> no seu celular agora.</strong></p>
     `,
