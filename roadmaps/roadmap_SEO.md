@@ -46,8 +46,8 @@ A IA busca respostas diretas e confiáveis.
 
 ### 2. E-E-A-T: O Fator "Experiência"
 O "E" extra de Experiência é o diferencial contra conteúdo gerado por IA genérica.
-- [ ] **Autoridade do Autor:** Criar páginas de perfil para os autores (Maria Eduarda) com biografia, foto real e links para LinkedIn/Redes Sociais.
-- [ ] **"Eu fiz isso":** Usar primeira pessoa. Relatar casos reais, erros cometidos e lições aprendidas na obra.
+- [x] **Autoridade do Autor:** Criar páginas de perfil para os autores (Maria Eduarda) com biografia, foto real e links para LinkedIn/Redes Sociais.
+- [x] **"Eu fiz isso":** Usar primeira pessoa. Relatar casos reais, erros cometidos e lições aprendidas na obra.
 - [ ] **Mídia Original:** Usar fotos reais da planilha em uso, prints de negociações (anonimizados), vídeos curtos de uso. Evitar banco de imagens genérico.
 
 ### 3. Topic Clusters (Autoridade Tópica)

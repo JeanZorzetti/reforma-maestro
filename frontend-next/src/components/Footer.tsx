@@ -5,8 +5,11 @@ export const Footer = () => {
     <footer className="bg-foreground/5 py-8 border-t border-border">
       <div className="container mx-auto px-4">
         <div className="text-center text-muted-foreground text-sm">
-          <div className="mb-4">
-            <Link href="/blog" className="text-primary hover:underline font-medium">
+          <div className="flex gap-6 text-sm text-muted-foreground">
+            <Link href="/sobre" className="hover:text-primary transition-colors">
+              Sobre
+            </Link>
+            <Link href="/blog" className="hover:text-primary transition-colors">
               Visite nosso Blog
             </Link>
           </div>
