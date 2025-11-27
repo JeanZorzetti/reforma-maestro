@@ -13,6 +13,7 @@ O Google substituiu o FID pelo INP. A responsividade visual é crítica.
 - [ ] **Meta:** INP < 200ms.
 - [x] **Ação:** Otimizar scripts JS pesados (Third-party scripts).
 - [x] **Ação:** Usar `next/script` com estratégia `afterInteractive` ou `lazyOnload` (já iniciado com GTM).
+- [x] **Ação:** Otimizar LCP (Largest Contentful Paint) com `fetchPriority="high"` na imagem Hero.
 - [ ] **Ferramenta:** Validar no PageSpeed Insights e Search Console.
 
 ### 2. Sitemap & Robots.txt (Indexação Básica)
