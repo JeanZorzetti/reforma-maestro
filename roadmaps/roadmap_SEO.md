@@ -15,7 +15,12 @@ O Google substituiu o FID pelo INP. A responsividade visual é crítica.
 - [ ] **Ação:** Usar `next/script` com estratégia `afterInteractive` ou `lazyOnload` (já iniciado com GTM).
 - [ ] **Ferramenta:** Validar no PageSpeed Insights e Search Console.
 
-### 2. Schema Markup (A Linguagem da IA)
+### 2. Sitemap & Robots.txt (Indexação Básica)
+Essencial para o Google descobrir suas páginas.
+- [x] **Sitemap:** Criado dinamicamente em `/sitemap.xml`.
+- [x] **Robots.txt:** Configurado para permitir indexação e apontar para o sitemap.
+
+### 3. Schema Markup (A Linguagem da IA)
 Para aparecer nos "AI Overviews" (resumos de IA no topo da busca), o Google precisa entender seu conteúdo estruturado.
 - [ ] **FAQ Schema:** Já implementado no Blog. Manter em todos os artigos informativos.
 - [ ] **Product Schema:** Adicionar na página de vendas (Preço, Avaliações, Disponibilidade).
