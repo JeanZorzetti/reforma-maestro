@@ -3,11 +3,16 @@ import { blogPosts } from "@/data/blog-posts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 
 export default function BlogPage() {
     return (
         <div className="container mx-auto px-4 py-12">
+            <Button asChild variant="ghost" className="mb-8 pl-0 hover:bg-transparent hover:text-primary">
+                <Link href="/#pricing" className="flex items-center gap-2">
+                    <ArrowLeft className="w-4 h-4" /> Voltar para Oferta
+                </Link>
+            </Button>
             <div className="text-center mb-12">
                 <h1 className="text-4xl font-bold mb-4 text-foreground">Blog do Reforma Maestro</h1>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
