@@ -6,9 +6,9 @@ import { ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface BlogPostPageProps {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
 }
 
 // Generate static params for all blog posts
@@ -18,8 +18,9 @@ export async function generateStaticParams() {
     }));
 }
 
-export default function BlogPostPage({ params }: BlogPostPageProps) {
-    const post = blogPosts.find((p) => p.slug === params.slug);
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+    const { slug } = await params;
+    const post = blogPosts.find((p) => p.slug === slug);
 
     if (!post) {
         notFound();
