@@ -47,7 +47,7 @@ Não escreva posts aleatórios. Domine um tópico.
 
 ## 🔮 Fase 4: Futuro (2026+)
 - **Busca por Vídeo:** Criar vídeos curtos (Shorts/Reels) respondendo às dúvidas do blog e embedar nos artigos. O Google indexa falas de vídeos.
-- **Busca Visual:** Otimizar Alt-Text não só para acessibilidade, mas descrevendo o contexto da imagem para o Google Lens.
+- [x] **Busca Visual:** Otimizar Alt-Text não só para acessibilidade, mas descrevendo o contexto da imagem para o Google Lens.
 
 ---
 

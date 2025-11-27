@@ -26,7 +26,7 @@ export const blogPosts: BlogPost[] = [
       <h2>Qual a diferença entre Orçamento Previsto e Realizado?</h2>
       <p>A diferença é simples: <strong>Previsto</strong> é quanto você planeja gastar antes de comprar, e <strong>Realizado</strong> é quanto efetivamente saiu do seu bolso. O segredo das construtoras é monitorar essa variação item a item para evitar surpresas.</p>
       
-      <img src="/images/tabela-sinapi-excel.png" alt="Tabela SINAPI Excel para Orçamento de Obras" class="w-full rounded-lg my-6 shadow-md" />
+      <img src="/images/tabela-sinapi-excel.png" alt="Planilha de Orçamento de Obras aberta no Excel mostrando colunas de Previsto vs Realizado e tabela SINAPI" class="w-full rounded-lg my-6 shadow-md" />
 
       <ul>
         <li><strong>Previsto:</strong> Estimativa inicial (ex: R$ 500,00 em tinta).</li>
@@ -88,7 +88,7 @@ export const blogPosts: BlogPost[] = [
       <h2>Quais são os principais custos invisíveis de uma obra?</h2>
       <p>Os 5 principais vilões são: Fretes, Caçambas, Alimentação da equipe, Desperdício de material e Pequenas ferramentas (miudezas).</p>
       
-      <img src="/images/custos-invisiveis-obra.png" alt="Gráfico de custos invisíveis em obras" class="w-full rounded-lg my-6 shadow-md" />
+      <img src="/images/custos-invisiveis-obra.png" alt="Gráfico de pizza mostrando a porcentagem de custos invisíveis como fretes e desperdícios em uma obra" class="w-full rounded-lg my-6 shadow-md" />
 
       <h3>1. Fretes e Carretos</h3>
       <p>Você orça o piso, mas esquece os R$ 150,00 de entrega. Multiplique isso por 10 entregas e lá se vão R$ 1.500,00.</p>
@@ -159,7 +159,7 @@ export const blogPosts: BlogPost[] = [
       <h2>Por que o Google Sheets é o Campeão?</h2>
       <p>O Google Sheets é a melhor ferramenta para donos de obra porque une a flexibilidade do Excel com a mobilidade da nuvem, sendo gratuito e acessível pelo celular.</p>
       
-      <img src="/images/google-sheets-obra.png" alt="Google Sheets para gestão de obras no celular" class="w-full rounded-lg my-6 shadow-md" />
+      <img src="/images/google-sheets-obra.png" alt="Pessoa usando Google Sheets no celular em uma obra para controlar gastos" class="w-full rounded-lg my-6 shadow-md" />
 
       <ul>
         <li><strong>Nuvem:</strong> Acesse do celular na loja de material ou no computador em casa.</li>
@@ -216,7 +216,7 @@ export const blogPosts: BlogPost[] = [
       <h2>Como negociar com Pedreiros?</h2>
       <p>Para negociar com pedreiros, demonstre organização. Estabeleça pagamentos atrelados a entregas (ex: "Pagamento X ao terminar o reboco") e registre tudo. Isso mostra profissionalismo e evita pedidos de adiantamento sem justificativa.</p>
       
-      <img src="/images/negociacao-obra.png" alt="Negociando materiais de construção com dados" class="w-full rounded-lg my-6 shadow-md" />
+      <img src="/images/negociacao-obra.png" alt="Mãos apertando em acordo de negociação com calculadora e planilha ao fundo" class="w-full rounded-lg my-6 shadow-md" />
 
       <p>Ao fechar etapas, registre isso. Se ele pedir adiantamento, mostre no sistema: "Olha, pelo nosso cronograma financeiro, o pagamento é só dia X".</p>
       <p>Isso tira o lado pessoal e coloca a "culpa" no sistema.</p>
