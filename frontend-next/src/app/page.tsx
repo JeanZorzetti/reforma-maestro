@@ -1,7 +1,7 @@
 import { Hero } from "@/components/Hero";
 import { Problem } from "@/components/Problem";
 import { Solution } from "@/components/Solution";
-import { Features } from "@/components/Features";
+import { Authority } from "@/components/Authority";
 import { FAQ } from "@/components/FAQ";
 import { Reviews } from "@/components/Reviews";
 import { Pricing } from "@/components/Pricing";
@@ -13,7 +13,7 @@ export default function Home() {
       <Hero />
       <Problem />
       <Solution />
-      <Features />
+      <Authority />
       <Reviews />
       <FAQ />
       <Pricing />
