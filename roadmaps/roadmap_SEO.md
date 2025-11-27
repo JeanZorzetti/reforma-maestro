@@ -22,15 +22,15 @@ Essencial para o Google descobrir suas páginas.
 
 ### 3. Schema Markup (A Linguagem da IA)
 Para aparecer nos "AI Overviews" (resumos de IA no topo da busca), o Google precisa entender seu conteúdo estruturado.
-- [ ] **FAQ Schema:** Já implementado no Blog. Manter em todos os artigos informativos.
-- [ ] **Product Schema:** Adicionar na página de vendas (Preço, Avaliações, Disponibilidade).
-- [ ] **Organization/LocalBusiness:** Adicionar no rodapé ou página "Sobre".
+- [x] **FAQ Schema:** Já implementado no Blog. Manter em todos os artigos informativos.
+- [x] **Product Schema:** Adicionar na página de vendas (Preço, Avaliações, Disponibilidade).
+- [x] **Organization/LocalBusiness:** Adicionar no rodapé ou página "Sobre".
 - [ ] **Article Schema:** Garantir que `author`, `datePublished` e `headline` estejam corretos.
 
 ### 3. Mobile-First "Real"
 Não basta ser responsivo. A indexação é 100% mobile.
-- [ ] **Check:** Botões clicáveis sem zoom (tamanho mín. 44x44px).
-- [ ] **Check:** Fontes legíveis (mín. 16px).
+- [x] **Check:** Botões clicáveis sem zoom (tamanho mín. 44x44px).
+- [x] **Check:** Fontes legíveis (mín. 16px).
 - [ ] **Check:** Navegação simplificada (Hambúrguer menu funcional).
 
 ---
