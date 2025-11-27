@@ -11,8 +11,8 @@ Este roadmap foi desenhado com base nas últimas atualizações do Google (Late 
 ### 1. Core Web Vitals & INP (Interaction to Next Paint)
 O Google substituiu o FID pelo INP. A responsividade visual é crítica.
 - [ ] **Meta:** INP < 200ms.
-- [ ] **Ação:** Otimizar scripts JS pesados (Third-party scripts).
-- [ ] **Ação:** Usar `next/script` com estratégia `afterInteractive` ou `lazyOnload` (já iniciado com GTM).
+- [x] **Ação:** Otimizar scripts JS pesados (Third-party scripts).
+- [x] **Ação:** Usar `next/script` com estratégia `afterInteractive` ou `lazyOnload` (já iniciado com GTM).
 - [ ] **Ferramenta:** Validar no PageSpeed Insights e Search Console.
 
 ### 2. Sitemap & Robots.txt (Indexação Básica)
