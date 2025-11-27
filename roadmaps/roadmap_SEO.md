@@ -70,8 +70,8 @@ Não escreva posts aleatórios. Domine um tópico.
 - [ ] **Imprensa/Mídia:** Tentar citações em portais de notícias sobre construção/reforma.
 
 ### 2. Prova Social Verificável
-- [ ] **Depoimentos:** Adicionar prints reais de conversas (WhatsApp/Email) elogiando a planilha (com permissão).
-- [ ] **Reviews:** Se possível, implementar sistema de estrelas/avaliações na página de produto (Schema de Review).
+- [x] **Depoimentos:** Adicionar prints reais de conversas (WhatsApp/Email) elogiando a planilha (com permissão).
+- [x] **Reviews:** Se possível, implementar sistema de estrelas/avaliações na página de produto (Schema de Review).
 
 ---
 

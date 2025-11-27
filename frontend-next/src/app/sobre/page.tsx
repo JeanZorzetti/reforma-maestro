@@ -16,7 +16,7 @@ export default function AboutPage() {
         "mainEntity": {
             "@type": "Person",
             "name": "Maria Eduarda Zorzetti",
-            "jobTitle": "Engenheira Mecânica e Pesquisadora de Mercado",
+            "jobTitle": "Pesquisadora de Mercado",
             "description": "Criadora do Reforma Maestro, especialista em gestão de processos e controle financeiro de obras residenciais.",
             "url": "https://financeiro-obras.roilabs.com.br/sobre",
             "sameAs": [
@@ -31,25 +31,13 @@ export default function AboutPage() {
                 {JSON.stringify(profileSchema)}
             </Script>
 
-            {/* Hero Section */}
-            <section className="py-20 bg-primary/5">
-                <div className="container mx-auto px-4 text-center">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
-                        Quem está por trás do <span className="text-primary">Reforma Maestro</span>?
-                    </h1>
-                    <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                        Uma solução criada por quem sentiu na pele a dor de uma obra sem controle.
-                    </p>
-                </div>
-            </section>
-
             {/* Story Section */}
             <section className="py-16">
                 <div className="container mx-auto px-4 max-w-4xl">
                     <div className="prose prose-lg dark:prose-invert mx-auto">
                         <h2>A História Real</h2>
                         <p>
-                            Tudo começou quando decidi reformar meu próprio apartamento. Como <strong>Engenheira Mecânica</strong>, eu achava que o controle seria fácil. Abri o Excel, criei algumas colunas e comecei.
+                            Tudo começou quando decidi reformar meu próprio apartamento. Como <strong>Pesquisadora de Mercado</strong>, eu achava que o controle seria fácil. Abri o Excel, criei algumas colunas e comecei.
                         </p>
                         <p>
                             Mas a realidade da obra atropelou minha teoria.
@@ -88,7 +76,7 @@ export default function AboutPage() {
                         </div>
                         <div>
                             <h3 className="text-2xl font-bold mb-2">Maria Eduarda Zorzetti</h3>
-                            <p className="text-primary font-medium mb-4">Engenheira Mecânica & Pesquisadora</p>
+                            <p className="text-primary font-medium mb-4">Pesquisadora de Mercado & Especialista em Processos</p>
                             <p className="text-muted-foreground mb-4">
                                 "Minha missão é democratizar a gestão profissional de obras. Acredito que ninguém deveria falir ou se endividar para realizar o sonho da casa própria."
                             </p>

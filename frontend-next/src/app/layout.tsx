@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title: "Planilha de Orçamento de Obras e Reformas em Excel - Atualizada 2025",
   description: "Controle total de materiais, mão de obra e cronograma em uma planilha profissional. Não deixe sua obra custar o dobro do planejado. Dashboard automático, cronograma financeiro e integração SINAPI.",
   keywords: "planilha orçamento obras, planilha reforma excel, orçamento construção civil, planilha custos obra, cronograma obra excel, controle financeiro obra",
-  authors: [{ name: "Maria Eduarda Zorzetti - Engenheira Mecânica" }],
+  authors: [{ name: "Maria Eduarda Zorzetti" }],
   openGraph: {
     title: "Planilha de Orçamento de Obras e Reformas em Excel - Atualizada 2025",
     description: "Controle total de materiais, mão de obra e cronograma. Dashboard automático e cronograma financeiro profissional.",
