@@ -6,6 +6,7 @@ import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { SchemaMarkup } from "@/components/schema-markup";
+import { Header } from "@/components/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -63,6 +64,7 @@ export default function RootLayout({
         </Script>
         <Providers>
           <SchemaMarkup />
+          <Header />
           {children}
           <Toaster />
           <Sonner />

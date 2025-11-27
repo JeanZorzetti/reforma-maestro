@@ -18,23 +18,6 @@ O Google substituiu o FID pelo INP. A responsividade visual é crítica.
 ### 2. Sitemap & Robots.txt (Indexação Básica)
 Essencial para o Google descobrir suas páginas.
 - [x] **Sitemap:** Criado dinamicamente em `/sitemap.xml`.
-- [x] **Robots.txt:** Configurado para permitir indexação e apontar para o sitemap.
-
-### 3. Schema Markup (A Linguagem da IA)
-Para aparecer nos "AI Overviews" (resumos de IA no topo da busca), o Google precisa entender seu conteúdo estruturado.
-- [x] **FAQ Schema:** Já implementado no Blog. Manter em todos os artigos informativos.
-- [x] **Product Schema:** Adicionar na página de vendas (Preço, Avaliações, Disponibilidade).
-- [x] **Organization/LocalBusiness:** Adicionar no rodapé ou página "Sobre".
-- [ ] **Article Schema:** Garantir que `author`, `datePublished` e `headline` estejam corretos.
-
-### 3. Mobile-First "Real"
-Não basta ser responsivo. A indexação é 100% mobile.
-- [x] **Check:** Botões clicáveis sem zoom (tamanho mín. 44x44px).
-- [x] **Check:** Fontes legíveis (mín. 16px).
-- [ ] **Check:** Navegação simplificada (Hambúrguer menu funcional).
-
----
-
 ## 🧠 Fase 2: Estratégia de Conteúdo (Otimização para IA)
 *Como ser citado pelo Google Gemini e ChatGPT.*
 

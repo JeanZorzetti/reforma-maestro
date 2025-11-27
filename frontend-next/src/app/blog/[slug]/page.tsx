@@ -57,6 +57,34 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <div dangerouslySetInnerHTML={{ __html: post.faqSchema }} />
             )}
 
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Article",
+                        "headline": post.title,
+                        "description": post.excerpt,
+                        "image": [`https://financeiro-obras.roilabs.com.br/images/${post.slug}.png`], // Assuming images follow slug naming
+                        "datePublished": post.date,
+                        "dateModified": post.date,
+                        "author": {
+                            "@type": "Person",
+                            "name": post.author,
+                            "url": "https://financeiro-obras.roilabs.com.br/sobre"
+                        },
+                        "publisher": {
+                            "@type": "Organization",
+                            "name": "Reforma Maestro",
+                            "logo": {
+                                "@type": "ImageObject",
+                                "url": "https://financeiro-obras.roilabs.com.br/images/logo.png"
+                            }
+                        }
+                    })
+                }}
+            />
+
             <div className="bg-muted/50 p-8 rounded-lg border border-border text-center mt-12">
                 <h3 className="text-2xl font-bold mb-4">Gostou das dicas?</h3>
                 <p className="text-muted-foreground mb-6">
