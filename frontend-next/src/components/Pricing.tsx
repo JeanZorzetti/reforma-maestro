@@ -4,10 +4,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle2, Shield, Clock } from "lucide-react";
 
 export const Pricing = () => {
-  const handlePurchase = () => {
-    // This would connect to your payment processor
-    alert("Redirecionando para o checkout...");
-  };
+
 
   return (
     <section id="pricing" className="py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5">
@@ -61,9 +58,11 @@ export const Pricing = () => {
                 variant="cta"
                 size="xl"
                 className="w-full mb-6"
-                onClick={handlePurchase}
+                asChild
               >
-                GARANTIR MEU SISTEMA AGORA
+                <a href="https://pay.kiwify.com.br/r85uk0S" target="_blank" rel="noopener noreferrer">
+                  GARANTIR MEU SISTEMA AGORA
+                </a>
               </Button>
 
               {/* Guarantee */}
