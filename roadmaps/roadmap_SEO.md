@@ -35,19 +35,6 @@ O "E" extra de Experiência é o diferencial contra conteúdo gerado por IA gen�
 
 ### 3. Topic Clusters (Autoridade Tópica)
 Não escreva posts aleatórios. Domine um tópico.
-- [ ] **Pilar:** "Gestão Financeira de Obras" (Página de Vendas/Home).
-- [ ] **Satélites:** Artigos que linkam para o pilar:
-    - "Como negociar com pedreiros"
-    - "Planilha vs App"
-    - "Custos invisíveis"
-    - "Cronograma físico-financeiro"
-- [ ] **Linkagem:** Garantir que todos os satélites linkem entre si e para o pilar (Teia de Aranha).
-
----
-
-## 🛡️ Fase 3: Autoridade e Confiança (Off-Page)
-*Sinais externos que validam seu site.*
-
 ### 1. Backlinks de Qualidade (Menos é Mais)
 - [ ] **Parcerias:** Trocar guest posts com arquitetos, engenheiros ou lojas de material de construção locais.
 - [ ] **Imprensa/Mídia:** Tentar citações em portais de notícias sobre construção/reforma.
