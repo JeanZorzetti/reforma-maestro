@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://reforma-maestro.roilabs.com.br/sitemap.xml
