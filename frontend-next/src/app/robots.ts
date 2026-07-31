@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: '/private/',
         },
-        sitemap: 'https://financeiro-obras.roilabs.com.br/sitemap.xml',
+        sitemap: 'https://orcaobra.roilabs.com.br/sitemap.xml',
     }
 }

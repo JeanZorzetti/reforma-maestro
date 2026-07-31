@@ -52,4 +52,4 @@ Não mexa em nada aqui! Esta aba é automática.
 
 **Precisa de ajuda?**
 Entre em contato com nosso suporte ou acesse o blog para dicas de economia:
-[https://financeiro-obras.roilabs.com.br/blog](https://financeiro-obras.roilabs.com.br/blog)
+[https://orcaobra.roilabs.com.br/blog](https://orcaobra.roilabs.com.br/blog)

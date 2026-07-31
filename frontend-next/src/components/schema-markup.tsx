@@ -5,8 +5,8 @@ export function SchemaMarkup() {
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "Reforma Maestro",
-        "url": "https://financeiro-obras.roilabs.com.br",
-        "logo": "https://financeiro-obras.roilabs.com.br/images/logo.png", // Placeholder if no logo exists yet
+        "url": "https://orcaobra.roilabs.com.br",
+        "logo": "https://orcaobra.roilabs.com.br/images/logo.png", // Placeholder if no logo exists yet
         "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "customer support",
@@ -22,7 +22,7 @@ export function SchemaMarkup() {
         "@type": "Product",
         "name": "Planilha de Orçamento de Obra e Reforma",
         "image": [
-            "https://financeiro-obras.roilabs.com.br/images/hero-dashboard.png" // Placeholder
+            "https://orcaobra.roilabs.com.br/images/hero-dashboard.png" // Placeholder
         ],
         "description": "Sistema completo de gestão financeira para obras e reformas em Excel. Controle gastos, cronograma e evite prejuízos.",
         "brand": {
@@ -31,7 +31,7 @@ export function SchemaMarkup() {
         },
         "offers": {
             "@type": "Offer",
-            "url": "https://financeiro-obras.roilabs.com.br/#pricing",
+            "url": "https://orcaobra.roilabs.com.br/#pricing",
             "priceCurrency": "BRL",
             "price": "47.90",
             "priceValidUntil": "2025-12-31",

@@ -18,7 +18,7 @@ export default function AboutPage() {
             "name": "Maria Eduarda Zorzetti",
             "jobTitle": "Pesquisadora de Mercado",
             "description": "Criadora do Reforma Maestro, especialista em gestão de processos e controle financeiro de obras residenciais.",
-            "url": "https://financeiro-obras.roilabs.com.br/sobre",
+            "url": "https://orcaobra.roilabs.com.br/sobre",
             "sameAs": [
                 "https://www.linkedin.com/in/mariaeduardazorzetti" // Placeholder, good for SEO even if generic
             ]

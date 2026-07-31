@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://financeiro-obras.roilabs.com.br'),
+  metadataBase: new URL('https://orcaobra.roilabs.com.br'),
   alternates: { canonical: '/' },
   title: "Planilha de Orçamento de Obras e Reformas em Excel - Atualizada 2025",
   description: "Controle total de materiais, mão de obra e cronograma em uma planilha profissional. Não deixe sua obra custar o dobro do planejado. Dashboard automático, cronograma financeiro e integração SINAPI.",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title: "Planilha de Orçamento de Obras e Reformas em Excel - Atualizada 2025",
     description: "Controle total de materiais, mão de obra e cronograma. Dashboard automático e cronograma financeiro profissional.",
     type: "website",
-    url: "https://financeiro-obras.roilabs.com.br",
+    url: "https://orcaobra.roilabs.com.br",
     images: ["https://lovable.dev/opengraph-image-p98pqg.png"],
   },
   twitter: {

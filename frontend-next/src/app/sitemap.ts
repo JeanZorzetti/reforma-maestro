@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { blogPosts } from '@/data/blog-posts'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://financeiro-obras.roilabs.com.br'
+    const baseUrl = 'https://orcaobra.roilabs.com.br'
 
     const posts = blogPosts.map((post) => ({
         url: `${baseUrl}/blog/${post.slug}`,

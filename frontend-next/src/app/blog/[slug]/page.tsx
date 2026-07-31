@@ -65,20 +65,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         "@type": "Article",
                         "headline": post.title,
                         "description": post.excerpt,
-                        "image": [`https://financeiro-obras.roilabs.com.br/images/${post.slug}.png`], // Assuming images follow slug naming
+                        "image": [`https://orcaobra.roilabs.com.br/images/${post.slug}.png`], // Assuming images follow slug naming
                         "datePublished": post.date,
                         "dateModified": post.date,
                         "author": {
                             "@type": "Person",
                             "name": post.author,
-                            "url": "https://financeiro-obras.roilabs.com.br/sobre"
+                            "url": "https://orcaobra.roilabs.com.br/sobre"
                         },
                         "publisher": {
                             "@type": "Organization",
                             "name": "Reforma Maestro",
                             "logo": {
                                 "@type": "ImageObject",
-                                "url": "https://financeiro-obras.roilabs.com.br/images/logo.png"
+                                "url": "https://orcaobra.roilabs.com.br/images/logo.png"
                             }
                         }
                     })
