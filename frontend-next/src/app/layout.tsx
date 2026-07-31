@@ -30,13 +30,13 @@ export const metadata: Metadata = {
     description: "Controle total de materiais, mão de obra e cronograma. Dashboard automático e cronograma financeiro profissional.",
     type: "website",
     url: "https://orcaobra.roilabs.com.br",
-    images: ["https://lovable.dev/opengraph-image-p98pqg.png"],
+    images: ["/og.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Planilha de Orçamento de Obras e Reformas em Excel",
     description: "Controle total de materiais, mão de obra e cronograma em uma planilha profissional.",
-    images: ["https://lovable.dev/opengraph-image-p98pqg.png"],
+    images: ["/og.png"],
   },
 };
 
@@ -48,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
