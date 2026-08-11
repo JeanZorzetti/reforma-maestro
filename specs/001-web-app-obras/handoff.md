@@ -1,6 +1,6 @@
 # Handoff — 001-web-app-obras
 
-**Data**: 2026-08-11 | **Para retomar em outra sessão/chat**
+**Data**: 2026-08-11 (atualizado pós-Fase 5) | **Para retomar em outra sessão/chat**
 
 ## Como retomar
 
@@ -16,22 +16,24 @@ Ou simplesmente rodar `/speckit-implement` de novo — ele lê
 
 ## Status
 
-**MVP + assinatura (Fases 1–4, T001–T064) completo, verificado e no `main`**:
-57/57 testes (`npm test`, 9 arquivos), `npm run build` limpo, `npm run lint`
-sem erros nos arquivos novos. Commitado e *pushed* — `git log` mostra
-`7cc6282` como HEAD de `main`, alinhado com `origin/main`. `git status` deve
-vir limpo ao retomar; se não vier, alguém mexeu depois deste handoff.
+**MVP + assinatura + exportação (Fases 1–5, T001–T069) completo, verificado e
+no `main`**: 55/55 testes (`npm test`, 10 arquivos), `npm run build` limpo,
+`npm run lint` sem erros nos arquivos novos. Commitado e *pushed* — `git log`
+mostra `b2a2183` como HEAD de `main`, alinhado com `origin/main`. `git status`
+deve vir limpo ao retomar; se não vier, alguém mexeu depois deste handoff.
 
 Funcional: cadastro/login/logout/reset de senha, trial de 14 dias, CRUD de
 obras e lançamentos com isolamento por usuário testado, painel com
 cards/gráfico/alerta de estouro, rotas públicas preservadas sem redirect,
 checkout/portal/webhook do Stripe com os 9 cenários obrigatórios testados,
 banner de acesso + redirects de tier, páginas `/app/assinar` e `/app/conta`,
-cron de avisos de trial/suspensão.
+cron de avisos de trial/suspensão, exportação CSV por obra em
+`/api/obras/[id]/export` (disponível também em `readonly`, botão no painel da
+obra e em `/app/conta`).
 
-**Pendente**: Fase 5 (export CSV), Fase 6 (SEO/conteúdo público), Fase 7
-(polish/cleanup — T059/T076/T079 já adiantadas, resta o restante). Ver
-checkboxes em `tasks.md` para o detalhe task-a-task.
+**Pendente**: Fase 6 (SEO/conteúdo público), Fase 7 (polish/cleanup —
+T059/T076/T079 já adiantadas, resta o restante). Ver checkboxes em
+`tasks.md` para o detalhe task-a-task.
 
 **Risco em aberto conhecido (T080, não bloqueia dev/testes)**: o Postgres real
 de produção ainda não tem TLS habilitado no host, e `src/db/index.ts` derruba
@@ -138,5 +140,7 @@ TRIAL_DAYS=14
 
 ## Próximo passo imediato
 
-Fase 5 (export CSV) — ver `contracts/http-routes.md` (`GET
-/api/obras/[id]/export`). Não depende de nenhuma chave externa.
+Fase 6 (SEO/conteúdo público) — T070–T074, ver `contracts/http-routes.md` e
+[spec.md](./spec.md) FR-031 a FR-034. Depende das Fases 3 e 4 (já prontas).
+Envolve decisão de conteúdo (copy da home/`Pricing.tsx`), então vale confirmar
+o tom antes de reescrever.
