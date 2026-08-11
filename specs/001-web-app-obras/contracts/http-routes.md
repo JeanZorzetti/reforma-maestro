@@ -82,11 +82,21 @@ Ver [`stripe-webhook.md`](./stripe-webhook.md).
 ### `GET|POST /api/auth/[...nextauth]`
 Handler do Auth.js v5. Sem contrato próprio.
 
-### `GET /api/cron/trial-warnings` (R8, FR-025a)
+### `GET /api/cron/trial-warnings` (R8, FR-023, FR-025a)
 Disparado por Vercel Cron uma vez ao dia. Exige header
-`Authorization: Bearer $CRON_SECRET`; sem ele, `401`. Seleciona assinaturas
-`trialing` com `access_until` em D-3 ou D-1, envia o aviso e marca o envio para
-não repetir. Resposta `200 { avisados: number }`.
+`Authorization: Bearer $CRON_SECRET`; sem ele, `401`. Faz duas varreduras:
+
+1. **Trial expirando** — assinaturas `trialing` com `access_until` em D-3 ou D-1;
+   envia o aviso com caminho direto para assinar e grava `trial_warned_at`
+   (FR-025a).
+2. **Suspensão iminente** — assinaturas `past_due` com `access_until` em D-2;
+   envia o aviso de suspensão com instruções de regularização e grava
+   `suspensao_avisada_em` (FR-023).
+
+Ambas as varreduras pulam quem já tem o marcador correspondente preenchido — o
+cron é idempotente, então rodar duas vezes no mesmo dia não duplica e-mail.
+
+Resposta `200 { trialAvisados: number, suspensaoAvisados: number }`.
 
 ---
 

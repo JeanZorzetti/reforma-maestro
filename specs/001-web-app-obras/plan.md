@@ -48,15 +48,17 @@ uso majoritário em celular
 **Project Type**: Web application — Next.js full-stack, frontend e backend no
 mesmo projeto
 
-**Performance Goals**: painel e listagem sem espera perceptível em obra com 500
-lançamentos (SC-009); registrar um gasto em menos de 30s (SC-002)
+**Performance Goals**: em obra com 500 lançamentos, as queries agregadas do
+painel respondem em **< 200 ms (p95)** e o painel atinge **LCP < 2,5 s** em 3G
+rápido — é a leitura numérica de "sem espera perceptível" do SC-009. Registrar um
+gasto em menos de 30 s (SC-002)
 
 **Constraints**: nenhum serviço além de Postgres, Stripe, Resend, GA4 e Search
 Console; sem fila, cache distribuído ou worker; agendamento limitado a um Vercel
 Cron diário; rotas públicas indexadas não podem mudar de URL (FR-031, FR-032)
 
-**Scale/Scope**: uso individual, centenas de contas na primeira fase; ~12 rotas
-novas, 9 tabelas, ~14 Server Actions, 4 Route Handlers
+**Scale/Scope**: uso individual, centenas de contas na primeira fase; 11 páginas
+novas + 4 Route Handlers, 10 tabelas, 14 Server Actions
 
 ## Constitution Check
 

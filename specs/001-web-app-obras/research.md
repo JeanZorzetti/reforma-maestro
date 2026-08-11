@@ -45,9 +45,22 @@ Subscription exige Customer com método de pagamento coletado (ou um fluxo
 `SetupIntent`). FR-025 proíbe pedir cartão no cadastro. Um `timestamptz` na
 nossa tabela custa uma coluna e atende FR-025, FR-025a e FR-025b integralmente.
 
+**Assinar antes de o trial acabar** (edge case do spec: os dias restantes não
+podem ser perdidos nem duplicados). A Checkout Session é criada com
+`subscription_data.trial_end = subscriptions.access_until` sempre que o status
+for `trialing`. O Stripe passa a cobrar só quando o trial termina, e o
+`current_period_end` do primeiro período já vem contado a partir dali — os dias
+restantes seguem valendo e não são somados duas vezes. Sem isso, quem assinasse
+no dia 4 de 14 perderia 10 dias pagos do próprio bolso.
+
+Consequência: a transição `trialing → active` **nunca reduz** `access_until`.
+
 **Alternativas rejeitadas**:
-- *Stripe trial nativo*: obrigaria coletar cartão no cadastro (viola FR-025) ou
-  criar Customer órfão para toda conta criada.
+- *Stripe trial nativo desde o cadastro*: obrigaria coletar cartão no cadastro
+  (viola FR-025) ou criar Customer órfão para toda conta criada. Usar `trial_end`
+  **no momento do checkout** é diferente — aí o cartão já está sendo coletado.
+- *Creditar os dias restantes como desconto na primeira fatura*: mesma intenção,
+  mais aritmética nossa e um cupom a gerar por assinatura.
 
 ---
 

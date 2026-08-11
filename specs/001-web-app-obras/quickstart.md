@@ -120,6 +120,10 @@ Cada cenário fecha uma User Story do spec e é verificável de ponta a ponta.
    preservadas (US2-8).
 8. Excluir a conta e recadastrar com o **mesmo e-mail** ⇒ a nova conta nasce sem
    trial (US2 edge case, FR-025c, SC-012).
+9. Com uma conta no **dia 4 de um trial de 14**, assinar ⇒ a primeira cobrança é
+   agendada para o fim do trial (não para hoje) e o `access_until` resultante é
+   posterior ao que o trial já garantia. Nenhum dia perdido, nenhum duplicado
+   (US2 edge case, R2).
 
 ### V3 — Levar os dados embora (US3, P3)
 
@@ -155,7 +159,7 @@ Cada cenário fecha uma User Story do spec e é verificável de ponta a ponta.
 - [ ] Sitemap e structured data ainda válidos (Princípio II)
 - [ ] Webhook de produção cadastrado no Stripe apontando para o domínio final,
       com o `STRIPE_WEBHOOK_SECRET` de produção
-- [ ] Painel de uma obra com 500 lançamentos carrega sem espera perceptível
-      (SC-009)
+- [ ] Obra com 500 lançamentos: queries agregadas do painel em < 200 ms (p95) e
+      LCP do painel < 2,5 s em 3G rápido (SC-009)
 - [ ] `frontend/` e os scripts de planilha removidos ao fim da migração
       (FR-035, R15)

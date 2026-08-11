@@ -183,6 +183,8 @@ Vínculo entre usuário e direito de acesso pago (entidade **Assinatura**).
 | `stripe_subscription_id`  | `text`                | NULL até assinar, UNIQUE                      |
 | `cancel_at_period_end`    | `boolean`             | NOT NULL, default `false`                     |
 | `last_event_at`           | `timestamptz`         | NULL — guarda `event.created` do último evento aplicado |
+| `trial_warned_at`         | `timestamptz`         | NULL — último aviso de expiração enviado (D-3 ou D-1)   |
+| `suspensao_avisada_em`    | `timestamptz`         | NULL — aviso de suspensão iminente enviado    |
 | `updated_at`              | `timestamptz`         | NOT NULL, default `now()`                     |
 
 ```sql
@@ -214,8 +216,15 @@ days'` — salvo se `trial_grants` já tiver o hash do e-mail, caso em que nasce
 **Invariantes**
 - `access_until` só é reduzido por evento cujo `event.created >= last_event_at`
   (FR-020). Evento mais antigo é descartado.
+- `access_until` **nunca retrocede** na transição `trialing → active`: quem assina
+  antes do fim do trial leva os dias restantes junto, via `trial_end` no Checkout
+  (R2, edge case "assina antes de o teste acabar").
 - Nenhum estado apaga obras ou lançamentos (FR-022).
 - A decisão de acesso lê **esta tabela**, sempre no servidor (FR-019).
+
+**Marcadores de notificação**: `trial_warned_at` e `suspensao_avisada_em` existem
+só para impedir reenvio — o cron é diário e idempotente por comparação desses
+timestamps, não por estado externo (FR-023, FR-025a).
 
 **Derivado — `tier`** (R4, função pura testável):
 ```text
@@ -282,12 +291,21 @@ sessão ou chave do Stripe.
 
 ## Retenção de dados (FR-028)
 
-Declarada na política pública e implementada como:
-- Conta em `expired` há **mais de 12 meses** é elegível a expurgo, avisada por
-  e-mail 30 dias antes.
-- Exclusão a pedido do usuário é imediata e irreversível: `DELETE FROM users`,
-  cascateando obras, lançamentos, sessões e assinatura; `trial_grants` e
-  `audit_log` permanecem (sem vínculo identificável).
+FR-028 exige **declarar** o prazo de retenção e **permitir a exclusão a pedido**.
+É exatamente o que esta versão implementa — nada mais:
+
+- **Exclusão a pedido**: imediata e irreversível. `DELETE FROM users` cascateando
+  obras, lançamentos, sessões e assinatura; `trial_grants` e `audit_log`
+  permanecem (sem vínculo identificável).
+- **Retenção declarada**: dados de contas inativas são mantidos **por tempo
+  indeterminado até que o titular solicite a exclusão**. A política pública diz
+  isso com essas palavras.
+
+**Expurgo automático de contas inativas está fora de escopo nesta versão.** Não
+existe job, não existe aviso prévio e a política não promete nenhum dos dois —
+prometer um expurgo que ninguém constrói seria passivo de compliance, não
+feature. Se a retenção passar a ter custo ou exigência real, o gancho natural é o
+cron diário que já existe para os avisos de trial.
 
 ---
 

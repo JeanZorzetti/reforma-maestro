@@ -54,7 +54,7 @@ registra `webhook_unmatched` em `audit_log` e responde `200`.
 
 | Evento | Efeito em `subscriptions` |
 |--------|---------------------------|
-| `checkout.session.completed` | grava `stripe_customer_id` e `stripe_subscription_id`; `status = 'active'`; `access_until = current_period_end` (FR-018) |
+| `checkout.session.completed` | grava `stripe_customer_id` e `stripe_subscription_id`; `status = 'active'`; `access_until = max(current_period_end, access_until)` (FR-018) |
 | `customer.subscription.updated` | `status` ← mapa abaixo; `access_until = current_period_end`; `cancel_at_period_end` espelhado (FR-021) |
 | `customer.subscription.deleted` | `status = 'expired'`; `access_until = now()` (FR-022) |
 | `invoice.payment_succeeded` | `status = 'active'`; estende `access_until = current_period_end` |
@@ -78,11 +78,21 @@ período já pago (FR-021), depois cai para `readonly` por comparação de times
 **Nunca reduzir acesso por conta própria**: o handler jamais escreve
 `access_until` no passado exceto em `customer.subscription.deleted`. Trial e
 período pago expiram por comparação de timestamp na leitura (R4), não por
-escrita.
+escrita. Na transição `trialing → active`, `access_until` é gravado como
+`max(current_period_end, access_until)` — com `trial_end` no Checkout os dois
+valores coincidem, e o `max` é a rede de segurança caso a session tenha sido
+criada sem ele (R2).
+
+**Período de tolerância (FR-023)**: são **7 dias** após a primeira falha de
+cobrança, configurados na *retry/dunning policy* do Stripe — não em código nosso.
+O handler apenas espelha: `payment_failed` marca `past_due` sem tocar em
+`access_until`, e é o Stripe que emite `customer.subscription.deleted` ao fim das
+tentativas, o que finalmente encerra o acesso. O aviso de **suspensão iminente**
+sai do cron diário, não daqui (ver `http-routes.md`).
 
 ---
 
-## Cenários de teste obrigatórios (constitution: estado de assinatura)
+## Cenários de teste obrigatórios — 9 (constitution: estado de assinatura)
 
 1. Assinatura de conta em trial ⇒ `active` e acesso `full` mantido sem intervalo.
 2. **Mesmo evento entregue duas vezes** ⇒ segunda resposta `duplicado: true` e
@@ -98,3 +108,7 @@ escrita.
 7. Assinatura inválida no header ⇒ `400` e zero escrita.
 8. Reassinatura depois de `expired` ⇒ `full` restabelecido com os dados da obra
    anterior preservados (US2-8).
+9. **Assinatura no dia 4 de um trial de 14** ⇒ `access_until` resultante é
+   posterior ao que o trial já garantia, e a primeira cobrança só ocorre no fim
+   do trial. Os dias restantes não são perdidos nem contados duas vezes (R2,
+   edge case do spec).

@@ -21,8 +21,10 @@ type ActionResult<T = void> =
 **Guardas, nesta ordem, em toda action**:
 1. `requireUser()` → sessão válida no servidor; sem sessão ⇒
    `{ ok: false, error: 'SESSAO_EXPIRADA' }` e o cliente redireciona para
-   `/entrar?next=<rota>` preservando o formulário (edge case "sessão expira no
-   meio do preenchimento").
+   `/entrar?next=<rota>`. O formulário de lançamento salva rascunho em
+   `sessionStorage` a cada mudança e o restaura ao voltar autenticado — é o que
+   fecha o edge case "sessão expira no meio do preenchimento". Nenhum outro
+   formulário preserva estado.
 2. `requireFullAccess()` → `tier === 'full'` lido de `subscriptions` (FR-019);
    caso contrário `{ ok: false, error: 'ACESSO_SOMENTE_LEITURA' }` + registro
    `access_denied` em `audit_log`. **Não** se aplica às actions de conta e
@@ -46,8 +48,9 @@ Sem guarda de sessão nem de acesso. Em uma única transação:
 normaliza o e-mail, cria `users` com bcrypt(12), grava `trial_grants` e cria
 `subscriptions`. `trial_grants` já existente ⇒ assinatura nasce `expired`
 (FR-025c). Senha mínima de 8 caracteres. E-mail duplicado ⇒
-`fields.email = 'Este e-mail já possui conta.'`. Sucesso autentica e redireciona
-para o cadastro da primeira obra (US1-1).
+`fields.email = 'Este e-mail já possui conta.'`. Em caso de sucesso a action
+**cria a sessão** (`signIn` com as mesmas credenciais, sem novo formulário) e
+redireciona para o cadastro da primeira obra (US1-1).
 
 ### `requestPasswordReset(formData)` · `resetPassword(formData)`
 FR-002. `requestPasswordReset` responde `ok: true` **sempre**, exista o e-mail ou
@@ -56,6 +59,11 @@ hash, invalida todas as `sessions` do usuário e registra `password_reset`.
 
 ### `signOut()`
 FR-003. Apaga a linha de `sessions` e registra `logout`.
+
+**Expiração de sessão** (FR-003): `maxAge` de 30 dias e `updateAge` de 24 h na
+config do Auth.js — sessão sem uso por 30 dias expira sozinha, e a renovação só
+grava no banco uma vez por dia. Login bem-sucedido registra `login`; tentativa
+falha registra `login_failed` (FR-030).
 
 ### `deleteAccount(formData)`
 FR-028. Exige reconfirmação da senha. `DELETE FROM users` cascateando; grava
@@ -115,6 +123,11 @@ delas.
 Checkout Session em modo `subscription` com `client_reference_id = user.id`
 (R6) e devolve a URL para redirecionamento. Não altera `subscriptions`: só o
 webhook escreve estado de acesso (FR-018, FR-019).
+
+**Preserva os dias de trial restantes**: quando `status === 'trialing'` e
+`access_until > now()`, a session leva `subscription_data.trial_end =
+access_until` (R2). O Stripe só cobra no fim do trial, e o primeiro
+`current_period_end` já parte dali — nada de perder nem duplicar dias.
 
 ### `createPortalSession()`
 `ActionResult<{ url: string }>` — Stripe Customer Portal para consultar a
