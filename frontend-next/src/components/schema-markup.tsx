@@ -19,12 +19,14 @@ export function SchemaMarkup() {
 
     const productSchema = {
         "@context": "https://schema.org",
-        "@type": "Product",
-        "name": "Planilha de Orçamento de Obra e Reforma",
+        "@type": "SoftwareApplication",
+        "name": "Reforma Maestro",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
         "image": [
             "https://orcaobra.roilabs.com.br/images/hero-dashboard.png" // Placeholder
         ],
-        "description": "Sistema completo de gestão financeira para obras e reformas em Excel. Controle gastos, cronograma e evite prejuízos.",
+        "description": "App de controle financeiro para obras e reformas. Cadastre a obra, lance os gastos e acompanhe o orçamento em um painel automático.",
         "brand": {
             "@type": "Brand",
             "name": "Reforma Maestro"
@@ -34,13 +36,13 @@ export function SchemaMarkup() {
             "url": "https://orcaobra.roilabs.com.br/#pricing",
             "priceCurrency": "BRL",
             "price": "47.90",
-            "priceValidUntil": "2025-12-31",
+            "priceSpecification": {
+                "@type": "UnitPriceSpecification",
+                "price": "47.90",
+                "priceCurrency": "BRL",
+                "billingDuration": "P1M"
+            },
             "availability": "https://schema.org/InStock"
-        },
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.8",
-            "reviewCount": "124"
         }
     };
 

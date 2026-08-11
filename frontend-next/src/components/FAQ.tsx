@@ -13,16 +13,20 @@ export const FAQ = () => {
       answer: "Sim. O sistema se adapta ao tamanho do seu orçamento, seja R$ 5.000 ou R$ 500.000."
     },
     {
-      question: "Preciso saber fórmulas de Excel?",
-      answer: "Zero. O sistema é \"No-Code\". Todas as fórmulas são travadas e automáticas. Você só preenche os campos brancos de entrada de dados."
+      question: "Preciso instalar alguma coisa ou saber usar planilha?",
+      answer: "Não. É um app que roda direto no navegador. Você cria a conta, cadastra a obra e lança os gastos — o cálculo é automático."
     },
     {
       question: "Funciona no celular?",
-      answer: "Sim. Recomendamos usar o app do Google Sheets (gratuito) para lançar os gastos direto da loja de construção."
+      answer: "Sim. O app é acessível pelo navegador do celular, para lançar os gastos direto da loja de construção."
     },
     {
-      question: "É um software mensal?",
-      answer: "Não. É uma compra única (Lifetime). O arquivo é seu para sempre."
+      question: "Como funciona o pagamento?",
+      answer: "Assinatura mensal de R$ 47,90, com 14 dias de teste grátis sem pedir cartão. Você pode cancelar quando quiser."
+    },
+    {
+      question: "Se eu cancelar, perco meus dados?",
+      answer: "Não. Você pode exportar todos os lançamentos em planilha a qualquer momento, mesmo depois de cancelar."
     }
   ];
 

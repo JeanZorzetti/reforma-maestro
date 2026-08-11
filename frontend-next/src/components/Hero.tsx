@@ -29,8 +29,8 @@ export const Hero = () => {
       <div className="container relative z-10 mx-auto px-4 py-20">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="mb-6 text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight">
-            Sistema de Controle Financeiro para Obras e Reformas{" "}
-            <span className="text-accent">(Planilha Inteligente 2025)</span>
+            Controle Financeiro para Obras e Reformas{" "}
+            <span className="text-accent">sem planilha</span>
           </h1>
 
           <p className="mb-8 text-xl md:text-2xl text-primary-foreground/90 font-medium">
@@ -44,11 +44,11 @@ export const Hero = () => {
               onClick={handleCTA}
               className="group"
             >
-              BAIXAR SISTEMA AGORA - R$ 47,90
+              TESTAR GRÁTIS POR 14 DIAS
               <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
             <p className="text-sm text-primary-foreground/80">
-              Funciona no Excel e Google Sheets. Acesso Vitalício.
+              Sem cartão de crédito. Cancele quando quiser.
             </p>
           </div>
         </div>

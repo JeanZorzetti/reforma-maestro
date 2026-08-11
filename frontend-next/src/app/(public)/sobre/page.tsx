@@ -104,7 +104,7 @@ export default function AboutPage() {
                     </p>
                     <Button asChild size="xl" variant="cta">
                         <Link href="/#pricing" className="flex items-center gap-2">
-                            Quero Minha Planilha Agora <ArrowRight className="w-5 h-5" />
+                            Quero Testar Grátis <ArrowRight className="w-5 h-5" />
                         </Link>
                     </Button>
                 </div>

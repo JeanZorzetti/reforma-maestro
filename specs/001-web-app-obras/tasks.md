@@ -199,11 +199,11 @@ indexabilidade e que nenhuma URL indexada quebrou — cenários V4 do
 **Depends on**: Fases 3 e 4 (a página só tem o que vender depois que app e
 assinatura existem).
 
-- [ ] T070 [P] [US4] Atualizar `frontend-next/src/app/robots.ts` com `disallow` de `/app`, `/entrar`, `/cadastrar`, `/recuperar-senha`, `/redefinir-senha` e `/api` (FR-033)
-- [ ] T071 [P] [US4] Revisar `frontend-next/src/app/sitemap.ts` e confirmar que lista **apenas** rotas públicas, sem nenhuma rota de `/app`
-- [ ] T072 [US4] Reescrever `frontend-next/src/components/Pricing.tsx`: substituir o link de checkout único da Kiwify por CTA de cadastro com trial, e a cópia passa a descrever app + assinatura recorrente (FR-034)
-- [ ] T073 [P] [US4] Revisar a cópia da home e de `/sobre` removendo qualquer promessa de planilha como entregável, mantendo o structured data verificável (FR-034, Princípio II)
-- [ ] T074 [US4] Verificar com `curl -I` que todas as URLs previamente indexadas respondem **200 sem redirect**, e conferir `<meta name="robots" content="noindex">` no HTML de `/app` (FR-031, FR-032, SC-008)
+- [X] T070 [P] [US4] Atualizar `frontend-next/src/app/robots.ts` com `disallow` de `/app`, `/entrar`, `/cadastrar`, `/recuperar-senha`, `/redefinir-senha` e `/api` (FR-033)
+- [X] T071 [P] [US4] Revisar `frontend-next/src/app/sitemap.ts` e confirmar que lista **apenas** rotas públicas, sem nenhuma rota de `/app`
+- [X] T072 [US4] Reescrever `frontend-next/src/components/Pricing.tsx`: substituir o link de checkout único da Kiwify por CTA de cadastro com trial, e a cópia passa a descrever app + assinatura recorrente (FR-034)
+- [X] T073 [P] [US4] Revisar a cópia da home e de `/sobre` removendo qualquer promessa de planilha como entregável, mantendo o structured data verificável (FR-034, Princípio II)
+- [X] T074 [US4] Verificar com `curl -I` que todas as URLs previamente indexadas respondem **200 sem redirect**, e conferir `<meta name="robots" content="noindex">` no HTML de `/app` (FR-031, FR-032, SC-008)
 
 **Checkpoint**: canal de aquisição preservado e alinhado ao novo produto.
 

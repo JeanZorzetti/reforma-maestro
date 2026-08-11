@@ -21,21 +21,21 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://orcaobra.roilabs.com.br'),
   alternates: { canonical: '/' },
-  title: "Planilha de Orçamento de Obras e Reformas em Excel - Atualizada 2025",
-  description: "Controle total de materiais, mão de obra e cronograma em uma planilha profissional. Não deixe sua obra custar o dobro do planejado. Dashboard automático, cronograma financeiro e integração SINAPI.",
-  keywords: "planilha orçamento obras, planilha reforma excel, orçamento construção civil, planilha custos obra, cronograma obra excel, controle financeiro obra",
+  title: "Reforma Maestro | Controle Financeiro de Obras e Reformas",
+  description: "App de controle financeiro para obras e reformas. Cadastre a obra, lance os gastos e acompanhe o orçamento em um painel automático. Teste grátis por 14 dias.",
+  keywords: "controle financeiro de obra, app orçamento obra, controle de gastos reforma, orçamento construção civil, painel financeiro obra",
   authors: [{ name: "Maria Eduarda Zorzetti" }],
   openGraph: {
-    title: "Planilha de Orçamento de Obras e Reformas em Excel - Atualizada 2025",
-    description: "Controle total de materiais, mão de obra e cronograma. Dashboard automático e cronograma financeiro profissional.",
+    title: "Reforma Maestro | Controle Financeiro de Obras e Reformas",
+    description: "Cadastre a obra, lance os gastos e acompanhe o orçamento em um painel automático. Teste grátis por 14 dias.",
     type: "website",
     url: "https://orcaobra.roilabs.com.br",
     images: ["/og.png"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Planilha de Orçamento de Obras e Reformas em Excel",
-    description: "Controle total de materiais, mão de obra e cronograma em uma planilha profissional.",
+    title: "Reforma Maestro | Controle Financeiro de Obras e Reformas",
+    description: "Cadastre a obra, lance os gastos e acompanhe o orçamento em um painel automático.",
     images: ["/og.png"],
   },
 };

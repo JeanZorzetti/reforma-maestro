@@ -5,7 +5,7 @@ const reviews = [
     {
         name: "Ricardo Silva",
         role: "Proprietário",
-        content: "Eu estava perdido com as contas da minha obra. Essa planilha salvou meu orçamento. Consegui ver exatamente onde estava gastando muito.",
+        content: "Eu estava perdido com as contas da minha obra. Esse sistema salvou meu orçamento. Consegui ver exatamente onde estava gastando muito.",
         rating: 5,
     },
     {

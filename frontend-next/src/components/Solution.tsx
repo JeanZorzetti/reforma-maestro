@@ -30,11 +30,11 @@ export const Solution = () => {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
-              Um Mini-Software de Gestão dentro do seu Excel
+              Um painel de gestão feito para a sua obra
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Esqueça as anotações em caderno. Desenvolvemos uma estrutura de banco de dados simplificada
-              onde você lança os gastos e o sistema gera os relatórios de inteligência financeira automaticamente.
+              Esqueça as anotações em caderno e as planilhas que travam. Você lança os gastos no app,
+              do celular ou do computador, e o sistema gera os relatórios de inteligência financeira automaticamente.
             </p>
           </div>
 

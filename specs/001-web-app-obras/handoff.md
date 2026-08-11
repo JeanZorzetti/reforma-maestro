@@ -1,6 +1,6 @@
 # Handoff — 001-web-app-obras
 
-**Data**: 2026-08-11 (atualizado pós-Fase 5) | **Para retomar em outra sessão/chat**
+**Data**: 2026-08-11 (atualizado pós-Fase 6) | **Para retomar em outra sessão/chat**
 
 ## Como retomar
 
@@ -8,19 +8,40 @@ Este projeto usa Spec Kit. Numa sessão nova, basta apontar para este arquivo e
 para `tasks.md`:
 
 > Leia `specs/001-web-app-obras/handoff.md` e continue a implementação a
-> partir da Fase 6 em `tasks.md`.
+> partir da Fase 7 em `tasks.md`.
 
 Ou simplesmente rodar `/speckit-implement` de novo — ele lê
-`check-prerequisites.sh`, vê que `tasks.md` já tem T001–T069 marcados `[X]`
-(mais T076, T079 adiantadas) e retoma do primeiro `[ ]`.
+`check-prerequisites.sh`, vê que `tasks.md` já tem T001–T074 marcados `[X]`
+(mais T076, T079 adiantadas) e retoma do primeiro `[ ]` (T075, Fase 7).
 
 ## Status
 
-**MVP + assinatura + exportação (Fases 1–5, T001–T069) completo, verificado e
-no `main`**: 55/55 testes (`npm test`, 10 arquivos), `npm run build` limpo,
-`npm run lint` sem erros nos arquivos novos. Commitado e *pushed* — `git log`
-mostra `b2a2183` como HEAD de `main`, alinhado com `origin/main`. `git status`
-deve vir limpo ao retomar; se não vier, alguém mexeu depois deste handoff.
+**MVP + assinatura + exportação + SEO/conteúdo público (Fases 1–6,
+T001–T074) completo e no `main` até a Fase 5**; **Fase 6 (T070–T074) feita
+nesta sessão, ainda não commitada** — ver `git status`. 55/55 testes
+(`npm test`, 10 arquivos) — Fase 6 é só conteúdo/UI, sem teste exigido pela
+constitution. `npm run lint` sem erros novos (os erros pré-existentes em
+`sobre/page.tsx` e `Reviews.tsx` são aspas literais não escapadas em linhas
+que esta sessão não tocou). Commitado e *pushed* até `b2a2183` (Fases 1–5);
+Fase 6 pendente de commit.
+
+**Fase 6 — o que mudou**: `Pricing.tsx` agora vende assinatura mensal
+R$ 47,90 com trial de 14 dias e CTA para `/cadastrar` (era checkout único
+Kiwify). `robots.ts` bloqueia `/app`, `/entrar`, `/cadastrar`,
+`/recuperar-senha`, `/redefinir-senha`, `/api`. `layout.tsx` e
+`schema-markup.tsx` (metadata raiz e structured data) pararam de descrever
+"planilha em Excel" e o `Product` schema perdeu o `aggregateRating`
+fabricado (124 reviews/4.8 — proibido pela constitution, Princípio II,
+independente do ganho de SEO). `Hero.tsx`, `Solution.tsx`, `FAQ.tsx` e o CTA
+de `/sobre` reescritos para o modelo de assinatura. `sitemap.ts` já estava
+correto (só rotas públicas), sem necessidade de mudança.
+
+**Fora do escopo de T070–T074, sinalizado e não tocado**: o conteúdo dos
+artigos do blog (`src/data/blog-posts.ts`) ainda promove "planilha" como
+entregável em vários pontos (inclusive um link `/#pricing` chamando de
+"Planilha de Orçamento de Obra"). `tasks.md` não lista nenhuma task de
+reescrita de blog — reescrever ~10+ artigos é decisão de conteúdo maior que
+o escopo desta fase. Vale revisar antes do lançamento real.
 
 Funcional: cadastro/login/logout/reset de senha, trial de 14 dias, CRUD de
 obras e lançamentos com isolamento por usuário testado, painel com

@@ -5,7 +5,15 @@ export default function robots(): MetadataRoute.Robots {
         rules: {
             userAgent: '*',
             allow: '/',
-            disallow: '/private/',
+            disallow: [
+                '/private/',
+                '/app',
+                '/entrar',
+                '/cadastrar',
+                '/recuperar-senha',
+                '/redefinir-senha',
+                '/api',
+            ],
         },
         sitemap: 'https://orcaobra.roilabs.com.br/sitemap.xml',
     }
