@@ -177,11 +177,11 @@ V3 do [quickstart.md](./quickstart.md).
 
 **Depends on**: Fase 3 (há o que exportar). Independente da Fase 4.
 
-- [ ] T065 [P] [US3] Implementar `frontend-next/src/lib/csv.ts`: BOM UTF-8, separador `;`, escape de `;`, `"` e quebra de linha, datas `dd/MM/yyyy`, decimal com vírgula e rótulos em português (R11)
-- [ ] T066 [P] [US3] Escrever `frontend-next/tests/unit/csv.test.ts` cobrindo BOM presente, acentuação de "Mão de Obra", item contendo `;` e `"`, valor negativo de diferença e obra sem lançamentos (só cabeçalho)
-- [ ] T067 [US3] Criar `frontend-next/src/app/api/obras/[id]/export/route.ts` exigindo sessão e posse da obra mas **não** o tier `full`, com `Content-Disposition: attachment` e `404` para obra de outro usuário (FR-026, FR-027)
-- [ ] T068 [P] [US3] Adicionar o botão de exportação no painel da obra e em `/app/conta`, visível também em `readonly` (FR-027)
-- [ ] T069 [US3] Escrever `frontend-next/tests/integration/export.test.ts`: exportação funciona com assinatura `expired` e retorna `404` para obra de outro usuário (SC-007, FR-029)
+- [X] T065 [P] [US3] Implementar `frontend-next/src/lib/csv.ts`: BOM UTF-8, separador `;`, escape de `;`, `"` e quebra de linha, datas `dd/MM/yyyy`, decimal com vírgula e rótulos em português (R11)
+- [X] T066 [P] [US3] Escrever `frontend-next/tests/unit/csv.test.ts` cobrindo BOM presente, acentuação de "Mão de Obra", item contendo `;` e `"`, valor negativo de diferença e obra sem lançamentos (só cabeçalho)
+- [X] T067 [US3] Criar `frontend-next/src/app/api/obras/[id]/export/route.ts` exigindo sessão e posse da obra mas **não** o tier `full`, com `Content-Disposition: attachment` e `404` para obra de outro usuário (FR-026, FR-027)
+- [X] T068 [P] [US3] Adicionar o botão de exportação no painel da obra e em `/app/conta`, visível também em `readonly` (FR-027)
+- [X] T069 [US3] Escrever `frontend-next/tests/integration/export.test.ts`: exportação funciona com assinatura `expired` e retorna `404` para obra de outro usuário (SC-007, FR-029)
 
 **Checkpoint**: a promessa que substitui o "acesso vitalício" está cumprida e testada.
 

@@ -36,6 +36,9 @@ export default async function PainelObraPage({ params }: { params: Promise<{ id:
           <Button asChild size="sm">
             <Link href={`/app/obras/${id}/lancamentos`}>Lançamentos</Link>
           </Button>
+          <Button asChild variant="outline" size="sm">
+            <a href={`/api/obras/${id}/export`}>Exportar CSV</a>
+          </Button>
         </div>
       </div>
 

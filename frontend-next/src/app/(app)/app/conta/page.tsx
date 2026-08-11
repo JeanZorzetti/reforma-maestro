@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { subscriptions } from "@/db/schema";
 import { createPortalSession } from "@/server/actions/assinatura";
+import { listObras } from "@/db/queries/obras";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -25,6 +26,8 @@ export default async function ContaPage() {
     .from(subscriptions)
     .where(eq(subscriptions.userId, session.user.id))
     .limit(1);
+
+  const obras = await listObras(session.user.id);
 
   return (
     <Card className="mx-auto max-w-md">
@@ -66,6 +69,17 @@ export default async function ContaPage() {
           <Button asChild className="w-full">
             <Link href="/app/assinar">Assinar agora</Link>
           </Button>
+        )}
+
+        {obras.length > 0 && (
+          <div className="space-y-2 border-t pt-4">
+            <p className="text-sm text-muted-foreground">Exportar dados</p>
+            {obras.map((obra) => (
+              <Button key={obra.id} asChild variant="outline" size="sm" className="w-full justify-start">
+                <a href={`/api/obras/${obra.id}/export`}>{obra.nome} (CSV)</a>
+              </Button>
+            ))}
+          </div>
         )}
       </CardContent>
     </Card>

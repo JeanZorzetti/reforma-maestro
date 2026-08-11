@@ -46,6 +46,16 @@ export async function listLancamentos({
   return { items, total: count, page, pageSize: PAGE_SIZE };
 }
 
+/** Todos os lançamentos da obra, sem paginação — uso exclusivo da exportação (FR-026). */
+export async function listLancamentosParaExport(userId: string, obraId: string) {
+  return db
+    .select(getTableColumns(lancamentos))
+    .from(lancamentos)
+    .innerJoin(obras, eq(obras.id, lancamentos.obraId))
+    .where(and(eq(lancamentos.obraId, obraId), eq(obras.userId, userId)))
+    .orderBy(desc(lancamentos.data));
+}
+
 /** Lançamento de outro usuário retorna `null` (FR-029). */
 export async function getLancamento(userId: string, lancamentoId: string) {
   const [row] = await db
