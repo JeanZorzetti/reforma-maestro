@@ -16,30 +16,30 @@ Ou simplesmente rodar `/speckit-implement` de novo — ele lê
 
 ## Status
 
-**MVP + assinatura (Fases 1–4, T001–T064) completo e verificado**: 57/57
-testes (`npm test`, 9 arquivos), `npm run build` limpo, `npm run lint` sem
-erros nos arquivos novos. Nada commitado ainda — tudo está como *working tree
-changes* (ver `git status`).
+**MVP + assinatura (Fases 1–4, T001–T064) completo, verificado e no `main`**:
+57/57 testes (`npm test`, 9 arquivos), `npm run build` limpo, `npm run lint`
+sem erros nos arquivos novos. Commitado e *pushed* — `git log` mostra
+`7cc6282` como HEAD de `main`, alinhado com `origin/main`. `git status` deve
+vir limpo ao retomar; se não vier, alguém mexeu depois deste handoff.
 
 Funcional: cadastro/login/logout/reset de senha, trial de 14 dias, CRUD de
 obras e lançamentos com isolamento por usuário testado, painel com
 cards/gráfico/alerta de estouro, rotas públicas preservadas sem redirect,
-**checkout/portal/webhook do Stripe com os 9 cenários obrigatórios testados,
-banner + redirects de tier, página `/app/assinar` e `/app/conta`, cron de
-avisos de trial/suspensão**.
-
-**Stripe (conta "Sirius", modo teste)**: Product/Price criados via MCP
-(`price_1U3FIhD6GTFfNAq4lzRXMZH7`, R$ 47,90/mês). `.env.local` tem
-`STRIPE_SECRET_KEY` (sk_test_ real) e `STRIPE_PRICE_ID` preenchidos.
-`STRIPE_WEBHOOK_SECRET` continua placeholder — só é necessário para rodar
-`stripe listen --forward-to localhost:3000/api/stripe/webhook` de verdade;
-os testes automatizados assinam eventos sintéticos com o mesmo secret do
-`.env.local`, então não bloqueiam nada. Gere o `whsec_` real com `stripe
-listen` antes de testar o fluxo ponta-a-ponta no navegador.
+checkout/portal/webhook do Stripe com os 9 cenários obrigatórios testados,
+banner de acesso + redirects de tier, páginas `/app/assinar` e `/app/conta`,
+cron de avisos de trial/suspensão.
 
 **Pendente**: Fase 5 (export CSV), Fase 6 (SEO/conteúdo público), Fase 7
-(polish/cleanup — falta só T060 antecessoras já feitas, resta o que não foi
-adiantado). Ver checkboxes em `tasks.md` para o detalhe task-a-task.
+(polish/cleanup — T059/T076/T079 já adiantadas, resta o restante). Ver
+checkboxes em `tasks.md` para o detalhe task-a-task.
+
+**Risco em aberto conhecido (T080, não bloqueia dev/testes)**: o Postgres real
+de produção ainda não tem TLS habilitado no host, e `src/db/index.ts` derruba
+qualquer request em `NODE_ENV=production` sem `sslmode=require` (guarda
+proposital, comentada com `ponytail:`). Se a Vercel fizer deploy automático a
+partir de `main`, o app quebra em produção até isso ser resolvido. O usuário
+já foi avisado e optou por commitar/pushar mesmo assim — **T080 continua
+pendente e é o bloqueio real antes de qualquer deploy funcionar**.
 
 ## Ambiente local — precisa recriar se a sessão for em outra máquina
 
@@ -50,9 +50,13 @@ DATABASE_URL=postgres://orcaobra_db:<senha>@2.24.207.200:5455/orcaobra_db?sslmod
 DATABASE_URL_TEST=postgres://test:test@localhost:55432/orcaobra_test
 AUTH_SECRET=<gerado com openssl rand -base64 32>
 AUTH_URL=http://localhost:3000
-STRIPE_SECRET_KEY=sk_test_placeholder
+
+# Stripe modo teste, conta "Sirius" — já preenchidas nesta sessão
+# (valor real só em .env.local — nunca cole a chave aqui, GitHub bloqueia o push)
+STRIPE_SECRET_KEY=sk_test_<peça ao usuário ou pegue em dashboard.stripe.com/test/apikeys>
 STRIPE_WEBHOOK_SECRET=whsec_placeholder
-STRIPE_PRICE_ID=price_placeholder
+STRIPE_PRICE_ID=price_1U3FIhD6GTFfNAq4lzRXMZH7
+
 RESEND_API_KEY=re_placeholder
 CRON_SECRET=<gerado com openssl rand -hex 32>
 TRIAL_DAYS=14
@@ -68,10 +72,16 @@ TRIAL_DAYS=14
   ```
   Se o container não existir mais, recrie com o comando acima — os testes
   (`tests/setup.ts`) aplicam as migrações nele automaticamente antes de rodar.
-- Stripe e Resend seguem com placeholders por decisão do usuário. Fase 4
-  precisa de chaves de teste reais (`sk_test_...`, `whsec_...` do
-  `stripe listen`, `price_...`, `re_...`) para os 9 cenários obrigatórios do
-  webhook serem testáveis de verdade.
+- `STRIPE_SECRET_KEY` e `STRIPE_PRICE_ID` já são reais (modo teste, conta
+  "Sirius" no Stripe, `price_...` = R$ 47,90/mês). O Product/Price foi criado
+  via MCP da Stripe nesta sessão.
+- `STRIPE_WEBHOOK_SECRET` continua placeholder — só é necessário para rodar
+  `stripe listen --forward-to localhost:3000/api/stripe/webhook` de verdade
+  no navegador. Os testes automatizados (`webhook.test.ts`) assinam eventos
+  sintéticos com o mesmo secret do `.env.local`, então o placeholder não
+  bloqueia `npm test`.
+- `RESEND_API_KEY` segue placeholder — nenhuma task até agora exigiu envio
+  real de e-mail nos testes (todos mockados).
 
 ## Decisões que fugiram do texto literal das tasks — merecem revisão
 
@@ -107,7 +117,6 @@ TRIAL_DAYS=14
    `requireUser()` → `auth()`, que também exige request scope e não roda fora
    de uma requisição real. O mecanismo de isolamento testado é o mesmo `WHERE`
    escopado por `user_id`/join que as actions usam por baixo.
-
 7. `computeTransition` (`src/server/stripe/webhook.ts`) chama
    `stripe.subscriptions.retrieve()` para obter `current_period_end` — esse
    campo saiu do objeto `Subscription` nas versões recentes da API Stripe
@@ -121,6 +130,11 @@ TRIAL_DAYS=14
    página, diferente de `obras/nova`/`obras/[id]/editar` que T060 já
    redireciona). `obra-form.tsx` ganhou o mesmo tratamento por consistência,
    mas é código morto na prática desde que T060 bloqueia a página antes.
+9. O MCP da Stripe usado nesta sessão (conta "Sirius") só resolve operações
+   depois de reconectar com o toggle de *test mode* explicitamente liberado —
+   por padrão a sessão só trazia escopo de modo live. Se o MCP voltar a
+   retornar zero operações em buscas com `livemode: false`, é esse o motivo:
+   reconectar via `manage_stripe_accounts` e garantir test mode marcado.
 
 ## Próximo passo imediato
 
