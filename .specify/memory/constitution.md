@@ -1,50 +1,84 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+- Version change: none → 1.0.0 (initial ratification)
+- Modified principles: n/a (first draft)
+- Added sections: Core Principles (5), Technology & Integration Constraints, Development Workflow, Governance
+- Removed sections: n/a
+- Follow-up TODOs: none — inferred from docs/VISAO-GERAL-DO-PROJETO.md and repo state on 2026-08-11
+-->
+
+# Reforma Maestro Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Simplicity First (No Backend Creep)
+This project is a static/serverless landing page — no backend, no database, no
+auth. Any proposal to add server-side infrastructure, a database, or user
+accounts MUST be justified against the actual business need (infoproduct
+sales via Kiwify checkout) before being accepted. Default to the simplest
+implementation that Next.js + static content can support; reject speculative
+scalability work.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. SEO & Content Integrity
+Organic search is the primary acquisition channel (blog, schema markup,
+`/sobre` for E-E-A-T). SEO structure (sitemap, robots, internal linking per
+`regras_SEO.md`) MUST be preserved or improved, never regressed, by feature
+work. Structured data (`schema-markup.tsx`, `Product` rating, testimonials)
+MUST reflect real, verifiable information — fabricated or unverifiable
+reviews/ratings are prohibited regardless of SEO benefit.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Next.js as the Canonical Stack
+`frontend-next/` (Next.js 16 App Router, React 19, TypeScript, Tailwind +
+shadcn/ui) is the only actively developed frontend. `frontend/` (legacy
+Lovable/Vite prototype) MUST NOT receive new features; it is a removal
+candidate once confirmed unused in production.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Manual Fulfillment is an Accepted Trade-off
+Checkout (Kiwify) and product fulfillment (manual Google Sheets provisioning
+via `scripts/create-spreadsheet.ts` / `populate-spreadsheet.ts`) are an
+intentional low-complexity design, not a defect. Building webhook automation,
+a fulfillment backend, or API integrations between Kiwify and Google Sheets
+requires an explicit business decision — it is out of scope by default.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Revenue-Path & Credential Safety
+Code paths that affect conversion (`Pricing.tsx`, checkout link, page speed,
+Core Web Vitals) are treated as revenue-critical and changed carefully with a
+manual browser check before merge. Google Service Account keys and other
+secrets MUST NEVER be committed (`*.json` is gitignored except
+`package.json`/`tsconfig.json`); any new credential type must be added to
+`.gitignore` before first use.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Technology & Integration Constraints
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+Stack: Next.js 16 (App Router), React 19, TypeScript, Tailwind, shadcn/ui,
+hosted on Vercel. External integrations are limited to: Kiwify (checkout
+link only, no API/webhook), Google Sheets/Drive API (offline admin scripts
+only, Service Account credentials kept out of version control), Google
+Analytics 4, Google Search Console. No SINAPI integration exists or is
+planned — any marketing mention of SINAPI is textual/illustrative only and
+MUST NOT imply a real data integration.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Development Workflow
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+There is no automated test suite and none is required for content/marketing
+changes; use the Spec Kit flow (`/speckit-specify` → `/speckit-plan` →
+`/speckit-tasks` → `/speckit-implement`) for non-trivial features or
+structural changes. Before merging changes that touch the landing page,
+verify the change in a running dev server (`npm run dev` in `frontend-next/`)
+covering the affected section and, if SEO-relevant, confirm sitemap/schema
+still validate. Domain/canonical-URL changes require confirming Search
+Console, Kiwify, and any backlinks point at the final domain
+(`orcaobra.roilabs.com.br`) before shipping.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes ad-hoc practice for this repository. Amendments
+require: a documented rationale, a version bump per semantic versioning
+(MAJOR for incompatible principle removal/redefinition, MINOR for a new or
+materially expanded principle, PATCH for wording/clarification), and an
+updated Sync Impact Report at the top of this file. Any Spec Kit
+`/speckit-plan` that proposes work conflicting with a Core Principle must
+either justify the deviation explicitly in the plan's Complexity Tracking
+section or be revised to comply.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-08-11 | **Last Amended**: 2026-08-11
