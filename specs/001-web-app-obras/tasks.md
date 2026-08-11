@@ -35,16 +35,16 @@ Projeto único full-stack em `frontend-next/` (Princípio III). Código em
 **Purpose**: instalar dependências, configurar ferramentas e reorganizar as
 rotas existentes sem alterar nenhuma URL.
 
-- [ ] T001 Instalar dependências de runtime em `frontend-next/package.json`: `next-auth@^5`, `@auth/drizzle-adapter`, `drizzle-orm`, `postgres`, `bcryptjs`, `stripe`, `resend`
-- [ ] T002 Instalar dependências de desenvolvimento em `frontend-next/package.json`: `drizzle-kit`, `vitest`, `@types/bcryptjs`, `dotenv`
-- [ ] T003 [P] Criar `frontend-next/drizzle.config.ts` apontando schema para `src/db/schema.ts`, saída para `src/db/migrations/` e `dialect: 'postgresql'`
-- [ ] T004 [P] Criar `frontend-next/vitest.config.ts` com ambiente `node`, `include` de `tests/**/*.test.ts` e `setupFiles: ['tests/setup.ts']`
-- [ ] T005 [P] Criar `frontend-next/tests/setup.ts` que carrega `.env.local`, aborta se `DATABASE_URL_TEST` estiver ausente ou for igual a `DATABASE_URL`, aplica as migrações e expõe helper de `truncate` entre casos — o arquivo é escrito aqui, mas **só executa depois de T015** (a primeira migração não existe antes disso)
-- [ ] T006 [P] Criar `frontend-next/.env.example` com todas as variáveis de [quickstart.md](./quickstart.md), valores vazios e comentário de origem; confirmar que `.env.local` está no `.gitignore`
-- [ ] T007 [P] Adicionar scripts em `frontend-next/package.json`: `test`, `test:watch`, `db:generate` (`drizzle-kit generate`), `db:migrate` (`drizzle-kit migrate`)
-- [ ] T008 [P] Criar `frontend-next/vercel.json` com um cron diário para `/api/cron/trial-warnings`
-- [ ] T009 Mover `src/app/page.tsx`, `src/app/blog/` e `src/app/sobre/` para o route group `src/app/(public)/`, mantendo `layout.tsx`, `robots.ts`, `sitemap.ts`, `not-found.tsx` e `globals.css` na raiz de `src/app/`
-- [ ] T010 Rodar `npm run dev` e confirmar que `/`, `/blog`, `/blog/<slug>` e `/sobre` respondem **200 sem redirect** após a movimentação (FR-031, FR-032)
+- [X] T001 Instalar dependências de runtime em `frontend-next/package.json`: `next-auth@^5`, `@auth/drizzle-adapter`, `drizzle-orm`, `postgres`, `bcryptjs`, `stripe`, `resend`
+- [X] T002 Instalar dependências de desenvolvimento em `frontend-next/package.json`: `drizzle-kit`, `vitest`, `@types/bcryptjs`, `dotenv`
+- [X] T003 [P] Criar `frontend-next/drizzle.config.ts` apontando schema para `src/db/schema.ts`, saída para `src/db/migrations/` e `dialect: 'postgresql'`
+- [X] T004 [P] Criar `frontend-next/vitest.config.ts` com ambiente `node`, `include` de `tests/**/*.test.ts` e `setupFiles: ['tests/setup.ts']`
+- [X] T005 [P] Criar `frontend-next/tests/setup.ts` que carrega `.env.local`, aborta se `DATABASE_URL_TEST` estiver ausente ou for igual a `DATABASE_URL`, aplica as migrações e expõe helper de `truncate` entre casos — o arquivo é escrito aqui, mas **só executa depois de T015** (a primeira migração não existe antes disso)
+- [X] T006 [P] Criar `frontend-next/.env.example` com todas as variáveis de [quickstart.md](./quickstart.md), valores vazios e comentário de origem; confirmar que `.env.local` está no `.gitignore`
+- [X] T007 [P] Adicionar scripts em `frontend-next/package.json`: `test`, `test:watch`, `db:generate` (`drizzle-kit generate`), `db:migrate` (`drizzle-kit migrate`)
+- [X] T008 [P] Criar `frontend-next/vercel.json` com um cron diário para `/api/cron/trial-warnings`
+- [X] T009 Mover `src/app/page.tsx`, `src/app/blog/` e `src/app/sobre/` para o route group `src/app/(public)/`, mantendo `layout.tsx`, `robots.ts`, `sitemap.ts`, `not-found.tsx` e `globals.css` na raiz de `src/app/`
+- [X] T010 Rodar `npm run dev` e confirmar que `/`, `/blog`, `/blog/<slug>` e `/sobre` respondem **200 sem redirect** após a movimentação (FR-031, FR-032)
 
 **Checkpoint**: projeto instala, builda e serve as rotas públicas exatamente nas mesmas URLs.
 
@@ -59,33 +59,33 @@ pura. Tudo aqui é pré-requisito de qualquer user story.
 
 ### Banco e schema
 
-- [ ] T011 Criar `frontend-next/src/db/index.ts` com a conexão `postgres.js` + Drizzle, lendo `DATABASE_URL` e **falhando na inicialização** se a URL não contiver `sslmode=require` fora de ambiente de teste (R17, Princípio V)
-- [ ] T012 Definir enums `categoria` e `subscription_status` e as tabelas `users`, `sessions`, `accounts`, `verification_tokens` em `frontend-next/src/db/schema.ts` conforme [data-model.md](./data-model.md)
-- [ ] T013 Definir as tabelas `obras` e `lancamentos` em `frontend-next/src/db/schema.ts`, com todos os CHECKs (`orcamento_teto_cents > 0`, `reserva_pct` entre 0 e 100, valores `>= 0`) e os índices `(user_id, arquivada_em)`, `(obra_id, data DESC)` e `(obra_id, categoria)`
-- [ ] T014 Definir as tabelas `subscriptions`, `trial_grants`, `stripe_events` e `audit_log` em `frontend-next/src/db/schema.ts`, com `audit_log.user_id` em `ON DELETE SET NULL`, as demais FKs em `CASCADE` e os marcadores de notificação `trial_warned_at` e `suspensao_avisada_em` em `subscriptions` (usados por T063)
-- [ ] T015 Gerar a migração inicial com `npm run db:generate`, escrever à mão o `frontend-next/src/db/migrations/0000_*.down.sql` correspondente e aplicar com `npm run db:migrate`
+- [X] T011 Criar `frontend-next/src/db/index.ts` com a conexão `postgres.js` + Drizzle, lendo `DATABASE_URL` e **falhando na inicialização** se a URL não contiver `sslmode=require` fora de ambiente de teste (R17, Princípio V)
+- [X] T012 Definir enums `categoria` e `subscription_status` e as tabelas `users`, `sessions`, `accounts`, `verification_tokens` em `frontend-next/src/db/schema.ts` conforme [data-model.md](./data-model.md)
+- [X] T013 Definir as tabelas `obras` e `lancamentos` em `frontend-next/src/db/schema.ts`, com todos os CHECKs (`orcamento_teto_cents > 0`, `reserva_pct` entre 0 e 100, valores `>= 0`) e os índices `(user_id, arquivada_em)`, `(obra_id, data DESC)` e `(obra_id, categoria)`
+- [X] T014 Definir as tabelas `subscriptions`, `trial_grants`, `stripe_events` e `audit_log` em `frontend-next/src/db/schema.ts`, com `audit_log.user_id` em `ON DELETE SET NULL`, as demais FKs em `CASCADE` e os marcadores de notificação `trial_warned_at` e `suspensao_avisada_em` em `subscriptions` (usados por T063)
+- [X] T015 Gerar a migração inicial com `npm run db:generate`, escrever à mão o `frontend-next/src/db/migrations/0000_*.down.sql` correspondente e aplicar com `npm run db:migrate`
 
 ### Lógica pura (testada)
 
-- [ ] T016 [P] Implementar `frontend-next/src/lib/money.ts`: parse de string pt-BR para centavos, formatação `Intl.NumberFormat('pt-BR', {currency:'BRL'})`, soma e arredondamento meio-para-cima (R10)
-- [ ] T017 [P] Escrever `frontend-next/tests/unit/money.test.ts` cobrindo parse de `"85.000,00"`, `"1.200"`, `"0,05"`, entrada inválida, e ausência de erro de ponto flutuante ao somar 500 valores
-- [ ] T018 [P] Implementar `frontend-next/src/lib/calc.ts` com os derivados de [data-model.md](./data-model.md): `reservaCents`, `saldoCents`, `saldoDisponivelCents`, `pctConsumido`, `excedidoCents`, `statusLancamento`, `diferencaCents`
-- [ ] T019 [P] Escrever `frontend-next/tests/unit/calc.test.ts` cobrindo obra sem lançamentos, `pago == previsto` (Pago), `pago < previsto` (Pendente), `pago > previsto` (estouro no item), estouro do orçamento teto e reserva de 0% e 100%
-- [ ] T020 Implementar `frontend-next/src/lib/access.ts` com `getAccess(userId)` retornando `{ tier, status, accessUntil }` conforme a tabela-verdade de R4, mais `requireUser()` e `requireFullAccess()`
-- [ ] T021 Escrever `frontend-next/tests/unit/access.test.ts` cobrindo **todas** as linhas da tabela de R4: `trialing` dentro e fora do prazo, `active`, `canceled` antes e depois de `access_until`, `past_due` e `expired` (FR-019, SC-010)
+- [X] T016 [P] Implementar `frontend-next/src/lib/money.ts`: parse de string pt-BR para centavos, formatação `Intl.NumberFormat('pt-BR', {currency:'BRL'})`, soma e arredondamento meio-para-cima (R10)
+- [X] T017 [P] Escrever `frontend-next/tests/unit/money.test.ts` cobrindo parse de `"85.000,00"`, `"1.200"`, `"0,05"`, entrada inválida, e ausência de erro de ponto flutuante ao somar 500 valores
+- [X] T018 [P] Implementar `frontend-next/src/lib/calc.ts` com os derivados de [data-model.md](./data-model.md): `reservaCents`, `saldoCents`, `saldoDisponivelCents`, `pctConsumido`, `excedidoCents`, `statusLancamento`, `diferencaCents`
+- [X] T019 [P] Escrever `frontend-next/tests/unit/calc.test.ts` cobrindo obra sem lançamentos, `pago == previsto` (Pago), `pago < previsto` (Pendente), `pago > previsto` (estouro no item), estouro do orçamento teto e reserva de 0% e 100%
+- [X] T020 Implementar `frontend-next/src/lib/access.ts` com `getAccess(userId)` retornando `{ tier, status, accessUntil }` conforme a tabela-verdade de R4, mais `requireUser()` e `requireFullAccess()`
+- [X] T021 Escrever `frontend-next/tests/unit/access.test.ts` cobrindo **todas** as linhas da tabela de R4: `trialing` dentro e fora do prazo, `active`, `canceled` antes e depois de `access_until`, `past_due` e `expired` (FR-019, SC-010)
 
 ### Autenticação
 
-- [ ] T022 Implementar `frontend-next/src/lib/auth.ts`: Auth.js v5 com `@auth/drizzle-adapter`, Credentials provider, `session.strategy = 'database'`, `maxAge` de 30 dias, `updateAge` de 24 h e bcrypt custo 12; registrar `login` e `login_failed` em `audit_log` nos callbacks (R7, FR-003, FR-030)
-- [ ] T023 Criar o handler `frontend-next/src/app/api/auth/[...nextauth]/route.ts`
-- [ ] T024 Implementar `frontend-next/src/lib/audit.ts` com `logAudit(userId, event, detail)` gravando em `audit_log`, garantindo que `detail` nunca receba senha, hash, token ou chave (FR-030)
-- [ ] T025 Implementar `frontend-next/src/lib/email.ts` com `sendEmail()` via Resend e os três templates: reset de senha, trial expirando e falha de pagamento (R8)
-- [ ] T026 Implementar `signUp` em `frontend-next/src/server/actions/auth.ts`: normaliza o e-mail, cria `users` com bcrypt, grava `trial_grants` e cria `subscriptions` — **em uma única transação**; se o hash já existir em `trial_grants`, a assinatura nasce `expired`; em caso de sucesso, cria a sessão e redireciona ao cadastro da primeira obra (FR-025, FR-025c, US1-1)
-- [ ] T027 Implementar `signOut`, `requestPasswordReset` e `resetPassword` em `frontend-next/src/server/actions/auth.ts`, conforme [contracts/server-actions.md](./contracts/server-actions.md) — `requestPasswordReset` responde `ok: true` sempre, e `resetPassword` invalida todas as sessões do usuário (FR-002, FR-003)
-- [ ] T028 Escrever `frontend-next/tests/integration/auth.test.ts` cobrindo: cadastro cria as três linhas na mesma transação, e-mail duplicado é rejeitado, e-mail é normalizado antes da busca, senha nunca retorna da action, token de reset é de uso único, reset invalida as sessões existentes e sessão com `expires` no passado é recusada (FR-003)
-- [ ] T029 Escrever `frontend-next/tests/integration/trial.test.ts`: conta nova nasce `trialing` com 14 dias; após `DELETE` da conta e recadastro **com o mesmo e-mail**, a nova conta nasce `expired` (FR-025c, SC-012)
-- [ ] T030 Criar `frontend-next/src/middleware.ts` protegendo `/app/*` — verifica **apenas sessão** e redireciona para `/entrar?next=<path>`; o tier nunca é lido de cookie (FR-019)
-- [ ] T031 [P] Criar as páginas do route group `frontend-next/src/app/(auth)/`: `entrar/`, `cadastrar/`, `recuperar-senha/` e `redefinir-senha/[token]/`, com `metadata.robots = { index: false, follow: false }` no layout do grupo
+- [X] T022 Implementar `frontend-next/src/lib/auth.ts`: Auth.js v5 com `@auth/drizzle-adapter`, Credentials provider, `session.strategy = 'database'`, `maxAge` de 30 dias, `updateAge` de 24 h e bcrypt custo 12; registrar `login` e `login_failed` em `audit_log` nos callbacks (R7, FR-003, FR-030)
+- [X] T023 Criar o handler `frontend-next/src/app/api/auth/[...nextauth]/route.ts`
+- [X] T024 Implementar `frontend-next/src/lib/audit.ts` com `logAudit(userId, event, detail)` gravando em `audit_log`, garantindo que `detail` nunca receba senha, hash, token ou chave (FR-030)
+- [X] T025 Implementar `frontend-next/src/lib/email.ts` com `sendEmail()` via Resend e os três templates: reset de senha, trial expirando e falha de pagamento (R8)
+- [X] T026 Implementar `signUp` em `frontend-next/src/server/actions/auth.ts`: normaliza o e-mail, cria `users` com bcrypt, grava `trial_grants` e cria `subscriptions` — **em uma única transação**; se o hash já existir em `trial_grants`, a assinatura nasce `expired`; em caso de sucesso, cria a sessão e redireciona ao cadastro da primeira obra (FR-025, FR-025c, US1-1)
+- [X] T027 Implementar `signOut`, `requestPasswordReset` e `resetPassword` em `frontend-next/src/server/actions/auth.ts`, conforme [contracts/server-actions.md](./contracts/server-actions.md) — `requestPasswordReset` responde `ok: true` sempre, e `resetPassword` invalida todas as sessões do usuário (FR-002, FR-003)
+- [X] T028 Escrever `frontend-next/tests/integration/auth.test.ts` cobrindo: cadastro cria as três linhas na mesma transação, e-mail duplicado é rejeitado, e-mail é normalizado antes da busca, senha nunca retorna da action, token de reset é de uso único, reset invalida as sessões existentes e sessão com `expires` no passado é recusada (FR-003)
+- [X] T029 Escrever `frontend-next/tests/integration/trial.test.ts`: conta nova nasce `trialing` com 14 dias; após `DELETE` da conta e recadastro **com o mesmo e-mail**, a nova conta nasce `expired` (FR-025c, SC-012)
+- [X] T030 Criar `frontend-next/src/middleware.ts` protegendo `/app/*` — verifica **apenas sessão** e redireciona para `/entrar?next=<path>`; o tier nunca é lido de cookie (FR-019)
+- [X] T031 [P] Criar as páginas do route group `frontend-next/src/app/(auth)/`: `entrar/`, `cadastrar/`, `recuperar-senha/` e `redefinir-senha/[token]/`, com `metadata.robots = { index: false, follow: false }` no layout do grupo
 
 **Checkpoint**: é possível criar conta, entrar, sair e recuperar senha; toda conta nova nasce em trial; a camada de acesso está testada e pronta para uso.
 
@@ -102,35 +102,35 @@ categoria batem com os lançamentos — cenários V1 do [quickstart.md](./quicks
 
 ### Leituras escopadas
 
-- [ ] T032 [P] [US1] Implementar `frontend-next/src/db/queries/obras.ts`: `listObras(userId)`, `getObra(userId, obraId)` — todo `WHERE` inclui `user_id`, e obra de outro usuário retorna `null` (FR-029)
-- [ ] T033 [P] [US1] Implementar `frontend-next/src/db/queries/lancamentos.ts`: listagem paginada (50/página) ordenada por `data DESC`, com filtros de categoria e de status aplicados no `WHERE`, sempre com join escopado por `obras.user_id` (FR-012, FR-029)
-- [ ] T034 [P] [US1] Implementar `frontend-next/src/db/queries/painel.ts` com duas queries agregadas em SQL — totais (`SUM`) e quebra por categoria (`GROUP BY`) — sem trazer lançamentos ao cliente (R12, SC-009)
+- [X] T032 [P] [US1] Implementar `frontend-next/src/db/queries/obras.ts`: `listObras(userId)`, `getObra(userId, obraId)` — todo `WHERE` inclui `user_id`, e obra de outro usuário retorna `null` (FR-029)
+- [X] T033 [P] [US1] Implementar `frontend-next/src/db/queries/lancamentos.ts`: listagem paginada (50/página) ordenada por `data DESC`, com filtros de categoria e de status aplicados no `WHERE`, sempre com join escopado por `obras.user_id` (FR-012, FR-029)
+- [X] T034 [P] [US1] Implementar `frontend-next/src/db/queries/painel.ts` com duas queries agregadas em SQL — totais (`SUM`) e quebra por categoria (`GROUP BY`) — sem trazer lançamentos ao cliente (R12, SC-009)
 
 ### Mutações
 
-- [ ] T035 [US1] Implementar os schemas Zod de obra e lançamento em `frontend-next/src/server/actions/schemas.ts`, com as mensagens de erro de FR-005 e conversão pt-BR → centavos via `money.ts`
-- [ ] T036 [US1] Implementar `createObra`, `updateObra`, `archiveObra` e `deleteObra` em `frontend-next/src/server/actions/obras.ts` conforme [contracts/server-actions.md](./contracts/server-actions.md), com `requireUser` → `requireFullAccess` → escopo, e `revalidatePath` ao final (FR-004 a FR-007a)
-- [ ] T037 [US1] Implementar `createLancamento`, `updateLancamento` e `deleteLancamento` em `frontend-next/src/server/actions/lancamentos.ts`, **ignorando** `status` e `diferenca` recebidos do cliente e verificando posse por join (FR-008 a FR-011)
+- [X] T035 [US1] Implementar os schemas Zod de obra e lançamento em `frontend-next/src/server/actions/schemas.ts`, com as mensagens de erro de FR-005 e conversão pt-BR → centavos via `money.ts`
+- [X] T036 [US1] Implementar `createObra`, `updateObra`, `archiveObra` e `deleteObra` em `frontend-next/src/server/actions/obras.ts` conforme [contracts/server-actions.md](./contracts/server-actions.md), com `requireUser` → `requireFullAccess` → escopo, e `revalidatePath` ao final (FR-004 a FR-007a)
+- [X] T037 [US1] Implementar `createLancamento`, `updateLancamento` e `deleteLancamento` em `frontend-next/src/server/actions/lancamentos.ts`, **ignorando** `status` e `diferenca` recebidos do cliente e verificando posse por join (FR-008 a FR-011)
 
 ### UI
 
-- [ ] T038 [P] [US1] Criar o layout do route group `frontend-next/src/app/(app)/layout.tsx` com `metadata.robots = { index: false, follow: false }` e a navegação do app (FR-033)
-- [ ] T039 [P] [US1] Criar `frontend-next/src/app/(app)/app/page.tsx` — seletor de obras, redirecionando para o cadastro quando a conta não tem nenhuma (FR-007)
-- [ ] T040 [P] [US1] Criar o componente de formulário de obra em `frontend-next/src/components/app/obra-form.tsx` (React Hook Form + Zod), com máscara de valor em reais e de percentual
-- [ ] T041 [US1] Criar `frontend-next/src/app/(app)/app/obras/nova/page.tsx` e `frontend-next/src/app/(app)/app/obras/[id]/editar/page.tsx` reusando `obra-form.tsx`
-- [ ] T042 [P] [US1] Criar os cards de indicador em `frontend-next/src/components/app/painel-cards.tsx`: total previsto, total pago, saldo restante, percentual consumido e fundo de reserva explícito (FR-014, FR-017)
-- [ ] T043 [P] [US1] Criar `frontend-next/src/components/app/alerta-estouro.tsx`, exibido apenas quando `excedidoCents > 0`, informando o valor excedido de forma inequívoca (FR-016, SC-004)
-- [ ] T044 [P] [US1] Criar `frontend-next/src/components/app/grafico-categorias.tsx` com Recharts, consumindo a agregação de `painel.ts` (FR-015)
-- [ ] T045 [US1] Criar `frontend-next/src/app/(app)/app/obras/[id]/page.tsx` (Server Component) compondo cards, alerta de estouro e gráfico a partir das queries agregadas
-- [ ] T046 [P] [US1] Criar o formulário de lançamento em `frontend-next/src/components/app/lancamento-form.tsx`, com data em `dd/MM/yyyy`, seleção fechada de categoria, aviso discreto para data futura e rascunho em `sessionStorage` restaurado ao voltar de uma sessão expirada (FR-008, FR-009, FR-013, edge case de sessão)
-- [ ] T047 [US1] Criar `frontend-next/src/app/(app)/app/obras/[id]/lancamentos/page.tsx` com a lista paginada, os filtros de categoria e status, e as colunas de status e diferença derivadas (FR-010, FR-012)
-- [ ] T048 [US1] Implementar edição e exclusão de lançamento na lista, com confirmação na exclusão e atualização imediata dos indicadores via `revalidatePath` (FR-011, US1-7)
-- [ ] T049 [US1] Implementar a confirmação de exclusão de obra informando quantos lançamentos serão perdidos e exigindo digitar o nome da obra (FR-007a, edge case)
+- [X] T038 [P] [US1] Criar o layout do route group `frontend-next/src/app/(app)/layout.tsx` com `metadata.robots = { index: false, follow: false }` e a navegação do app (FR-033)
+- [X] T039 [P] [US1] Criar `frontend-next/src/app/(app)/app/page.tsx` — seletor de obras, redirecionando para o cadastro quando a conta não tem nenhuma (FR-007)
+- [X] T040 [P] [US1] Criar o componente de formulário de obra em `frontend-next/src/components/app/obra-form.tsx` (React Hook Form + Zod), com máscara de valor em reais e de percentual
+- [X] T041 [US1] Criar `frontend-next/src/app/(app)/app/obras/nova/page.tsx` e `frontend-next/src/app/(app)/app/obras/[id]/editar/page.tsx` reusando `obra-form.tsx`
+- [X] T042 [P] [US1] Criar os cards de indicador em `frontend-next/src/components/app/painel-cards.tsx`: total previsto, total pago, saldo restante, percentual consumido e fundo de reserva explícito (FR-014, FR-017)
+- [X] T043 [P] [US1] Criar `frontend-next/src/components/app/alerta-estouro.tsx`, exibido apenas quando `excedidoCents > 0`, informando o valor excedido de forma inequívoca (FR-016, SC-004)
+- [X] T044 [P] [US1] Criar `frontend-next/src/components/app/grafico-categorias.tsx` com Recharts, consumindo a agregação de `painel.ts` (FR-015)
+- [X] T045 [US1] Criar `frontend-next/src/app/(app)/app/obras/[id]/page.tsx` (Server Component) compondo cards, alerta de estouro e gráfico a partir das queries agregadas
+- [X] T046 [P] [US1] Criar o formulário de lançamento em `frontend-next/src/components/app/lancamento-form.tsx`, com data em `dd/MM/yyyy`, seleção fechada de categoria, aviso discreto para data futura e rascunho em `sessionStorage` restaurado ao voltar de uma sessão expirada (FR-008, FR-009, FR-013, edge case de sessão)
+- [X] T047 [US1] Criar `frontend-next/src/app/(app)/app/obras/[id]/lancamentos/page.tsx` com a lista paginada, os filtros de categoria e status, e as colunas de status e diferença derivadas (FR-010, FR-012)
+- [X] T048 [US1] Implementar edição e exclusão de lançamento na lista, com confirmação na exclusão e atualização imediata dos indicadores via `revalidatePath` (FR-011, US1-7)
+- [X] T049 [US1] Implementar a confirmação de exclusão de obra informando quantos lançamentos serão perdidos e exigindo digitar o nome da obra (FR-007a, edge case)
 
 ### Testes obrigatórios
 
-- [ ] T050 [US1] Escrever `frontend-next/tests/integration/isolamento.test.ts`: usuário A não lê nem escreve obra ou lançamento de B por nenhum caminho — `getObra`, listagem, `updateObra`, `updateLancamento`, `deleteLancamento` — e o retorno é sempre `NAO_ENCONTRADO`, nunca `SEM_PERMISSAO` (FR-029, SC-006)
-- [ ] T051 [US1] Escrever `frontend-next/tests/integration/painel.test.ts`: com lançamentos conhecidos, as queries agregadas devolvem exatamente os totais esperados, inclusive com obra vazia e com lançamento de valor pago acima do previsto
+- [X] T050 [US1] Escrever `frontend-next/tests/integration/isolamento.test.ts`: usuário A não lê nem escreve obra ou lançamento de B por nenhum caminho — `getObra`, listagem, `updateObra`, `updateLancamento`, `deleteLancamento` — e o retorno é sempre `NAO_ENCONTRADO`, nunca `SEM_PERMISSAO` (FR-029, SC-006)
+- [X] T051 [US1] Escrever `frontend-next/tests/integration/painel.test.ts`: com lançamentos conhecidos, as queries agregadas devolvem exatamente os totais esperados, inclusive com obra vazia e com lançamento de valor pago acima do previsto
 
 **Checkpoint**: US1 entregue e testável de ponta a ponta — o produto já substitui a planilha. **Este é o MVP.**
 
@@ -147,20 +147,20 @@ estado corresponde ao documentado — cenários V2 do [quickstart.md](./quicksta
 
 **Depends on**: Fase 2 (`access.ts`, `subscriptions`) e Fase 3 (há o que liberar).
 
-- [ ] T052 [P] [US2] Implementar `frontend-next/src/lib/stripe.ts`: cliente Stripe e o mapa `subscription.status` do Stripe → nosso `status`, conforme [contracts/stripe-webhook.md](./contracts/stripe-webhook.md)
-- [ ] T053 [US2] Implementar `createCheckoutSession` e `createPortalSession` em `frontend-next/src/server/actions/assinatura.ts` — **sem** `requireFullAccess`, com `client_reference_id = user.id` e sem escrever em `subscriptions` (FR-018, FR-024, R6)
-- [ ] T053a [US2] Em `createCheckoutSession`, passar `subscription_data.trial_end = subscriptions.access_until` quando o status for `trialing` e o acesso ainda estiver vigente, para que quem assina antes do fim do trial não perca os dias restantes (R2, edge case do spec)
-- [ ] T054 [US2] Criar `frontend-next/src/app/api/stripe/webhook/route.ts` com runtime `nodejs`, corpo lido como `req.text()` e `constructEvent` — assinatura inválida retorna `400` e não grava nada
-- [ ] T055 [US2] Implementar no mesmo handler o pipeline transacional de [contracts/stripe-webhook.md](./contracts/stripe-webhook.md): `INSERT ... ON CONFLICT DO NOTHING` em `stripe_events`, resolução do usuário em três níveis, checagem de `event.created >= last_event_at` e aplicação da transição (FR-020)
-- [ ] T056 [US2] Implementar os cinco handlers de evento (`checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_succeeded`, `invoice.payment_failed`), gravando `access_until = max(current_period_end, access_until)` para nunca encurtar acesso já garantido, e mapeando `cancel_at_period_end` → `status = 'canceled'` com acesso até `current_period_end` (FR-018, FR-021, FR-022)
-- [ ] T057 [US2] Disparar o e-mail de falha de pagamento a partir de `invoice.payment_failed` e registrar `subscription_changed` em `audit_log` a cada transição aplicada (FR-023, FR-030)
-- [ ] T058 [US2] Escrever `frontend-next/tests/integration/webhook.test.ts` cobrindo **os nove cenários obrigatórios** de [contracts/stripe-webhook.md](./contracts/stripe-webhook.md), com destaque para evento duplicado, evento fora de ordem, evento sem usuário resolvível e assinatura no meio do trial sem perda de dias (FR-020, R2, R6)
-- [ ] T059 [P] [US2] Criar `frontend-next/src/components/app/banner-acesso.tsx`: em `trialing` mostra os dias restantes com CTA de assinatura; em `readonly` explica o estado e linka `/app/assinar` (FR-025a, FR-022)
-- [ ] T060 [US2] Aplicar o banner no layout de `(app)` e fazer as rotas de tier `full` (`obras/nova`, `obras/[id]/editar`) redirecionarem para `/app/assinar` quando o tier for `readonly` (FR-025b)
-- [ ] T061 [P] [US2] Criar `frontend-next/src/app/(app)/app/assinar/page.tsx` com a proposta de valor e o botão que chama `createCheckoutSession`
-- [ ] T062 [P] [US2] Criar `frontend-next/src/app/(app)/app/conta/page.tsx` exibindo estado da assinatura, data de término do acesso e botão para o Customer Portal (FR-024)
-- [ ] T063 [US2] Criar `frontend-next/src/app/api/cron/trial-warnings/route.ts` protegido por `Authorization: Bearer $CRON_SECRET`, com as **duas varreduras** de [contracts/http-routes.md](./contracts/http-routes.md): trials em D-3/D-1 gravando `trial_warned_at`, e contas `past_due` em D-2 recebendo o aviso de suspensão iminente gravando `suspensao_avisada_em` — quem já tem o marcador é pulado (FR-023, FR-025a, R8)
-- [ ] T064 [US2] Garantir que as mensagens de negação em `requireFullAccess` incluam caminho direto para assinar e que cada negação gere `access_denied` em `audit_log` (US2-5, FR-030)
+- [X] T052 [P] [US2] Implementar `frontend-next/src/lib/stripe.ts`: cliente Stripe e o mapa `subscription.status` do Stripe → nosso `status`, conforme [contracts/stripe-webhook.md](./contracts/stripe-webhook.md)
+- [X] T053 [US2] Implementar `createCheckoutSession` e `createPortalSession` em `frontend-next/src/server/actions/assinatura.ts` — **sem** `requireFullAccess`, com `client_reference_id = user.id` e sem escrever em `subscriptions` (FR-018, FR-024, R6)
+- [X] T053a [US2] Em `createCheckoutSession`, passar `subscription_data.trial_end = subscriptions.access_until` quando o status for `trialing` e o acesso ainda estiver vigente, para que quem assina antes do fim do trial não perca os dias restantes (R2, edge case do spec)
+- [X] T054 [US2] Criar `frontend-next/src/app/api/stripe/webhook/route.ts` com runtime `nodejs`, corpo lido como `req.text()` e `constructEvent` — assinatura inválida retorna `400` e não grava nada
+- [X] T055 [US2] Implementar no mesmo handler o pipeline transacional de [contracts/stripe-webhook.md](./contracts/stripe-webhook.md): `INSERT ... ON CONFLICT DO NOTHING` em `stripe_events`, resolução do usuário em três níveis, checagem de `event.created >= last_event_at` e aplicação da transição (FR-020)
+- [X] T056 [US2] Implementar os cinco handlers de evento (`checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_succeeded`, `invoice.payment_failed`), gravando `access_until = max(current_period_end, access_until)` para nunca encurtar acesso já garantido, e mapeando `cancel_at_period_end` → `status = 'canceled'` com acesso até `current_period_end` (FR-018, FR-021, FR-022)
+- [X] T057 [US2] Disparar o e-mail de falha de pagamento a partir de `invoice.payment_failed` e registrar `subscription_changed` em `audit_log` a cada transição aplicada (FR-023, FR-030)
+- [X] T058 [US2] Escrever `frontend-next/tests/integration/webhook.test.ts` cobrindo **os nove cenários obrigatórios** de [contracts/stripe-webhook.md](./contracts/stripe-webhook.md), com destaque para evento duplicado, evento fora de ordem, evento sem usuário resolvível e assinatura no meio do trial sem perda de dias (FR-020, R2, R6)
+- [X] T059 [P] [US2] Criar `frontend-next/src/components/app/banner-acesso.tsx`: em `trialing` mostra os dias restantes com CTA de assinatura; em `readonly` explica o estado e linka `/app/assinar` (FR-025a, FR-022)
+- [X] T060 [US2] Aplicar o banner no layout de `(app)` e fazer as rotas de tier `full` (`obras/nova`, `obras/[id]/editar`) redirecionarem para `/app/assinar` quando o tier for `readonly` (FR-025b)
+- [X] T061 [P] [US2] Criar `frontend-next/src/app/(app)/app/assinar/page.tsx` com a proposta de valor e o botão que chama `createCheckoutSession`
+- [X] T062 [P] [US2] Criar `frontend-next/src/app/(app)/app/conta/page.tsx` exibindo estado da assinatura, data de término do acesso e botão para o Customer Portal (FR-024)
+- [X] T063 [US2] Criar `frontend-next/src/app/api/cron/trial-warnings/route.ts` protegido por `Authorization: Bearer $CRON_SECRET`, com as **duas varreduras** de [contracts/http-routes.md](./contracts/http-routes.md): trials em D-3/D-1 gravando `trial_warned_at`, e contas `past_due` em D-2 recebendo o aviso de suspensão iminente gravando `suspensao_avisada_em` — quem já tem o marcador é pulado (FR-023, FR-025a, R8)
+- [X] T064 [US2] Garantir que as mensagens de negação em `requireFullAccess` incluam caminho direto para assinar e que cada negação gere `access_denied` em `audit_log` (US2-5, FR-030)
 
 **Checkpoint**: produto vendável — pagamento confirmado libera acesso sozinho e cada estado de assinatura tem comportamento verificado.
 
@@ -212,10 +212,10 @@ assinatura existem).
 ## Phase 7: Polish & Cross-Cutting Concerns
 
 - [ ] T075 [P] Criar a página pública de política de retenção e privacidade declarando exatamente o que o sistema faz (ver [data-model.md](./data-model.md) § Retenção): dados mantidos até o titular pedir exclusão, exclusão a pedido imediata e irreversível — **sem prometer expurgo automático nem aviso prévio**, que não existem nesta versão (FR-028)
-- [ ] T076 Implementar `deleteAccount` em `frontend-next/src/server/actions/auth.ts` com reconfirmação de senha, `DELETE FROM users` cascateado e registro `account_deleted` em `audit_log` (FR-028)
+- [X] T076 Implementar `deleteAccount` em `frontend-next/src/server/actions/auth.ts` com reconfirmação de senha, `DELETE FROM users` cascateado e registro `account_deleted` em `audit_log` (FR-028)
 - [ ] T077 [P] Popular uma obra de teste com 500 lançamentos e medir: as queries agregadas do painel devem responder em **< 200 ms (p95)** e o painel atingir **LCP < 2,5 s** em 3G rápido; ajustar índices só se algum limite for estourado (SC-009)
 - [ ] T078 [P] Revisar responsividade do app em viewport de celular — o uso majoritário é celular durante a obra (Assumptions)
-- [ ] T079 [P] Adicionar o comentário `ponytail:` em `frontend-next/src/server/actions/lancamentos.ts` registrando a ausência deliberada de locking otimista e o caminho de upgrade (R13)
+- [X] T079 [P] Adicionar o comentário `ponytail:` em `frontend-next/src/server/actions/lancamentos.ts` registrando a ausência deliberada de locking otimista e o caminho de upgrade (R13)
 - [ ] T080 Confirmar `sslmode=require` na `DATABASE_URL` de produção e o TLS habilitado no Postgres auto-hospedado, **antes do primeiro cadastro real** (R17, Princípio V)
 - [ ] T081 Cadastrar o webhook de produção no Stripe apontando para o domínio final, configurar a retry/dunning policy com **7 dias de tolerância** antes do cancelamento automático (FR-023) e definir todas as variáveis de ambiente na Vercel
 - [ ] T082 Remover o diretório `frontend/` (protótipo Lovable) do repositório (FR-035, Princípio III)

@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS "verification_tokens";
+DROP TABLE IF EXISTS "users";
+DROP TABLE IF EXISTS "trial_grants";
+DROP TABLE IF EXISTS "subscriptions";
+DROP TABLE IF EXISTS "stripe_events";
+DROP TABLE IF EXISTS "sessions";
+DROP TABLE IF EXISTS "obras";
+DROP TABLE IF EXISTS "lancamentos";
+DROP TABLE IF EXISTS "audit_log";
+DROP TABLE IF EXISTS "accounts";
+DROP TYPE IF EXISTS "public"."subscription_status";
+DROP TYPE IF EXISTS "public"."categoria";
