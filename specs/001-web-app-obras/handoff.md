@@ -12,48 +12,33 @@ para `tasks.md`:
 
 Ou simplesmente rodar `/speckit-implement` de novo — ele lê
 `check-prerequisites.sh`, vê que `tasks.md` já tem T001–T074 marcados `[X]`
-(mais T076, T079 adiantadas) e retoma do primeiro `[ ]` (T075, Fase 7).
+(mais T076, T079 adiantadas dentro da Fase 7) e retoma do primeiro `[ ]`
+(T075).
 
 ## Status
 
 **MVP + assinatura + exportação + SEO/conteúdo público (Fases 1–6,
-T001–T074) completo e no `main` até a Fase 5**; **Fase 6 (T070–T074) feita
-nesta sessão, ainda não commitada** — ver `git status`. 55/55 testes
-(`npm test`, 10 arquivos) — Fase 6 é só conteúdo/UI, sem teste exigido pela
-constitution. `npm run lint` sem erros novos (os erros pré-existentes em
-`sobre/page.tsx` e `Reviews.tsx` são aspas literais não escapadas em linhas
-que esta sessão não tocou). Commitado e *pushed* até `b2a2183` (Fases 1–5);
-Fase 6 pendente de commit.
-
-**Fase 6 — o que mudou**: `Pricing.tsx` agora vende assinatura mensal
-R$ 47,90 com trial de 14 dias e CTA para `/cadastrar` (era checkout único
-Kiwify). `robots.ts` bloqueia `/app`, `/entrar`, `/cadastrar`,
-`/recuperar-senha`, `/redefinir-senha`, `/api`. `layout.tsx` e
-`schema-markup.tsx` (metadata raiz e structured data) pararam de descrever
-"planilha em Excel" e o `Product` schema perdeu o `aggregateRating`
-fabricado (124 reviews/4.8 — proibido pela constitution, Princípio II,
-independente do ganho de SEO). `Hero.tsx`, `Solution.tsx`, `FAQ.tsx` e o CTA
-de `/sobre` reescritos para o modelo de assinatura. `sitemap.ts` já estava
-correto (só rotas públicas), sem necessidade de mudança.
-
-**Fora do escopo de T070–T074, sinalizado e não tocado**: o conteúdo dos
-artigos do blog (`src/data/blog-posts.ts`) ainda promove "planilha" como
-entregável em vários pontos (inclusive um link `/#pricing` chamando de
-"Planilha de Orçamento de Obra"). `tasks.md` não lista nenhuma task de
-reescrita de blog — reescrever ~10+ artigos é decisão de conteúdo maior que
-o escopo desta fase. Vale revisar antes do lançamento real.
+T001–T074) completo, verificado e no `main`**: 55/55 testes (`npm test`, 10
+arquivos — Fase 6 é só conteúdo/UI, sem teste exigido pela constitution),
+`npm run build` limpo, `npm run lint` sem erros novos introduzidos nesta
+sessão (erros pré-existentes em `sobre/page.tsx` e `Reviews.tsx` são aspas
+literais não escapadas em linhas que ninguém tocou ainda). Commitado e
+*pushed* — `git log` mostra `38e6a25` como HEAD de `main`, alinhado com
+`origin/main`. `git status` deve vir limpo ao retomar; se não vier, alguém
+mexeu depois deste handoff.
 
 Funcional: cadastro/login/logout/reset de senha, trial de 14 dias, CRUD de
 obras e lançamentos com isolamento por usuário testado, painel com
-cards/gráfico/alerta de estouro, rotas públicas preservadas sem redirect,
-checkout/portal/webhook do Stripe com os 9 cenários obrigatórios testados,
-banner de acesso + redirects de tier, páginas `/app/assinar` e `/app/conta`,
-cron de avisos de trial/suspensão, exportação CSV por obra em
-`/api/obras/[id]/export` (disponível também em `readonly`, botão no painel da
-obra e em `/app/conta`).
+cards/gráfico/alerta de estouro, rotas públicas preservadas sem redirect e
+sem promessa de planilha, checkout/portal/webhook do Stripe com os 9
+cenários obrigatórios testados, banner de acesso + redirects de tier,
+páginas `/app/assinar` e `/app/conta`, cron de avisos de trial/suspensão,
+exportação CSV por obra em `/api/obras/[id]/export` (disponível também em
+`readonly`, botão no painel da obra e em `/app/conta`), copy pública e
+structured data alinhados ao modelo de assinatura (Fase 6).
 
-**Pendente**: Fase 6 (SEO/conteúdo público), Fase 7 (polish/cleanup —
-T059/T076/T079 já adiantadas, resta o restante). Ver checkboxes em
+**Pendente**: Fase 7 (polish/cleanup) — T059/T076/T079 já adiantadas em
+sessões anteriores, resta T075, T077, T078, T080–T088. Ver checkboxes em
 `tasks.md` para o detalhe task-a-task.
 
 **Risco em aberto conhecido (T080, não bloqueia dev/testes)**: o Postgres real
@@ -63,6 +48,15 @@ proposital, comentada com `ponytail:`). Se a Vercel fizer deploy automático a
 partir de `main`, o app quebra em produção até isso ser resolvido. O usuário
 já foi avisado e optou por commitar/pushar mesmo assim — **T080 continua
 pendente e é o bloqueio real antes de qualquer deploy funcionar**.
+
+**Débito de conteúdo sinalizado, fora de qualquer task numerada**: os
+artigos do blog (`frontend-next/src/data/blog-posts.ts`) ainda promovem
+"planilha" como entregável em vários pontos (inclusive um link `/#pricing`
+chamando o produto de "Planilha de Orçamento de Obra"). `tasks.md` não lista
+nenhuma task de reescrita de blog — reescrever ~10+ artigos é decisão de
+conteúdo maior que o escopo de qualquer task individual da Fase 6. Vale
+revisar antes do lançamento real; se virar task formal, provavelmente entra
+na Fase 7 ou como um follow-up de conteúdo separado.
 
 ## Ambiente local — precisa recriar se a sessão for em outra máquina
 
@@ -74,7 +68,7 @@ DATABASE_URL_TEST=postgres://test:test@localhost:55432/orcaobra_test
 AUTH_SECRET=<gerado com openssl rand -base64 32>
 AUTH_URL=http://localhost:3000
 
-# Stripe modo teste, conta "Sirius" — já preenchidas nesta sessão
+# Stripe modo teste, conta "Sirius"
 # (valor real só em .env.local — nunca cole a chave aqui, GitHub bloqueia o push)
 STRIPE_SECRET_KEY=sk_test_<peça ao usuário ou pegue em dashboard.stripe.com/test/apikeys>
 STRIPE_WEBHOOK_SECRET=whsec_placeholder
@@ -97,7 +91,7 @@ TRIAL_DAYS=14
   (`tests/setup.ts`) aplicam as migrações nele automaticamente antes de rodar.
 - `STRIPE_SECRET_KEY` e `STRIPE_PRICE_ID` já são reais (modo teste, conta
   "Sirius" no Stripe, `price_...` = R$ 47,90/mês). O Product/Price foi criado
-  via MCP da Stripe nesta sessão.
+  via MCP da Stripe em sessão anterior.
 - `STRIPE_WEBHOOK_SECRET` continua placeholder — só é necessário para rodar
   `stripe listen --forward-to localhost:3000/api/stripe/webhook` de verdade
   no navegador. Os testes automatizados (`webhook.test.ts`) assinam eventos
@@ -125,7 +119,7 @@ TRIAL_DAYS=14
    `tests/setup.ts` assume um único banco de teste compartilhado; arquivos em
    paralelo se truncavam uns aos outros no meio dos testes.
 4. Três tasks da Fase 7 foram resolvidas de forma antecipada porque caíram
-   naturalmente nos arquivos que eu já estava escrevendo: **T059**
+   naturalmente nos arquivos que já estavam sendo escritos: **T059**
    (`banner-acesso.tsx`, já usado no layout `(app)`), **T076**
    (`deleteAccount` em `server/actions/auth.ts`), **T079** (comentário
    `ponytail:` sobre locking otimista em `lancamentos.ts`). Já marcadas `[X]`
@@ -153,14 +147,15 @@ TRIAL_DAYS=14
    página, diferente de `obras/nova`/`obras/[id]/editar` que T060 já
    redireciona). `obra-form.tsx` ganhou o mesmo tratamento por consistência,
    mas é código morto na prática desde que T060 bloqueia a página antes.
-9. O MCP da Stripe usado nesta sessão (conta "Sirius") só resolve operações
-   depois de reconectar com o toggle de *test mode* explicitamente liberado —
-   por padrão a sessão só trazia escopo de modo live. Se o MCP voltar a
-   retornar zero operações em buscas com `livemode: false`, é esse o motivo:
-   reconectar via `manage_stripe_accounts` e garantir test mode marcado.
+9. O MCP da Stripe usado em sessão anterior (conta "Sirius") só resolve
+   operações depois de reconectar com o toggle de *test mode* explicitamente
+   liberado — por padrão a sessão só trazia escopo de modo live. Se o MCP
+   voltar a retornar zero operações em buscas com `livemode: false`, é esse o
+   motivo: reconectar via `manage_stripe_accounts` e garantir test mode
+   marcado.
 10. **Fase 5**: `listLancamentos` (usada na tela de lançamentos) é paginada em
     50/página e não serve à exportação, que precisa de todos os lançamentos da
-    obra. Em vez de parametrizar a paginação existente, criei
+    obra. Em vez de parametrizar a paginação existente, foi criada
     `listLancamentosParaExport(userId, obraId)` em
     `db/queries/lancamentos.ts` — mesma query escopada por join, sem `LIMIT`.
     T069 testa a exportação pela camada de query (`getObra` +
@@ -170,10 +165,25 @@ TRIAL_DAYS=14
     `/app/conta` lista **todas** as obras não arquivadas do usuário com um
     link de exportação cada uma — a página não tinha contexto de obra antes
     disso.
+11. **Fase 6**: tom de copy confirmado com o usuário antes de reescrever
+    (direto e sóbrio, sem urgência artificial) — ver T072–T073. O `Product`
+    schema em `schema-markup.tsx` tinha um `aggregateRating` fabricado (124
+    reviews, nota 4.8) que foi removido: a constitution (Princípio II) proíbe
+    reviews/ratings fabricados independentemente do ganho de SEO. O mesmo
+    schema virou `SoftwareApplication` com `priceSpecification` mensal em vez
+    de `Product` com oferta de pagamento único. `Reviews.tsx` manteve os
+    depoimentos existentes (não fabricados nesta sessão, só um reajuste de
+    palavra que dizia "planilha") — vale revisão futura se a autenticidade
+    desses depoimentos for questionável.
 
 ## Próximo passo imediato
 
-Fase 6 (SEO/conteúdo público) — T070–T074, ver `contracts/http-routes.md` e
-[spec.md](./spec.md) FR-031 a FR-034. Depende das Fases 3 e 4 (já prontas).
-Envolve decisão de conteúdo (copy da home/`Pricing.tsx`), então vale confirmar
-o tom antes de reescrever.
+Fase 7 (Polish & Cross-Cutting) — começar por **T075** (página pública de
+retenção/privacidade, ver [data-model.md](./data-model.md) § Retenção,
+FR-028). Tasks independentes que podem rodar em paralelo: T077 (performance
+do painel com 500 lançamentos), T078 (responsividade mobile), T087
+(instrumentação GA4). **T080, T081, T082–T086 são os itens de
+pré-lançamento** (TLS de produção, webhook de produção, remoção de legado,
+checklist final) — não pular T080 antes de qualquer deploy real, é o
+bloqueio documentado acima. T088 (teste de usabilidade) só faz sentido com
+pessoas reais, não é executável só por IA.
