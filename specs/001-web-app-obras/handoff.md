@@ -8,10 +8,10 @@ Este projeto usa Spec Kit. Numa sessão nova, basta apontar para este arquivo e
 para `tasks.md`:
 
 > Leia `specs/001-web-app-obras/handoff.md` e continue a implementação a
-> partir da Fase 5 em `tasks.md`.
+> partir da Fase 6 em `tasks.md`.
 
 Ou simplesmente rodar `/speckit-implement` de novo — ele lê
-`check-prerequisites.sh`, vê que `tasks.md` já tem T001–T064 marcados `[X]`
+`check-prerequisites.sh`, vê que `tasks.md` já tem T001–T069 marcados `[X]`
 (mais T076, T079 adiantadas) e retoma do primeiro `[ ]`.
 
 ## Status
@@ -137,6 +137,18 @@ TRIAL_DAYS=14
    por padrão a sessão só trazia escopo de modo live. Se o MCP voltar a
    retornar zero operações em buscas com `livemode: false`, é esse o motivo:
    reconectar via `manage_stripe_accounts` e garantir test mode marcado.
+10. **Fase 5**: `listLancamentos` (usada na tela de lançamentos) é paginada em
+    50/página e não serve à exportação, que precisa de todos os lançamentos da
+    obra. Em vez de parametrizar a paginação existente, criei
+    `listLancamentosParaExport(userId, obraId)` em
+    `db/queries/lancamentos.ts` — mesma query escopada por join, sem `LIMIT`.
+    T069 testa a exportação pela camada de query (`getObra` +
+    `listLancamentosParaExport` + `lancamentosParaCsv`), não pela rota HTTP:
+    a rota chama `requireUser()` → `auth()`, que exige request scope e não
+    roda no Vitest (mesma limitação de T050, item 6 acima). O botão em
+    `/app/conta` lista **todas** as obras não arquivadas do usuário com um
+    link de exportação cada uma — a página não tinha contexto de obra antes
+    disso.
 
 ## Próximo passo imediato
 
