@@ -6,73 +6,153 @@
 
 ## 1. Sumário executivo
 
-O **Reforma Maestro** não é um SaaS com backend próprio — é o **site de vendas (landing page)** de um produto digital chamado **"Gestor Financeiro de Obras 1.0"**: uma planilha Google Sheets pronta para uso, vendida por **R$ 47,90** em pagamento único ("acesso vitalício"), com checkout processado 100% pela **Kiwify**.
+O **Reforma Maestro** deixou de ser a landing page de venda de uma planilha
+Google Sheets e virou um **web app com backend próprio**: controle financeiro
+de obras por assinatura recorrente (**R$ 47,90/mês**, cobrança via **Stripe**),
+com **14 dias de teste grátis sem cartão**. O código deste repositório agora
+serve tanto o canal de aquisição (landing page, blog, `/sobre`, todos com URL
+preservada) quanto o produto em si, autenticado, em `/app`.
 
-O produto ajuda uma pessoa física leiga — sem conhecimento técnico de construção civil ou de planilhas — a não perder o controle do orçamento durante uma reforma ou obra residencial. O código deste repositório existe para **converter visitante em comprador**: página institucional, blog de SEO e scripts administrativos que geram a planilha entregue ao cliente.
+O produto ajuda uma pessoa física leiga — sem conhecimento técnico de
+construção civil ou de planilhas — a não perder o controle do orçamento
+durante uma reforma ou obra residencial. Isso não mudou. O que mudou é a
+entrega: em vez de uma planilha provisionada manualmente por script, é uma
+conta com dados persistidos em Postgres, cadastro/login, múltiplas obras por
+conta e assinatura como fonte da verdade do acesso.
 
-Projeto jovem: histórico de git com apenas 5 commits, todos entre 29 e 31/07/2026, focados em ajustes de SEO/domínio. O código da landing page em si já nasceu pronto (provavelmente gerado via Lovable) e só passou a ser versionado nesta fase final de lançamento.
+A migração (feature `001-web-app-obras`, fluxo Spec Kit) está com **MVP +
+assinatura + exportação + SEO/conteúdo público completos e no `main`** (Fases
+1–6). Resta a Fase 7 (polish e itens de pré-lançamento) — ver §8.
 
 ---
 
 ## 2. A dor que resolve
 
-Reformas residenciais estouram orçamento com frequência porque o controle financeiro de quem contrata é informal: anotações soltas, WhatsApp com fornecedores, memória. Sem comparar **Previsto vs. Realizado** por categoria (Material, Mão de Obra, Taxas, Mobília), o dono da obra só percebe o estouro quando já é tarde — e não tem visibilidade de quanto do orçamento já foi consumido nem de para onde o dinheiro está indo.
+Reformas residenciais estouram orçamento com frequência porque o controle
+financeiro de quem contrata é informal: anotações soltas, WhatsApp com
+fornecedores, memória. Sem comparar **Previsto vs. Realizado** por categoria
+(Material, Mão de Obra, Taxas, Mobília), o dono da obra só percebe o estouro
+quando já é tarde — e não tem visibilidade de quanto do orçamento já foi
+consumido nem de para onde o dinheiro está indo.
 
-A dor não é "gerenciar uma obra" (isso é problema do engenheiro/construtora) — é **fluxo de caixa pessoal durante um projeto de gasto imprevisível e prolongado**, para alguém que não usaria (ou não sabe montar) uma ferramenta de gestão de projetos ou um ERP de construção.
+A dor não é "gerenciar uma obra" (isso é problema do engenheiro/construtora) —
+é **fluxo de caixa pessoal durante um projeto de gasto imprevisível e
+prolongado**, para alguém que não usaria (ou não sabe montar) uma ferramenta
+de gestão de projetos ou um ERP de construção.
 
 ## 3. A quem se destina
 
-**Perfil do cliente (ICP):** pessoa física, dona de imóvel, executando reforma ou construção residencial — não é construtora, não é profissional de engenharia/arquitetura. Já é usuária básica de planilhas (Excel/Google Sheets), mas não sabe construir uma do zero com fórmulas, validações e dashboard.
+**Perfil do cliente (ICP):** pessoa física, dona de imóvel, executando reforma
+ou construção residencial — não é construtora, não é profissional de
+engenharia/arquitetura. Uso majoritário em celular durante a obra.
 
-Não é um produto para o mercado B2B de construção civil (não há e nunca houve indício de integração com tabela SINAPI real, ERPs de obra, ou fluxos multiusuário/aprovação — a menção a SINAPI no marketing é apenas textual).
+Não é um produto para o mercado B2B de construção civil (não há e nunca houve
+integração com tabela SINAPI real, ERPs de obra, ou fluxos
+multiusuário/aprovação — a menção a SINAPI no marketing é apenas ilustrativa).
 
 ## 4. O que o produto faz
 
-A entrega ao cliente é uma planilha com três abas:
+Depois de cadastrar (trial de 14 dias, sem cartão), a conta pode:
 
-| Aba | Função |
+| Área | Função |
 |---|---|
-| `CONFIG` | Orçamento teto da obra e % de fundo de reserva |
-| `DB_LANCAMENTOS` | Registro de gastos: Data, Categoria (validada: Material / Mão de Obra / Taxas / Mobília), Item, Fornecedor, Valor Previsto, Valor Pago — com cálculo automático de Status (Pago/Pendente) e Diferença |
-| `DASHBOARD` | Totais, saldo restante, % do orçamento utilizado, gráfico de pizza por categoria, formatação condicional (vermelho ao estourar o previsto) |
+| Obras | Cadastrar múltiplas obras, cada uma com orçamento teto e % de fundo de reserva |
+| Lançamentos | Registrar gastos por obra: data, categoria (Material / Mão de Obra / Taxas / Mobília), item, valor previsto, valor pago — com status (Pago/Pendente) e diferença calculados no servidor |
+| Painel | Cards de total previsto, total pago, saldo restante, % do orçamento consumido, fundo de reserva explícito, alerta de estouro e gráfico por categoria |
+| Exportação | CSV por obra a qualquer momento, inclusive com assinatura cancelada ou vencida |
+| Assinatura | Checkout e Customer Portal Stripe, trial sem cartão, degradação de acesso previsível quando a assinatura expira ou falha o pagamento |
 
-Isso é descrito em detalhe no manual entregue ao comprador (`INSTRUCOES_RAPIDAS.md`).
+Todo cálculo financeiro (centavos, arredondamento, status do lançamento) é
+feito no servidor, nunca confiado ao cliente.
 
 ## 5. Como funciona — jornada do cliente
 
-1. Visitante chega ao site (orgânico via blog/SEO, ou tráfego pago/direto) em `orcaobra.roilabs.com.br`.
-2. Landing page apresenta o problema (estouro de orçamento), a solução ("Metodologia Cash-First") e prova social (depoimentos, FAQ).
-3. CTA leva a um link de checkout hospedado na **Kiwify** — não há integração de API/webhook no código; é um link direto configurado em `frontend-next/src/components/Pricing.tsx`.
-4. Pagamento aprovado → entrega da planilha é responsabilidade da Kiwify (fora do escopo deste código).
-5. A planilha-produto em si é provisionada **manualmente pelo desenvolvedor**, fora do runtime do site, via scripts Node que usam a Google Sheets API com uma Service Account (`frontend-next/scripts/create-spreadsheet.ts`, `populate-spreadsheet.ts`).
+1. Visitante chega ao site (orgânico via blog/SEO, ou tráfego pago/direto) em
+   `orcaobra.roilabs.com.br` — a landing page, o blog e `/sobre` mantêm as
+   mesmas URLs de antes da migração.
+2. CTA leva ao cadastro em `/cadastrar`: conta nasce em **trial de 14 dias,
+   sem cartão**.
+3. O cliente já usa o produto completo durante o trial: cadastra obras,
+   lança gastos, acompanha o painel.
+4. Perto do fim do trial (ou depois dele), a conta é convidada a assinar via
+   **Stripe Checkout** (`/app/assinar`). Pagamento aprovado libera o acesso
+   automaticamente — o **webhook do Stripe é o único escritor de estado de
+   assinatura**, nunca o cliente.
+5. Cancelamento, inadimplência ou trial vencido degradam o acesso para
+   **somente leitura + exportação** (nunca perda de dados) até o titular
+   pedir a exclusão da conta.
 
 ## 6. Como funciona — arquitetura técnica
 
-Sem backend, sem banco de dados, sem autenticação. Dois frontends coexistem no repositório:
+Um único codebase, um único deploy Vercel — sem microsserviço, fila ou cache
+distribuído (Princípio I da constitution).
 
-- **`frontend-next/`** — versão em produção. Next.js 16 (App Router) + React 19 + TypeScript, Tailwind + shadcn/ui, hospedado na Vercel. Contém:
-  - `app/` — home, blog (`blog/[slug]`), `/sobre`, `sitemap.ts`/`robots.ts` dinâmicos
-  - `components/` — seções da landing (Hero, Problem, Solution, Authority, Reviews, FAQ, Pricing, Header, Footer) + `schema-markup.tsx` (JSON-LD: Organization, Product com rating agregado)
-  - `data/blog-posts.ts` — os 4 artigos do blog embutidos como array TypeScript (sem CMS)
-  - `scripts/` — ferramentas administrativas offline (Google Sheets API) para gerar a planilha-produto
-- **`frontend/`** — versão anterior gerada via Lovable (Vite + React 18 + bun), mesma landing sem blog nem rotas dinâmicas. Provavelmente o protótipo que precedeu a migração para Next.js.
+- **`frontend-next/`** — único frontend ativo (o protótipo legado `frontend/`,
+  gerado via Lovable, foi removido do repositório). Next.js 16 (App Router) +
+  React 19 + TypeScript, Tailwind + shadcn/ui, hospedado na Vercel. Contém:
+  - `app/(public)/` — home, blog (`blog/[slug]`), `/sobre`, `/privacidade`:
+    mesmas URLs de antes, sem redirect
+  - `app/(auth)/` — `entrar`, `cadastrar`, `recuperar-senha`,
+    `redefinir-senha/[token]`, `noindex`
+  - `app/(app)/app/` — o produto autenticado: seletor de obras, painel,
+    lançamentos, assinatura, conta — protegido por middleware, `noindex`
+  - `app/api/` — handler do Auth.js, webhook do Stripe, exportação CSV,
+    cron diário de avisos de trial
+  - `db/` — schema único via Drizzle ORM, migrações SQL versionadas e
+    reversíveis, queries de leitura sempre escopadas por `user_id`
+  - `server/actions/` — mutações (Server Actions): auth, obras, lançamentos,
+    assinatura
+  - `lib/` — lógica pura testada (`money.ts`, `calc.ts`, `csv.ts`),
+    `access.ts` (fonte da verdade do tier de acesso), integrações
+    (`auth.ts`, `stripe.ts`, `email.ts`)
 
-Integrações externas: Kiwify (checkout), Google Sheets/Drive API (fulfillment manual do produto), Google Analytics 4, Google Search Console. Nenhuma integração SINAPI real, nenhum backend próprio.
+Integrações externas: **Stripe** (Checkout + Customer Portal + webhook,
+cobrança recorrente), **Postgres** auto-hospedado (`sslmode=require` fora de
+ambiente de teste), **Resend** (e-mail transacional), Google Analytics 4,
+Google Search Console. A Google Sheets API e os scripts de provisionamento
+manual da planilha foram removidos — não há mais fulfillment manual.
+
+Testes automatizados (Vitest) cobrem o que a constitution exige: autenticação,
+escopo de dados por usuário, cálculo financeiro e estado de assinatura —
+55 testes em 10 arquivos, todos passando no `main`.
 
 ## 7. Por que existe / racional de negócio
 
-Modelo de **infoproduto de baixo ticket com alta escalabilidade**: custo marginal por venda é praticamente zero (planilha + link de pagamento), o que justifica o investimento pesado em SEO (blog com 4 artigos, schema markup, sitemap, `/sobre` para E-E-A-T) como canal de aquisição orgânica de longo prazo — visível em `roadmaps/roadmap_SEO.md` e nas regras de linkagem interna (`regras_SEO.md`).
+SEO continua sendo o canal de aquisição primário (blog, `/sobre` para E-E-A-T,
+sitemap, structured data — Princípio II da constitution), mas o modelo de
+receita mudou de infoproduto de pagamento único para **assinatura recorrente**:
+o produto agora tem custo de operação contínuo (banco de dados, e-mail,
+processamento de pagamento) e entrega valor contínuo (dados sempre
+atualizados, múltiplas obras, sem limite de uso), o que justifica cobrança
+mensal em vez de "acesso vitalício".
 
 ## 8. Estado atual e maturidade
 
-- Git: 5 commits (29–31/07/2026), todos de ajuste de SEO/domínio, working tree limpo, sincronizado com `origin/main`.
-- **Ponto de atenção:** o domínio canônico mudou 3 vezes em menos de 3 dias (placeholder Lovable → `financeiro-obras.roilabs.com.br` → `orcaobra.roilabs.com.br`, o atual). Vale confirmar que todas as referências (Search Console, backlinks, Kiwify) apontam para o domínio final antes de investir mais em SEO.
-- Não há testes automatizados, CI/CD documentado, monitoramento de erros ou analytics de conversão além do GA4 básico.
-- Não há changelog nem documentação de arquitetura prévia — este documento é a primeira visão consolidada do projeto.
+- Feature `001-web-app-obras` (Spec Kit): **Fases 1–6 completas, verificadas
+  e no `main`** — MVP, assinatura, exportação, SEO/conteúdo público. Fase 7
+  (polish e pré-lançamento) em andamento; ver
+  [`specs/001-web-app-obras/tasks.md`](../specs/001-web-app-obras/tasks.md) e
+  [`specs/001-web-app-obras/handoff.md`](../specs/001-web-app-obras/handoff.md)
+  para o detalhe task-a-task.
+- `npm test` (55/55), `npm run build` e `npm run lint` limpos no `main`.
+- Governança do projeto segue a `.specify/memory/constitution.md` (v2.0.0),
+  reescrita para refletir o pivot de infoproduto estático para web app com
+  backend.
 
 ## 9. Riscos e lacunas conhecidas
 
-- **Fulfillment manual**: a geração da planilha depende de um script rodado manualmente pelo desenvolvedor com uma Service Account local (chave `.json` fora do versionamento) — não escala sem intervenção humana por venda.
-- **Sem webhook Kiwify**: não há automação entre pagamento confirmado e entrega; presumivelmente a Kiwify entrega um link/arquivo estático configurado na própria plataforma, fora deste repositório.
-- **Dois frontends redundantes**: manter `frontend/` (legado Lovable) e `frontend-next/` (produção) no mesmo repo é fonte potencial de confusão; se `frontend/` não estiver mais em uso, é candidato a remoção.
-- **Depoimentos e rating agregado (schema `Product`) parecem hardcoded**, não coletados dinamicamente — atenção a compliance de "reviews" no Schema.org/Google se não forem reais e verificáveis.
+- **TLS de produção pendente**: o Postgres real ainda não tem `sslmode=require`
+  habilitado no host; `src/db/index.ts` derruba qualquer request em
+  `NODE_ENV=production` sem isso (guarda proposital). É o bloqueio real antes
+  de qualquer deploy funcionar em produção — rastreado como T080 na Fase 7.
+- **Webhook de produção do Stripe** ainda não cadastrado apontando para o
+  domínio final, nem as variáveis de ambiente de produção definidas na Vercel
+  (T081).
+- **Débito de conteúdo**: os artigos do blog (`frontend-next/src/data/blog-posts.ts`)
+  ainda promovem "planilha" como entregável em vários pontos. Reescrever
+  ~10+ artigos é decisão de conteúdo maior que o escopo de uma task
+  individual — vale revisão antes do lançamento real.
+- **Teste de usabilidade e instrumentação de eventos GA4** (`obra_criada`,
+  `lancamento_criado`, `assinatura_concluida`) ainda pendentes — sem eles, os
+  critérios de sucesso de tempo (SC-001 a SC-004) e conversão (SC-003,
+  SC-011) ficam declarados mas não verificáveis após o lançamento.

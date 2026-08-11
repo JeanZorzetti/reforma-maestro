@@ -12,6 +12,9 @@ export const Footer = () => {
             <Link href="/blog" className="hover:text-primary transition-colors">
               Visite nosso Blog
             </Link>
+            <Link href="/privacidade" className="hover:text-primary transition-colors">
+              Privacidade
+            </Link>
           </div>
           <p className="text-sm text-gray-500">
             &copy; {new Date().getFullYear()} Reforma Maestro. Todos os direitos reservados.

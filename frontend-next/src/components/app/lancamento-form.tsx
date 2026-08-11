@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { createLancamento, updateLancamento } from "@/server/actions/lancamentos";
+import { trackEvent } from "@/lib/analytics";
 
 const CATEGORIAS = [
   { value: "material", label: "Material" },
@@ -113,6 +114,7 @@ export function LancamentoForm({ obraId, lancamentoId, defaultValues }: Lancamen
         return;
       }
 
+      if (!lancamentoId) trackEvent("lancamento_criado");
       sessionStorage.removeItem(draftKey);
       router.push(`/app/obras/${obraId}/lancamentos`);
       router.refresh();

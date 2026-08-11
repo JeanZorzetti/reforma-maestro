@@ -8,6 +8,7 @@ import { createPortalSession } from "@/server/actions/assinatura";
 import { listObras } from "@/db/queries/obras";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckoutSuccessTracker } from "@/components/app/checkout-success-tracker";
 
 const STATUS_LABEL: Record<string, string> = {
   trialing: "Em teste grátis",
@@ -17,9 +18,15 @@ const STATUS_LABEL: Record<string, string> = {
   expired: "Expirada",
 };
 
-export default async function ContaPage() {
+export default async function ContaPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ checkout?: string }>;
+}) {
   const session = await auth();
   if (!session?.user?.id) redirect("/entrar");
+
+  const { checkout } = await searchParams;
 
   const [sub] = await db
     .select()
@@ -31,6 +38,7 @@ export default async function ContaPage() {
 
   return (
     <Card className="mx-auto max-w-md">
+      {checkout === "sucesso" && <CheckoutSuccessTracker />}
       <CardHeader>
         <CardTitle>Minha conta</CardTitle>
       </CardHeader>

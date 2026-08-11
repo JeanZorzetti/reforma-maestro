@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { createObra, updateObra } from "@/server/actions/obras";
+import { trackEvent } from "@/lib/analytics";
 
 const formSchema = z.object({
   nome: z.string().min(1, "O nome da obra é obrigatório.").max(120),
@@ -67,6 +68,7 @@ export function ObraForm({ obraId, defaultValues }: ObraFormProps) {
           }
           return;
         }
+        trackEvent("obra_criada");
         router.push(`/app/obras/${result.data.obraId}`);
       }
       router.refresh();

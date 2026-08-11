@@ -14,9 +14,9 @@ export default async function SeletorObrasPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-xl font-semibold">Suas obras</h1>
-        <Button asChild>
+        <Button asChild className="self-start">
           <Link href="/app/obras/nova">Nova obra</Link>
         </Button>
       </div>

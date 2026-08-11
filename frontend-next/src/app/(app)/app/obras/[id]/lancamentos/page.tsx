@@ -62,15 +62,15 @@ export default async function LancamentosPage({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-xl font-semibold">Lançamentos — {obra.nome}</h1>
-        <Button asChild>
+        <Button asChild className="self-start">
           <Link href={`/app/obras/${id}/lancamentos/novo`}>Novo lançamento</Link>
         </Button>
       </div>
 
       <div className="flex flex-wrap gap-4">
-        <div className="flex gap-2 text-sm">
+        <div className="flex flex-wrap gap-2 text-sm">
           <Link href={filterUrl({ categoria: undefined, page: 1 })} className={!categoria ? "font-semibold" : "text-muted-foreground"}>
             Todas as categorias
           </Link>
@@ -84,7 +84,7 @@ export default async function LancamentosPage({
             </Link>
           ))}
         </div>
-        <div className="flex gap-2 text-sm">
+        <div className="flex flex-wrap gap-2 text-sm">
           <Link href={filterUrl({ status: undefined, page: 1 })} className={!status ? "font-semibold" : "text-muted-foreground"}>
             Todos
           </Link>
