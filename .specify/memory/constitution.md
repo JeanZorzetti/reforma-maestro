@@ -1,15 +1,9 @@
 <!--
 Sync Impact Report
-- Version change: 1.0.0 → 2.0.0 (MAJOR — pivot de infoproduto estático para web app com backend)
+- Version change: 2.0.0 → 3.0.0 (MAJOR — remoção do requisito de TLS obrigatório do Princípio V)
 - Modified principles:
-  - I. Simplicity First (No Backend Creep) → I. Minimal Backend, Single Deploy (redefinido: backend agora permitido, mas restrito a Next.js API routes)
-  - III. Next.js as the Canonical Stack → III. Single Codebase, Single Deploy (expandido para incluir API routes e Postgres)
-  - V. Revenue-Path & Credential Safety → V. Credential & Customer Data Safety (reforçado: agora há dados financeiros de terceiros em banco)
-- Added sections: IV. Subscription State is the Access Source of Truth; VI. Data Ownership & Portability
-- Removed sections: IV. Manual Fulfillment is an Accepted Trade-off (obsoleto — fulfillment agora é provisionamento automático de conta)
-- Follow-up TODOs:
-  - TODO(SSL_ENFORCEMENT): conexão Postgres atual usa sslmode=disable sobre IP público; migrar para sslmode=require antes de dados reais de cliente.
-  - TODO(BILLING_PROVIDER): definir se assinatura roda em Kiwify recorrente ou Stripe antes do /speckit-plan.
+  - V. Credential & Customer Data Safety: removida a exigência de sslmode=require em produção. O Postgres auto-hospedado (Easypanel, mesmo host de outros ~34 projetos) não isola namespace de IPC entre containers, e uma tentativa de habilitar TLS em 2026-08-11 gerou colisão de memória compartilhada com outro banco de produção ativo no mesmo host — risco maior do que o problema que resolvia. Decisão: aceitar sslmode=disable, alinhado ao padrão já usado nos demais projetos no mesmo host.
+- Removed follow-up TODOs: TODO(SSL_ENFORCEMENT) — descartado, não T080 pendente. Ver histórico do dia 2026-08-11 para o motivo.
 -->
 
 # Reforma Maestro Constitution
@@ -50,10 +44,14 @@ quanto tempo os dados dele sobrevivem).
 O sistema passa a guardar dados financeiros de terceiros (orçamentos,
 gastos, fornecedores de obras reais). Segredos (connection strings, chaves
 de billing, chaves de Service Account) MUST NEVER ser commitados — vivem em
-`.env.local` e nas env vars da Vercel. Conexões de banco MUST usar TLS
-(`sslmode=require`) em qualquer ambiente que trafegue dado real. Toda query
-que lê dados de obra MUST ser escopada ao usuário autenticado no servidor;
-isolamento por usuário é requisito de corretude, não de conveniência.
+`.env.local` e nas env vars da Vercel. A conexão de banco roda sem TLS
+(`sslmode=disable`), mesmo padrão usado nos demais projetos hospedados no
+mesmo host — o host não isola namespace de IPC entre containers Postgres, e
+uma tentativa de habilitar TLS colidiu com outro banco de produção ativo.
+Risco aceito conscientemente; não reabrir sem resolver o isolamento de IPC
+no host primeiro. Toda query que lê dados de obra MUST ser escopada ao
+usuário autenticado no servidor; isolamento por usuário é requisito de
+corretude, não de conveniência.
 
 ### VI. Data Ownership & Portability
 O cliente é dono dos dados da obra dele. O app MUST oferecer exportação
@@ -101,4 +99,4 @@ Report atualizado no topo deste arquivo. Todo `/speckit-plan` que proponha
 trabalho conflitante com um Core Principle deve justificar o desvio
 explicitamente na seção Complexity Tracking do plano ou ser revisado.
 
-**Version**: 2.0.0 | **Ratified**: 2026-08-11 | **Last Amended**: 2026-08-11
+**Version**: 3.0.0 | **Ratified**: 2026-08-11 | **Last Amended**: 2026-08-11
