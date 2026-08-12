@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LogoMark } from "@/components/LogoMark";
 
 export function Header() {
     const [isOpen, setIsOpen] = useState(false);
@@ -22,12 +23,7 @@ export function Header() {
             <div className="container mx-auto px-4 h-16 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-                    <svg viewBox="0 0 48 48" fill="none" aria-hidden="true" className="h-7 w-7 shrink-0">
-                        <path d="M5 21.5 24 7l19 14.5" className="stroke-primary" strokeWidth="4.4" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M10 24.5V41h28V24.5" className="stroke-primary" strokeWidth="4.4" strokeLinecap="round" strokeLinejoin="round" />
-                        <rect x="15" y="29" width="18" height="7" rx="3.5" className="fill-primary/20" />
-                        <rect x="15" y="29" width="11.5" height="7" rx="3.5" className="fill-accent" />
-                    </svg>
+                    <LogoMark />
                     <span className="text-primary">Reforma</span> Maestro
                 </Link>
 

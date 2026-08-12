@@ -3,6 +3,7 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { getAccess } from "@/lib/access";
 import { BannerAcesso } from "@/components/app/banner-acesso";
+import { LogoMark } from "@/components/LogoMark";
 import { Button } from "@/components/ui/button";
 import { signOutAction } from "@/server/actions/auth";
 
@@ -18,7 +19,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen bg-muted/20">
       <header className="border-b bg-background">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-          <Link href="/app" className="font-semibold">
+          <Link href="/app" className="flex items-center gap-2 font-semibold">
+            <LogoMark className="h-6 w-6" />
             Reforma Maestro
           </Link>
           <nav className="flex items-center gap-4 text-sm">
