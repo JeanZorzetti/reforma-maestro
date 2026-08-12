@@ -174,11 +174,11 @@ sem depender de US1 nem de US2.
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T062 [P] Atualizar `frontend-next/CLAUDE.md` e `frontend-next/AGENTS.md` com as tabelas novas, `recordIncident()` como ponto único de alerta e o par de crons
-- [ ] T063 [P] Conferir com `EXPLAIN` que a evolução, a paginação e o relatório de uma obra com 500 lançamentos ficam abaixo de 2 s por operação (SC-009)
-- [ ] T064 Reler `detail` gravado em `incidents` e `audit_log` em todos os caminhos novos, confirmando ausência de senha, token, chave, `item`, `fornecedor` e qualquer `*_cents` (Princípio V)
-- [ ] T065 Rodar `npm test`, `npm run lint` e `npm run build` em `frontend-next/` com tudo integrado
-- [ ] T066 Executar o `quickstart.md` inteiro, incluindo a cronometragem em celular real (SC-005, SC-006) e a conferência de que `/sitemap.xml` e o structured data não regrediram (Princípio II)
+- [X] T062 [P] Atualizar `frontend-next/CLAUDE.md` e `frontend-next/AGENTS.md` com as tabelas novas, `recordIncident()` como ponto único de alerta e o par de crons
+- [X] T063 [P] Conferir com `EXPLAIN` que a evolução, a paginação e o relatório de uma obra com 500 lançamentos ficam abaixo de 2 s por operação (SC-009)
+- [X] T064 Reler `detail` gravado em `incidents` e `audit_log` em todos os caminhos novos, confirmando ausência de senha, token, chave, `item`, `fornecedor` e qualquer `*_cents` (Princípio V)
+- [X] T065 Rodar `npm test`, `npm run lint` e `npm run build` em `frontend-next/` com tudo integrado
+- [X] T066 Executar o `quickstart.md` inteiro, incluindo a cronometragem em celular real (SC-005, SC-006) e a conferência de que `/sitemap.xml` e o structured data não regrediram (Princípio II)
 
 ---
 

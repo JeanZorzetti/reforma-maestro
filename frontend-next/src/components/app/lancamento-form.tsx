@@ -289,7 +289,7 @@ export function LancamentoForm({ obraId, lancamentoId, defaultValues }: Lancamen
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Periodicidade</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value ?? ""}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Escolha" />
