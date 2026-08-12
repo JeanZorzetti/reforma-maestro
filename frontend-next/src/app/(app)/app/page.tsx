@@ -17,9 +17,14 @@ export default async function SeletorObrasPage() {
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-xl font-semibold">Suas obras</h1>
-        <Button asChild className="self-start">
-          <Link href="/app/obras/nova">Nova obra</Link>
-        </Button>
+        <div className="flex gap-2 self-start">
+          <Button asChild variant="outline">
+            <Link href="/app/obras/arquivadas">Arquivadas</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/app/obras/nova">Nova obra</Link>
+          </Button>
+        </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         {obras.map((obra) => (

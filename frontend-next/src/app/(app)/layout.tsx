@@ -17,7 +17,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-screen bg-muted/20">
-      <header className="border-b bg-background">
+      <header className="border-b bg-background print:hidden">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <Link href="/app" className="flex items-center gap-2 font-semibold">
             <LogoMark className="h-6 w-6" />
@@ -33,8 +33,12 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </nav>
         </div>
       </header>
-      {access && <BannerAcesso access={access} />}
-      <main className="mx-auto max-w-5xl px-4 py-6">{children}</main>
+      {access && (
+        <div className="print:hidden">
+          <BannerAcesso access={access} />
+        </div>
+      )}
+      <main className="mx-auto max-w-5xl px-4 py-6 print:max-w-none print:p-0">{children}</main>
     </div>
   );
 }

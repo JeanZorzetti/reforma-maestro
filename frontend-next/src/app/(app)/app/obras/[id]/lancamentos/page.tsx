@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { LancamentoRowActions } from "@/components/app/lancamento-row-actions";
+import { Paginacao } from "@/components/app/paginacao";
 
 const LABELS: Record<string, string> = {
   material: "Material",
@@ -46,8 +47,6 @@ export default async function LancamentosPage({
     categoria: categoria as never,
     status: status as never,
   });
-
-  const totalPages = Math.max(1, Math.ceil(result.total / result.pageSize));
 
   const parcelamentoIds = [...new Set(result.items.map((l) => l.parcelamentoId).filter((v): v is string => !!v))];
   const serieCounts = await countsByParcelamento(session.user.id, id, parcelamentoIds);
@@ -151,19 +150,12 @@ export default async function LancamentosPage({
         </TableBody>
       </Table>
 
-      {totalPages > 1 && (
-        <div className="flex justify-center gap-2">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <Link
-              key={p}
-              href={filterUrl({ page: p })}
-              className={p === currentPage ? "font-semibold underline" : "text-muted-foreground"}
-            >
-              {p}
-            </Link>
-          ))}
-        </div>
-      )}
+      <Paginacao
+        page={currentPage}
+        pageSize={result.pageSize}
+        total={result.total}
+        hrefForPage={(p) => filterUrl({ page: p })}
+      />
     </div>
   );
 }

@@ -2,11 +2,13 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { getObra } from "@/db/queries/obras";
-import { getPainelPorCategoria, getPainelTotais } from "@/db/queries/painel";
+import { evolucaoConsumo, getPainelPorCategoria, getPainelTotais } from "@/db/queries/painel";
 import { excedidoCents } from "@/lib/calc";
 import { PainelCards } from "@/components/app/painel-cards";
 import { AlertaEstouro } from "@/components/app/alerta-estouro";
 import { GraficoCategorias } from "@/components/app/grafico-categorias";
+import { GraficoEvolucao } from "@/components/app/grafico-evolucao";
+import { ObraArchiveButton } from "@/components/app/obra-archive-button";
 import { Button } from "@/components/ui/button";
 
 export default async function PainelObraPage({ params }: { params: Promise<{ id: string }> }) {
@@ -17,9 +19,10 @@ export default async function PainelObraPage({ params }: { params: Promise<{ id:
   const obra = await getObra(session.user.id, id);
   if (!obra) notFound();
 
-  const [totais, porCategoria] = await Promise.all([
+  const [totais, porCategoria, evolucao] = await Promise.all([
     getPainelTotais(session.user.id, id),
     getPainelPorCategoria(session.user.id, id),
+    evolucaoConsumo(session.user.id, id),
   ]);
 
   const orcamentoTetoCents = obra.orcamentoTetoCents;
@@ -39,6 +42,10 @@ export default async function PainelObraPage({ params }: { params: Promise<{ id:
           <Button asChild variant="outline" size="sm">
             <a href={`/api/obras/${id}/export`}>Exportar CSV</a>
           </Button>
+          <Button asChild variant="outline" size="sm">
+            <Link href={`/app/obras/${id}/relatorio`}>Relatório</Link>
+          </Button>
+          <ObraArchiveButton obraId={id} />
         </div>
       </div>
 
@@ -52,6 +59,8 @@ export default async function PainelObraPage({ params }: { params: Promise<{ id:
       />
 
       <GraficoCategorias dados={porCategoria} />
+
+      <GraficoEvolucao dados={evolucao} orcamentoTetoCents={orcamentoTetoCents} />
     </div>
   );
 }

@@ -68,24 +68,44 @@ export async function updateObra(formData: FormData): Promise<ActionResult> {
   return { ok: true, data: undefined };
 }
 
-export async function archiveObra(formData: FormData): Promise<ActionResult> {
-  const user = await requireUser();
-  if (!user) return { ok: false, error: "SESSAO_EXPIRADA" };
-  if (!(await requireFullAccess(user.id))) return { ok: false, error: "ACESSO_SOMENTE_LEITURA" };
-
-  const obraId = String(formData.get("obraId") ?? "");
-  const arquivar = formData.get("arquivar") === "true";
-
+/**
+ * Núcleo puro (userId direto, sem `revalidatePath`) — nunca toca `subscriptions`,
+ * por isso não altera acesso (FR-028). Testável sem request scope (T048).
+ */
+async function setArquivada(userId: string, obraId: string, arquivada: boolean): Promise<ActionResult> {
   const result = await db
     .update(obras)
-    .set({ arquivadaEm: arquivar ? new Date() : null, updatedAt: new Date() })
-    .where(and(eq(obras.id, obraId), eq(obras.userId, user.id)))
+    .set({ arquivadaEm: arquivada ? new Date() : null, updatedAt: new Date() })
+    .where(and(eq(obras.id, obraId), eq(obras.userId, userId)))
     .returning({ id: obras.id });
 
   if (result.length === 0) return { ok: false, error: "NAO_ENCONTRADO" };
-
-  revalidatePath("/app");
   return { ok: true, data: undefined };
+}
+
+export async function arquivarObraCore(userId: string, obraId: string): Promise<ActionResult> {
+  return setArquivada(userId, obraId, true);
+}
+export async function desarquivarObraCore(userId: string, obraId: string): Promise<ActionResult> {
+  return setArquivada(userId, obraId, false);
+}
+
+export async function arquivarObra(formData: FormData): Promise<ActionResult> {
+  const user = await requireUser();
+  if (!user) return { ok: false, error: "SESSAO_EXPIRADA" };
+  if (!(await requireFullAccess(user.id))) return { ok: false, error: "ACESSO_SOMENTE_LEITURA" };
+  const result = await arquivarObraCore(user.id, String(formData.get("obraId") ?? ""));
+  if (result.ok) revalidatePath("/app");
+  return result;
+}
+
+export async function desarquivarObra(formData: FormData): Promise<ActionResult> {
+  const user = await requireUser();
+  if (!user) return { ok: false, error: "SESSAO_EXPIRADA" };
+  if (!(await requireFullAccess(user.id))) return { ok: false, error: "ACESSO_SOMENTE_LEITURA" };
+  const result = await desarquivarObraCore(user.id, String(formData.get("obraId") ?? ""));
+  if (result.ok) revalidatePath("/app");
+  return result;
 }
 
 export async function deleteObra(formData: FormData): Promise<ActionResult> {

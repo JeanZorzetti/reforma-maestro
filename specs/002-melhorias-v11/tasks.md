@@ -149,24 +149,24 @@ sem depender de US1 nem de US2.
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T047 [P] [US3] Teste unitário da agregação de evolução em `frontend-next/tests/unit/evolucao.test.ts`: acumulado por mês, separação entre pago (`data <= CURRENT_DATE`) e previsto, e array vazio com menos de 2 meses distintos
-- [ ] T048 [P] [US3] Teste de integração em `frontend-next/tests/integration/arquivar.test.ts`: `getAccess()` devolve o mesmo `tier` antes e depois de arquivar, e a obra arquivada continua exportável (FR-028)
-- [ ] T049 [P] [US3] Teste de integração do funil em `frontend-next/tests/integration/funil.test.ts`: `createAccount` → `getAccess` (trial) → evento Stripe assinado localmente → `processStripeWebhookEvent` → `getAccess` (full), com chave Stripe de modo teste (FR-032)
+- [X] T047 [P] [US3] Teste unitário da agregação de evolução em `frontend-next/tests/unit/evolucao.test.ts`: acumulado por mês, separação entre pago (`data <= CURRENT_DATE`) e previsto, e array vazio com menos de 2 meses distintos
+- [X] T048 [P] [US3] Teste de integração em `frontend-next/tests/integration/arquivar.test.ts`: `getAccess()` devolve o mesmo `tier` antes e depois de arquivar, e a obra arquivada continua exportável (FR-028)
+- [X] T049 [P] [US3] Teste de integração do funil em `frontend-next/tests/integration/funil.test.ts`: `createAccount` → `getAccess` (trial) → evento Stripe assinado localmente → `processStripeWebhookEvent` → `getAccess` (full), com chave Stripe de modo teste (FR-032)
 
 ### Implementation for User Story 3
 
-- [ ] T050 [P] [US3] Implementar `evolucaoConsumo(userId, obraId)` em `frontend-next/src/db/queries/painel.ts` com `SUM(...) OVER (ORDER BY mes)` para pago e previsto, escopo por join em `obras.user_id` e retorno vazio abaixo de 2 meses distintos (FR-023 a FR-025; faz T047 passar)
-- [ ] T051 [P] [US3] Criar `frontend-next/src/components/app/grafico-evolucao.tsx` em Recharts, distinguindo visualmente o trecho pago do previsto e traçando a linha do teto do orçamento (FR-023, FR-024)
-- [ ] T052 [US3] Ligar a evolução ao painel em `frontend-next/src/app/(app)/app/obras/[id]/page.tsx`, exibindo a mensagem explicativa quando a série vier vazia em vez de um gráfico degenerado (FR-025; depende de T050, T051)
-- [ ] T053 [P] [US3] Criar `arquivarObra` e `desarquivarObra` em `frontend-next/src/server/actions/obras.ts` com `requireUser()` + `requireFullAccess()` e escopo `WHERE id = $1 AND user_id = $2`, sem tocar em `subscriptions` (FR-026, FR-028; faz T048 passar)
-- [ ] T054 [P] [US3] Implementar `listObrasArquivadas(userId)` em `frontend-next/src/db/queries/obras.ts` e filtrar `arquivada_em IS NULL` na listagem principal (FR-026, FR-027)
-- [ ] T055 [US3] Criar a listagem em `frontend-next/src/app/(app)/app/obras/arquivadas/page.tsx` com a ação de desarquivar (FR-027; depende de T053, T054)
-- [ ] T056 [US3] Adicionar a ação de arquivar na página da obra em `frontend-next/src/app/(app)/app/obras/[id]/page.tsx` (FR-026; depende de T053)
-- [ ] T057 [P] [US3] Criar `frontend-next/src/components/app/paginacao.tsx` com avançar/voltar e indicação de posição no total ("51–100 de 512"), sem enumerar páginas (FR-029)
-- [ ] T058 [US3] Paginar a lista em `frontend-next/src/app/(app)/app/obras/[id]/lancamentos/page.tsx` por `searchParams`, com `LIMIT`/`OFFSET` e `COUNT` na query de `frontend-next/src/db/queries/lancamentos.ts` (FR-029, SC-009; depende de T057)
-- [ ] T059 [P] [US3] Implementar `dadosRelatorio(userId, obraId)` em `frontend-next/src/db/queries/obras.ts` reusando as agregações do painel e `listLancamentosParaExport`, sem escrever agregação nova (FR-030)
-- [ ] T060 [US3] Criar `frontend-next/src/app/(app)/app/obras/[id]/relatorio/page.tsx` como Server Component **sem** `requireFullAccess()`, reusando `painel-cards.tsx` e `grafico-categorias.tsx`, com estilos `@media print` que escondem a navegação do app e não cortam conteúdo (FR-030, FR-031; depende de T059)
-- [ ] T061 [US3] Criar `.github/workflows/ci.yml` rodando `npm test` a cada push com `postgres:16` como service container e chaves Stripe de modo teste (FR-032, SC-010; depende de T049)
+- [X] T050 [P] [US3] Implementar `evolucaoConsumo(userId, obraId)` em `frontend-next/src/db/queries/painel.ts` com `SUM(...) OVER (ORDER BY mes)` para pago e previsto, escopo por join em `obras.user_id` e retorno vazio abaixo de 2 meses distintos (FR-023 a FR-025; faz T047 passar)
+- [X] T051 [P] [US3] Criar `frontend-next/src/components/app/grafico-evolucao.tsx` em Recharts, distinguindo visualmente o trecho pago do previsto e traçando a linha do teto do orçamento (FR-023, FR-024)
+- [X] T052 [US3] Ligar a evolução ao painel em `frontend-next/src/app/(app)/app/obras/[id]/page.tsx`, exibindo a mensagem explicativa quando a série vier vazia em vez de um gráfico degenerado (FR-025; depende de T050, T051)
+- [X] T053 [P] [US3] Criar `arquivarObra` e `desarquivarObra` em `frontend-next/src/server/actions/obras.ts` com `requireUser()` + `requireFullAccess()` e escopo `WHERE id = $1 AND user_id = $2`, sem tocar em `subscriptions` (FR-026, FR-028; faz T048 passar)
+- [X] T054 [P] [US3] Implementar `listObrasArquivadas(userId)` em `frontend-next/src/db/queries/obras.ts` e filtrar `arquivada_em IS NULL` na listagem principal (FR-026, FR-027)
+- [X] T055 [US3] Criar a listagem em `frontend-next/src/app/(app)/app/obras/arquivadas/page.tsx` com a ação de desarquivar (FR-027; depende de T053, T054)
+- [X] T056 [US3] Adicionar a ação de arquivar na página da obra em `frontend-next/src/app/(app)/app/obras/[id]/page.tsx` (FR-026; depende de T053)
+- [X] T057 [P] [US3] Criar `frontend-next/src/components/app/paginacao.tsx` com avançar/voltar e indicação de posição no total ("51–100 de 512"), sem enumerar páginas (FR-029)
+- [X] T058 [US3] Paginar a lista em `frontend-next/src/app/(app)/app/obras/[id]/lancamentos/page.tsx` por `searchParams`, com `LIMIT`/`OFFSET` e `COUNT` na query de `frontend-next/src/db/queries/lancamentos.ts` (FR-029, SC-009; depende de T057)
+- [X] T059 [P] [US3] Implementar `dadosRelatorio(userId, obraId)` em `frontend-next/src/db/queries/obras.ts` reusando as agregações do painel e `listLancamentosParaExport`, sem escrever agregação nova (FR-030)
+- [X] T060 [US3] Criar `frontend-next/src/app/(app)/app/obras/[id]/relatorio/page.tsx` como Server Component **sem** `requireFullAccess()`, reusando `painel-cards.tsx` e `grafico-categorias.tsx`, com estilos `@media print` que escondem a navegação do app e não cortam conteúdo (FR-030, FR-031; depende de T059)
+- [X] T061 [US3] Criar `.github/workflows/ci.yml` rodando `npm test` a cada push com `postgres:16` como service container e chaves Stripe de modo teste (FR-032, SC-010; depende de T049)
 
 **Checkpoint**: as três histórias funcionam de forma independente
 
