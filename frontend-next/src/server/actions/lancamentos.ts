@@ -3,8 +3,9 @@
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";
-import { lancamentos, obras } from "@/db/schema";
+import { lancamentos, obras, parcelamentos } from "@/db/schema";
 import { requireFullAccess, requireUser } from "@/lib/access";
+import { datasParcelas, distribuirParcelas } from "@/lib/parcelas";
 import { lancamentoSchema } from "./schemas";
 import type { ActionResult } from "./types";
 
@@ -38,14 +39,51 @@ export async function createLancamento(formData: FormData): Promise<ActionResult
     fornecedor: formData.get("fornecedor") ?? undefined,
     previstoCents: formData.get("previsto"),
     pagoCents: formData.get("pago") ?? undefined,
+    parcelas: formData.get("parcelas") ?? undefined,
+    periodicidade: formData.get("periodicidade") ?? undefined,
   });
   if (!parsed.success) return { ok: false, error: "VALIDACAO", fields: fieldErrors(parsed.error) };
+
+  if (parsed.data.parcelas && parsed.data.periodicidade) {
+    const { parcelas: n, periodicidade, previstoCents, categoria, item, fornecedor, pagoCents } = parsed.data;
+    const fatias = distribuirParcelas(previstoCents, n);
+    const datas = datasParcelas(new Date(`${parsed.data.data}T00:00:00`), n, periodicidade);
+
+    const lancamentoId = await db.transaction(async (tx) => {
+      const [serie] = await tx
+        .insert(parcelamentos)
+        .values({ obraId, totalCents: previstoCents, parcelas: n, periodicidade })
+        .returning({ id: parcelamentos.id });
+
+      const rows = await tx
+        .insert(lancamentos)
+        .values(
+          fatias.map((cents, i) => ({
+            obraId,
+            data: datas[i].toISOString().slice(0, 10),
+            categoria,
+            item,
+            fornecedor,
+            previstoCents: cents,
+            pagoCents: i === 0 ? (pagoCents ?? 0) : 0,
+            parcelamentoId: serie.id,
+            parcelaNum: i + 1,
+          })),
+        )
+        .returning({ id: lancamentos.id });
+
+      return rows[0].id;
+    });
+
+    revalidatePath(`/app/obras/${obraId}`);
+    return { ok: true, data: { lancamentoId } };
+  }
 
   const [lancamento] = await db
     .insert(lancamentos)
     .values({
       obraId,
-      data: parsed.data.data.toISOString().slice(0, 10),
+      data: parsed.data.data,
       categoria: parsed.data.categoria,
       item: parsed.data.item,
       fornecedor: parsed.data.fornecedor,
@@ -86,7 +124,7 @@ export async function updateLancamento(formData: FormData): Promise<ActionResult
   await db
     .update(lancamentos)
     .set({
-      data: parsed.data.data.toISOString().slice(0, 10),
+      data: parsed.data.data,
       categoria: parsed.data.categoria,
       item: parsed.data.item,
       fornecedor: parsed.data.fornecedor,
@@ -119,4 +157,32 @@ export async function deleteLancamento(formData: FormData): Promise<ActionResult
 
   revalidatePath(`/app/obras/${owned.obraId}`);
   return { ok: true, data: undefined };
+}
+
+export async function excluirSerieParcelamento(formData: FormData): Promise<ActionResult<{ removidos: number }>> {
+  const user = await requireUser();
+  if (!user) return { ok: false, error: "SESSAO_EXPIRADA" };
+  if (!(await requireFullAccess(user.id))) return { ok: false, error: "ACESSO_SOMENTE_LEITURA" };
+
+  const parcelamentoId = String(formData.get("parcelamentoId") ?? "");
+
+  const [owned] = await db
+    .select({ obraId: parcelamentos.obraId })
+    .from(parcelamentos)
+    .innerJoin(obras, eq(obras.id, parcelamentos.obraId))
+    .where(and(eq(parcelamentos.id, parcelamentoId), eq(obras.userId, user.id)))
+    .limit(1);
+  if (!owned) return { ok: false, error: "NAO_ENCONTRADO" };
+
+  const removidos = await db.transaction(async (tx) => {
+    const rows = await tx
+      .delete(lancamentos)
+      .where(eq(lancamentos.parcelamentoId, parcelamentoId))
+      .returning({ id: lancamentos.id });
+    await tx.delete(parcelamentos).where(eq(parcelamentos.id, parcelamentoId));
+    return rows.length;
+  });
+
+  revalidatePath(`/app/obras/${owned.obraId}`);
+  return { ok: true, data: { removidos } };
 }

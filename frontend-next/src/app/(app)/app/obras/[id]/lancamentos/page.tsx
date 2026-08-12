@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { getObra } from "@/db/queries/obras";
-import { listLancamentos } from "@/db/queries/lancamentos";
+import { countsByParcelamento, listLancamentos } from "@/db/queries/lancamentos";
 import { diferencaCents, statusLancamento } from "@/lib/calc";
 import { formatCents } from "@/lib/money";
 import { Badge } from "@/components/ui/badge";
@@ -48,6 +48,9 @@ export default async function LancamentosPage({
   });
 
   const totalPages = Math.max(1, Math.ceil(result.total / result.pageSize));
+
+  const parcelamentoIds = [...new Set(result.items.map((l) => l.parcelamentoId).filter((v): v is string => !!v))];
+  const serieCounts = await countsByParcelamento(session.user.id, id, parcelamentoIds);
 
   function filterUrl(next: { categoria?: string; status?: string; page?: number }) {
     const params = new URLSearchParams();
@@ -128,7 +131,12 @@ export default async function LancamentosPage({
                   <Badge variant={itemStatus === "Pago" ? "default" : "secondary"}>{itemStatus}</Badge>
                 </TableCell>
                 <TableCell>
-                  <LancamentoRowActions obraId={id} lancamentoId={lancamento.id} />
+                  <LancamentoRowActions
+                    obraId={id}
+                    lancamentoId={lancamento.id}
+                    parcelamentoId={lancamento.parcelamentoId}
+                    serieCount={lancamento.parcelamentoId ? serieCounts[lancamento.parcelamentoId] : undefined}
+                  />
                 </TableCell>
               </TableRow>
             );

@@ -44,7 +44,7 @@ function formatDecimal(cents: number): string {
 }
 
 /** BOM UTF-8 + CSV `;` (R11). Obra sem lançamentos devolve só o cabeçalho. */
-export function lancamentosParaCsv(lancamentos: LancamentoCsvRow[]): string {
+export function lancamentosParaCsv(lancamentos: LancamentoCsvRow[], opts?: { exemplo?: boolean }): string {
   const linhas = lancamentos.map((l) =>
     [
       formatDataBr(l.data),
@@ -60,5 +60,7 @@ export function lancamentosParaCsv(lancamentos: LancamentoCsvRow[]): string {
       .join(";"),
   );
 
-  return "﻿" + [HEADER.join(";"), ...linhas].join("\r\n");
+  // Marca inequívoca (FR-015): obra de exemplo não pode ser confundida com dado real.
+  const marcador = opts?.exemplo ? "ATENÇÃO: dados de exemplo, não são gastos reais\r\n" : "";
+  return "﻿" + marcador + [HEADER.join(";"), ...linhas].join("\r\n");
 }

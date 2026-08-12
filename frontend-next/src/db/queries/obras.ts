@@ -18,3 +18,12 @@ export async function getObra(userId: string, obraId: string) {
     .limit(1);
   return obra ?? null;
 }
+
+/** Obras "reais" (não-exemplo) — indicador de uso para decisões de onboarding (FR-015). */
+export async function countObrasReais(userId: string): Promise<number> {
+  const rows = await db
+    .select({ id: obras.id })
+    .from(obras)
+    .where(and(eq(obras.userId, userId), isNull(obras.arquivadaEm), eq(obras.exemplo, false)));
+  return rows.length;
+}

@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { listObras } from "@/db/queries/obras";
+import { countObrasReais, listObras } from "@/db/queries/obras";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -10,7 +11,7 @@ export default async function SeletorObrasPage() {
   if (!session?.user?.id) redirect("/entrar?next=/app");
 
   const obras = await listObras(session.user.id);
-  if (obras.length === 0) redirect("/app/obras/nova");
+  if ((await countObrasReais(session.user.id)) === 0) redirect("/app/comecar");
 
   return (
     <div className="space-y-4">
@@ -25,7 +26,10 @@ export default async function SeletorObrasPage() {
           <Link key={obra.id} href={`/app/obras/${obra.id}`}>
             <Card className="transition hover:border-primary">
               <CardHeader>
-                <CardTitle className="text-base">{obra.nome}</CardTitle>
+                <CardTitle className="flex items-center gap-2 text-base">
+                  {obra.nome}
+                  {obra.exemplo && <Badge variant="secondary">Exemplo</Badge>}
+                </CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
                 Orçamento: {(obra.orcamentoTetoCents / 100).toLocaleString("pt-BR", {

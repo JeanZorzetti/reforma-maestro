@@ -4,11 +4,6 @@ import { getLancamento } from "@/db/queries/lancamentos";
 import { LancamentoForm } from "@/components/app/lancamento-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-function formatDataBr(iso: string): string {
-  const [yyyy, mm, dd] = iso.split("-");
-  return `${dd}/${mm}/${yyyy}`;
-}
-
 export default async function EditarLancamentoPage({
   params,
 }: {
@@ -31,7 +26,7 @@ export default async function EditarLancamentoPage({
           obraId={id}
           lancamentoId={lancamento.id}
           defaultValues={{
-            data: formatDataBr(lancamento.data),
+            data: lancamento.data,
             categoria: lancamento.categoria,
             item: lancamento.item,
             fornecedor: lancamento.fornecedor ?? "",

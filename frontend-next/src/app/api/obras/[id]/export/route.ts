@@ -27,14 +27,15 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   }
 
   const lancamentos = await listLancamentosParaExport(user.id, id);
-  const csv = lancamentosParaCsv(lancamentos);
+  const csv = lancamentosParaCsv(lancamentos, { exemplo: obra.exemplo });
   const data = new Date().toISOString().slice(0, 10);
+  const sufixo = obra.exemplo ? "-exemplo" : "";
 
   return new NextResponse(csv, {
     status: 200,
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": `attachment; filename="obra-${slugify(obra.nome)}-${data}.csv"`,
+      "Content-Disposition": `attachment; filename="obra-${slugify(obra.nome)}${sufixo}-${data}.csv"`,
     },
   });
 }

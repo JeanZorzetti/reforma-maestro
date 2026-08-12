@@ -7,9 +7,11 @@ import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { maskMoneyInput } from "@/lib/money";
 import { createLancamento, updateLancamento } from "@/server/actions/lancamentos";
 import { trackEvent } from "@/lib/analytics";
 
@@ -20,27 +22,43 @@ const CATEGORIAS = [
   { value: "mobilia", label: "Mobília" },
 ] as const;
 
-const formSchema = z.object({
-  data: z.string().regex(/^\d{2}\/\d{2}\/\d{4}$/, "Use o formato dd/MM/yyyy."),
-  categoria: z.enum(["material", "mao_de_obra", "taxas", "mobilia"]),
-  item: z.string().min(1, "O item é obrigatório.").max(200),
-  fornecedor: z.string().max(200).optional(),
-  previsto: z.string().min(1, "Informe o valor previsto."),
-  pago: z.string().optional(),
-});
+const PERIODICIDADES = [
+  { value: "mensal", label: "Mensal" },
+  { value: "quinzenal", label: "Quinzenal" },
+  { value: "semanal", label: "Semanal" },
+] as const;
+
+const formSchema = z
+  .object({
+    data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Data inválida."),
+    categoria: z.enum(["material", "mao_de_obra", "taxas", "mobilia"]),
+    item: z.string().min(1, "O item é obrigatório.").max(200),
+    fornecedor: z.string().max(200).optional(),
+    previsto: z.string().min(1, "Informe o valor previsto."),
+    pago: z.string().optional(),
+    parcelado: z.boolean(),
+    parcelas: z.string().optional(),
+    periodicidade: z.enum(["mensal", "quinzenal", "semanal"]).optional(),
+  })
+  .refine((v) => !v.parcelado || (Number(v.parcelas) >= 2 && Number(v.parcelas) <= 60), {
+    message: "Informe entre 2 e 60 parcelas.",
+    path: ["parcelas"],
+  })
+  .refine((v) => !v.parcelado || v.periodicidade, {
+    message: "Escolha a periodicidade.",
+    path: ["periodicidade"],
+  });
 
 type FormValues = z.infer<typeof formSchema>;
 
 function hoje(): string {
   const now = new Date();
-  return `${String(now.getDate()).padStart(2, "0")}/${String(now.getMonth() + 1).padStart(2, "0")}/${now.getFullYear()}`;
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 }
 
 function isDataFutura(data: string): boolean {
-  const match = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(data);
-  if (!match) return false;
-  const [, dd, mm, yyyy] = match;
-  const date = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) return false;
+  const date = new Date(`${data}T00:00:00`);
   const hoje = new Date();
   hoje.setHours(0, 0, 0, 0);
   return date.getTime() > hoje.getTime();
@@ -67,6 +85,9 @@ export function LancamentoForm({ obraId, lancamentoId, defaultValues }: Lancamen
       fornecedor: "",
       previsto: "",
       pago: "",
+      parcelado: false,
+      parcelas: "",
+      periodicidade: undefined,
       ...defaultValues,
     },
   });
@@ -88,6 +109,7 @@ export function LancamentoForm({ obraId, lancamentoId, defaultValues }: Lancamen
   }, [form, draftKey, lancamentoId]);
 
   const dataValue = form.watch("data");
+  const parcelado = form.watch("parcelado");
 
   function onSubmit(values: FormValues) {
     startTransition(async () => {
@@ -100,6 +122,10 @@ export function LancamentoForm({ obraId, lancamentoId, defaultValues }: Lancamen
       formData.set("fornecedor", values.fornecedor ?? "");
       formData.set("previsto", values.previsto);
       formData.set("pago", values.pago ?? "");
+      if (values.parcelado) {
+        formData.set("parcelas", values.parcelas ?? "");
+        formData.set("periodicidade", values.periodicidade ?? "");
+      }
 
       const result = lancamentoId ? await updateLancamento(formData) : await createLancamento(formData);
 
@@ -131,7 +157,7 @@ export function LancamentoForm({ obraId, lancamentoId, defaultValues }: Lancamen
             <FormItem>
               <FormLabel>Data</FormLabel>
               <FormControl>
-                <Input placeholder="dd/MM/yyyy" {...field} />
+                <Input type="date" {...field} />
               </FormControl>
               {isDataFutura(dataValue) && (
                 <p className="text-xs text-muted-foreground">Data futura — gasto ainda não realizado.</p>
@@ -198,7 +224,12 @@ export function LancamentoForm({ obraId, lancamentoId, defaultValues }: Lancamen
               <FormItem>
                 <FormLabel>Previsto (R$)</FormLabel>
                 <FormControl>
-                  <Input placeholder="1.200,00" inputMode="decimal" {...field} />
+                  <Input
+                    placeholder="1.200,00"
+                    inputMode="decimal"
+                    {...field}
+                    onChange={(e) => field.onChange(maskMoneyInput(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -211,13 +242,75 @@ export function LancamentoForm({ obraId, lancamentoId, defaultValues }: Lancamen
               <FormItem>
                 <FormLabel>Pago (R$)</FormLabel>
                 <FormControl>
-                  <Input placeholder="0,00" inputMode="decimal" {...field} />
+                  <Input
+                    placeholder="0,00"
+                    inputMode="decimal"
+                    {...field}
+                    onChange={(e) => field.onChange(maskMoneyInput(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
+        {!lancamentoId && (
+          <div className="space-y-3 rounded-md border p-3">
+            <FormField
+              control={form.control}
+              name="parcelado"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center gap-2 space-y-0">
+                  <FormControl>
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                  <FormLabel className="!mt-0">Parcelar esse gasto</FormLabel>
+                </FormItem>
+              )}
+            />
+            {parcelado && (
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="parcelas"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Número de parcelas</FormLabel>
+                      <FormControl>
+                        <Input type="number" min={2} max={60} placeholder="6" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="periodicidade"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Periodicidade</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Escolha" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {PERIODICIDADES.map((p) => (
+                            <SelectItem key={p.value} value={p.value}>
+                              {p.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+          </div>
+        )}
         {acessoNegado && (
           <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm">
             Seu acesso está limitado à leitura.{" "}

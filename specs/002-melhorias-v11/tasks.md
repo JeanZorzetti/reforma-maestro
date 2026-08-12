@@ -118,21 +118,21 @@ conferindo as 6 parcelas e a soma exata. Não depende de nada de US1.
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T035 [P] [US2] Teste unitário de `distribuirParcelas` em `frontend-next/tests/unit/parcelas.test.ts`: soma exatamente igual ao total em casos não divisíveis (`1000/3` → `334, 333, 333`), limites 2 e 60 aceitos, fora do intervalo rejeitado
+- [X] T035 [P] [US2] Teste unitário de `distribuirParcelas` em `frontend-next/tests/unit/parcelas.test.ts`: soma exatamente igual ao total em casos não divisíveis (`1000/3` → `334, 333, 333`), limites 2 e 60 aceitos, fora do intervalo rejeitado
 
 ### Implementation for User Story 2
 
-- [ ] T036 [P] [US2] Implementar `distribuirParcelas(totalCents, n)` em `frontend-next/src/lib/parcelas.ts` com base `Math.floor(total / n)` e resto distribuído um centavo por parcela a partir da primeira, mais o cálculo de datas por periodicidade mensal/quinzenal/semanal (FR-019; faz T035 passar)
-- [ ] T037 [US2] Alterar o schema Zod de lançamento em `frontend-next/src/server/actions/schemas.ts` para aceitar data em `yyyy-MM-dd` e os campos opcionais `parcelas` (inteiro 2–60) e `periodicidade` (obrigatório quando `parcelas` presente) (FR-016, FR-018, FR-022)
-- [ ] T038 [US2] Estender `criarLancamento` em `frontend-next/src/server/actions/lancamentos.ts` para, com `parcelas` presente, inserir o `parcelamento` e os N lançamentos numa única transação com `parcela_num = 1..N` e datas deslocadas pela periodicidade, revalidando painel e lista (FR-018, FR-019; depende de T036, T037)
-- [ ] T039 [US2] Criar `excluirSerieParcelamento` em `frontend-next/src/server/actions/lancamentos.ts` com `requireUser()` + `requireFullAccess()`, contagem escopada por join em `obras.user_id` devolvida à UI, e transação apagando lançamentos e a série (FR-021; depende de T038)
-- [ ] T040 [US2] Trocar o campo de data por `<input type="date">` nativo com hoje pré-selecionado e aplicar máscara de moeda em reais durante a digitação em `frontend-next/src/components/app/lancamento-form.tsx`, reusando os helpers de `frontend-next/src/lib/money.ts` (FR-016, FR-017)
-- [ ] T041 [US2] Adicionar os campos de número de parcelas e periodicidade em `frontend-next/src/components/app/lancamento-form.tsx`, visíveis só quando o gasto for parcelado (FR-018; depende de T037, T040)
-- [ ] T042 [US2] Adicionar em `frontend-next/src/components/app/lancamento-row-actions.tsx` a ação de excluir a série inteira, com confirmação informando quantos lançamentos serão removidos (FR-021; depende de T039)
-- [ ] T043 [P] [US2] Criar `criarObraExemplo` em `frontend-next/src/server/actions/obras.ts`: obra com `exemplo = true` e lançamentos ilustrativos numa transação, idempotente por usuário (FR-014)
-- [ ] T044 [US2] Excluir obras com `exemplo = true` dos indicadores de uso em `frontend-next/src/db/queries/obras.ts` e marcá-las de forma inequívoca na exportação em `frontend-next/src/lib/csv.ts`, mantendo o painel da obra de exemplo funcionando (FR-015; depende de T043)
-- [ ] T045 [US2] Criar a página do caminho guiado em `frontend-next/src/app/(app)/app/comecar/page.tsx`, explicando o produto, terminando com a primeira obra criada e oferecendo a obra de exemplo, marcada e removível (FR-013, FR-014; depende de T043)
-- [ ] T046 [US2] Redirecionar `signUp` para `/app/comecar` em vez de `/app/obras/nova` em `frontend-next/src/server/actions/auth.ts` (FR-013; depende de T045)
+- [X] T036 [P] [US2] Implementar `distribuirParcelas(totalCents, n)` em `frontend-next/src/lib/parcelas.ts` com base `Math.floor(total / n)` e resto distribuído um centavo por parcela a partir da primeira, mais o cálculo de datas por periodicidade mensal/quinzenal/semanal (FR-019; faz T035 passar)
+- [X] T037 [US2] Alterar o schema Zod de lançamento em `frontend-next/src/server/actions/schemas.ts` para aceitar data em `yyyy-MM-dd` e os campos opcionais `parcelas` (inteiro 2–60) e `periodicidade` (obrigatório quando `parcelas` presente) (FR-016, FR-018, FR-022)
+- [X] T038 [US2] Estender `criarLancamento` em `frontend-next/src/server/actions/lancamentos.ts` para, com `parcelas` presente, inserir o `parcelamento` e os N lançamentos numa única transação com `parcela_num = 1..N` e datas deslocadas pela periodicidade, revalidando painel e lista (FR-018, FR-019; depende de T036, T037)
+- [X] T039 [US2] Criar `excluirSerieParcelamento` em `frontend-next/src/server/actions/lancamentos.ts` com `requireUser()` + `requireFullAccess()`, contagem escopada por join em `obras.user_id` devolvida à UI, e transação apagando lançamentos e a série (FR-021; depende de T038)
+- [X] T040 [US2] Trocar o campo de data por `<input type="date">` nativo com hoje pré-selecionado e aplicar máscara de moeda em reais durante a digitação em `frontend-next/src/components/app/lancamento-form.tsx`, reusando os helpers de `frontend-next/src/lib/money.ts` (FR-016, FR-017)
+- [X] T041 [US2] Adicionar os campos de número de parcelas e periodicidade em `frontend-next/src/components/app/lancamento-form.tsx`, visíveis só quando o gasto for parcelado (FR-018; depende de T037, T040)
+- [X] T042 [US2] Adicionar em `frontend-next/src/components/app/lancamento-row-actions.tsx` a ação de excluir a série inteira, com confirmação informando quantos lançamentos serão removidos (FR-021; depende de T039)
+- [X] T043 [P] [US2] Criar `criarObraExemplo` em `frontend-next/src/server/actions/obras.ts`: obra com `exemplo = true` e lançamentos ilustrativos numa transação, idempotente por usuário (FR-014)
+- [X] T044 [US2] Excluir obras com `exemplo = true` dos indicadores de uso em `frontend-next/src/db/queries/obras.ts` e marcá-las de forma inequívoca na exportação em `frontend-next/src/lib/csv.ts`, mantendo o painel da obra de exemplo funcionando (FR-015; depende de T043)
+- [X] T045 [US2] Criar a página do caminho guiado em `frontend-next/src/app/(app)/app/comecar/page.tsx`, explicando o produto, terminando com a primeira obra criada e oferecendo a obra de exemplo, marcada e removível (FR-013, FR-014; depende de T043)
+- [X] T046 [US2] Redirecionar `signUp` para `/app/comecar` em vez de `/app/obras/nova` em `frontend-next/src/server/actions/auth.ts` (FR-013; depende de T045)
 
 **Checkpoint**: US1 e US2 funcionam de forma independente; primeiro gasto salvo em menos de 3 minutos no celular e parcelamento em um único preenchimento.
 

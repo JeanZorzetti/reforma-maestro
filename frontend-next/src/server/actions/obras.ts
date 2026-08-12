@@ -113,6 +113,80 @@ export async function deleteObra(formData: FormData): Promise<ActionResult> {
   return { ok: true, data: undefined };
 }
 
+/** Obra com lançamentos ilustrativos para o caminho guiado (FR-013, FR-014). Idempotente por usuário. */
+export async function criarObraExemplo(): Promise<ActionResult<{ obraId: string }>> {
+  const user = await requireUser();
+  if (!user) return { ok: false, error: "SESSAO_EXPIRADA" };
+
+  const [existing] = await db
+    .select({ id: obras.id })
+    .from(obras)
+    .where(and(eq(obras.userId, user.id), eq(obras.exemplo, true)))
+    .limit(1);
+  if (existing) return { ok: true, data: { obraId: existing.id } };
+
+  function dataIso(offsetDias: number): string {
+    const d = new Date();
+    d.setDate(d.getDate() + offsetDias);
+    return d.toISOString().slice(0, 10);
+  }
+
+  const obraId = await db.transaction(async (tx) => {
+    const [obra] = await tx
+      .insert(obras)
+      .values({
+        userId: user.id,
+        nome: "Reforma de exemplo",
+        orcamentoTetoCents: 5_000_000,
+        reservaPct: "10",
+        exemplo: true,
+      })
+      .returning({ id: obras.id });
+
+    await tx.insert(lancamentos).values([
+      {
+        obraId: obra.id,
+        data: dataIso(-20),
+        categoria: "material",
+        item: "Cimento e areia",
+        fornecedor: "Depósito Central",
+        previstoCents: 180_000,
+        pagoCents: 180_000,
+      },
+      {
+        obraId: obra.id,
+        data: dataIso(-10),
+        categoria: "mao_de_obra",
+        item: "Pedreiro — semana 1",
+        previstoCents: 120_000,
+        pagoCents: 120_000,
+      },
+      {
+        obraId: obra.id,
+        data: dataIso(-3),
+        categoria: "taxas",
+        item: "Alvará de reforma",
+        fornecedor: "Prefeitura",
+        previstoCents: 35_000,
+        pagoCents: 35_000,
+      },
+      {
+        obraId: obra.id,
+        data: dataIso(5),
+        categoria: "mobilia",
+        item: "Armários planejados",
+        fornecedor: "Marcenaria Ipê",
+        previstoCents: 450_000,
+        pagoCents: 0,
+      },
+    ]);
+
+    return obra.id;
+  });
+
+  return { ok: true, data: { obraId } };
+}
+
 export async function countLancamentos(userId: string, obraId: string): Promise<number> {
   const rows = await db
     .select({ id: lancamentos.id })

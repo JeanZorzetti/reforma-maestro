@@ -3,6 +3,18 @@ const formatter = new Intl.NumberFormat("pt-BR", {
   currency: "BRL",
 });
 
+const plainFormatter = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+/** Máscara "ao digitar": trata os dígitos do input como centavos (estilo calculadora). "" para campo vazio. */
+export function maskMoneyInput(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  if (!digits) return "";
+  return plainFormatter.format(Number(digits) / 100);
+}
+
 /** "85.000,00" | "1.200" | "0,05" → centavos. `null` se a entrada não for um valor válido. */
 export function parseMoneyToCents(input: string): number | null {
   const trimmed = input.trim();

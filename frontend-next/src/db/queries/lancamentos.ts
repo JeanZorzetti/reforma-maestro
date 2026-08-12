@@ -1,4 +1,4 @@
-import { and, desc, eq, getTableColumns, sql } from "drizzle-orm";
+import { and, desc, eq, getTableColumns, inArray, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { categoriaEnum, lancamentos, obras } from "@/db/schema";
 
@@ -54,6 +54,28 @@ export async function listLancamentosParaExport(userId: string, obraId: string) 
     .innerJoin(obras, eq(obras.id, lancamentos.obraId))
     .where(and(eq(lancamentos.obraId, obraId), eq(obras.userId, userId)))
     .orderBy(desc(lancamentos.data));
+}
+
+/** Total de lançamentos por série, para a confirmação "isso vai remover N lançamentos" (FR-021) antes de excluir. */
+export async function countsByParcelamento(
+  userId: string,
+  obraId: string,
+  parcelamentoIds: string[],
+): Promise<Record<string, number>> {
+  if (parcelamentoIds.length === 0) return {};
+  const rows = await db
+    .select({ parcelamentoId: lancamentos.parcelamentoId, count: sql<number>`count(*)::int` })
+    .from(lancamentos)
+    .innerJoin(obras, eq(obras.id, lancamentos.obraId))
+    .where(
+      and(
+        eq(lancamentos.obraId, obraId),
+        eq(obras.userId, userId),
+        inArray(lancamentos.parcelamentoId, parcelamentoIds),
+      ),
+    )
+    .groupBy(lancamentos.parcelamentoId);
+  return Object.fromEntries(rows.map((r) => [r.parcelamentoId as string, r.count]));
 }
 
 /** Lançamento de outro usuário retorna `null` (FR-029). */

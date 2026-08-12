@@ -15,17 +15,38 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { deleteLancamento } from "@/server/actions/lancamentos";
+import { deleteLancamento, excluirSerieParcelamento } from "@/server/actions/lancamentos";
 
-export function LancamentoRowActions({ obraId, lancamentoId }: { obraId: string; lancamentoId: string }) {
+export function LancamentoRowActions({
+  obraId,
+  lancamentoId,
+  parcelamentoId,
+  serieCount,
+}: {
+  obraId: string;
+  lancamentoId: string;
+  parcelamentoId?: string | null;
+  serieCount?: number;
+}) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const [pendingSerie, startTransitionSerie] = useTransition();
 
   function onDelete() {
     startTransition(async () => {
       const formData = new FormData();
       formData.set("lancamentoId", lancamentoId);
       await deleteLancamento(formData);
+      router.refresh();
+    });
+  }
+
+  function onDeleteSerie() {
+    if (!parcelamentoId) return;
+    startTransitionSerie(async () => {
+      const formData = new FormData();
+      formData.set("parcelamentoId", parcelamentoId);
+      await excluirSerieParcelamento(formData);
       router.refresh();
     });
   }
@@ -54,6 +75,30 @@ export function LancamentoRowActions({ obraId, lancamentoId }: { obraId: string;
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      {parcelamentoId && (
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="ghost" size="sm" className="text-destructive">
+              Excluir série
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Excluir a série inteira?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Isso vai remover {serieCount ?? "todos os"} lançamento{serieCount === 1 ? "" : "s"} desse
+                parcelamento. Essa ação não pode ser desfeita.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction disabled={pendingSerie} onClick={onDeleteSerie}>
+                Excluir série
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   );
 }

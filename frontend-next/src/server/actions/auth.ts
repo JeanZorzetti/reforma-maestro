@@ -109,7 +109,7 @@ export async function signUp(formData: FormData): Promise<ActionResult<{ userId:
   if (!result.ok) return result;
 
   await signIn("credentials", { email: normalizeEmail(email), senha, redirect: false });
-  redirect("/app/obras/nova");
+  redirect("/app/comecar");
 }
 
 export async function login(formData: FormData): Promise<ActionResult | undefined> {
