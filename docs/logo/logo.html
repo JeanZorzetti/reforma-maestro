@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Reforma Maestro — Logo</title>
+<style>
+  :root{
+    --c1:#3B82F6;  /* azul primário — hsl(217 91% 60%) */
+    --c2:#F59E0B;  /* âmbar accent — hsl(38 92% 50%) */
+    --ink:#1E293B; --muted:#64748B; --line:#E2E8F0; --bg:#F8FAFC;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:48px 40px;background:var(--bg);color:var(--ink);
+    font-family:"Geist","Inter","Segoe UI",system-ui,sans-serif}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:24px;margin:0 0 6px;letter-spacing:-.02em}
+  .sub{margin:0 0 32px;color:var(--muted);font-size:14px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:32px}
+  .stage{display:flex;align-items:center;gap:36px;flex-wrap:wrap}
+  .lockup{display:flex;align-items:center;gap:12px}
+  .wm{font-size:26px;font-weight:700;letter-spacing:-.03em;line-height:1;white-space:nowrap}
+  .wm i{font-style:normal;font-weight:800;color:var(--c1)}
+  .tests{display:flex;align-items:center;gap:24px;margin-top:28px;padding-top:22px;border-top:1px dashed var(--line)}
+  .chip{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)}
+  /* custom properties herdam no shadow tree do <use>: trocar de cor é só sobrescrever aqui */
+  .mono{--c1:var(--ink);--c2:var(--ink)}
+  .inv{--c1:#fff;--c2:#fff}
+  .dark{background:var(--ink);border-radius:8px;padding:8px;display:flex}
+</style>
+</head>
+<body>
+
+<!-- fonte única de verdade; svg/logo.svg é este mesmo path com as cores literais -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark" viewBox="0 0 48 48">
+      <path d="M5 21.5 24 7l19 14.5" stroke="var(--c1)" stroke-width="4.4"
+            stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M10 24.5V41h28V24.5" stroke="var(--c1)" stroke-width="4.4"
+            stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <rect x="15" y="29" width="18" height="7" rx="3.5" fill="var(--c1)" fill-opacity=".22"/>
+      <rect x="15" y="29" width="11.5" height="7" rx="3.5" fill="var(--c2)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <h1>Reforma Maestro — logo</h1>
+  <p class="sub">Casa &amp; Orçamento: telhado da obra, barra de execução do orçamento em âmbar.</p>
+
+  <div class="card">
+    <div class="stage">
+      <svg width="112" height="112"><use href="#mark"/></svg>
+      <div class="lockup">
+        <svg width="34" height="34"><use href="#mark"/></svg>
+        <div class="wm"><i>Reforma</i> Maestro</div>
+      </div>
+    </div>
+    <div class="tests">
+      <div class="chip"><svg width="24" height="24"><use href="#mark"/></svg>24px</div>
+      <div class="chip mono"><svg width="32" height="32"><use href="#mark"/></svg>mono</div>
+      <div class="chip"><span class="dark inv"><svg width="32" height="32"><use href="#mark"/></svg></span>invertido</div>
+      <div class="chip"><img src="svg/logo.svg" width="32" height="32" alt=""><img src="svg/logo.svg" width="24" height="24" alt="">arquivo .svg</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none" role="img" aria-label="Reforma Maestro">
-  <rect width="48" height="48" rx="12" fill="#2563EB"/>
-  <rect x="9" y="29" width="7.5" height="11" rx="2.4" fill="#fff" fill-opacity=".45"/>
-  <rect x="20.2" y="23" width="7.5" height="17" rx="2.4" fill="#fff" fill-opacity=".7"/>
-  <rect x="31.5" y="17" width="7.5" height="23" rx="2.4" fill="#fff"/>
-  <path d="M11 29.6 36.5 13.5" stroke="#F59E0B" stroke-width="3.4" stroke-linecap="round"/>
-  <circle cx="37.5" cy="12.9" r="3.4" fill="#F59E0B"/>
-</svg>
