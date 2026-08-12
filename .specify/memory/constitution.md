@@ -11,6 +11,10 @@ Sync Impact Report
     ser Stripe (assinatura recorrente já ativa em produção); Resend passa a constar como provedor
     de e-mail transacional já integrado; serviço de captura de erro de servidor passa a ser
     integração permitida — era o bloqueio declarado em `specs/002-melhorias-v11/spec.md`.
+- PATCH 3.1.1 (2026-08-12): o plano da 002 resolveu a captura de erro com capacidade nativa
+  (`onRequestError` + tabela `incidents` + Resend), sem adotar serviço externo. A permissão
+  permanece registrada como caminho de upgrade já autorizado, agora marcada como não adotada,
+  para que a lista de integrações descreva o sistema real e não uma intenção.
 - Added sections: nenhuma
 - Removed sections: nenhuma
 - Deferred: FR-032 (verificação automática do funil pago a cada publicação) fica como requisito da
@@ -82,13 +86,15 @@ Stack: Next.js 16 (App Router), React 19, TypeScript, Tailwind, shadcn/ui,
 API routes/Server Actions e Postgres, hospedado na Vercel. O banco Postgres
 é auto-hospedado e acessado por connection string mantida fora do
 versionamento. Integrações externas limitadas a: Stripe (assinatura recorrente,
-já em produção), Resend (e-mail transacional), serviço gerenciado de captura de
-erro de servidor, Google Analytics 4 e Google Search Console. Qualquer
-integração fora dessa lista exige emenda desta seção antes de entrar no código.
-O serviço de captura de erro MUST ser configurável por env var e MUST degradar
-sem derrubar requisição quando estiver indisponível — observabilidade não pode
-virar ponto único de falha do produto. Não existe nem está planejada integração
-SINAPI;
+já em produção), Resend (e-mail transacional), Google Analytics 4 e Google Search
+Console. Serviço gerenciado de captura de erro de servidor é **permitido mas não
+adotado** — a captura roda in-house (`onRequestError` nativo do Next + tabela
+`incidents`), e trocar por serviço externo não exige nova emenda, apenas registro
+da decisão no plano correspondente. Qualquer integração fora dessa lista exige
+emenda desta seção antes de entrar no código. Observabilidade, in-house ou
+externa, MUST ser configurável por env var e MUST degradar sem derrubar
+requisição quando indisponível — nunca pode virar ponto único de falha do
+produto. Não existe nem está planejada integração SINAPI;
 menções de marketing a SINAPI são ilustrativas e MUST NOT sugerir
 integração real de dados.
 
@@ -120,4 +126,4 @@ Report atualizado no topo deste arquivo. Todo `/speckit-plan` que proponha
 trabalho conflitante com um Core Principle deve justificar o desvio
 explicitamente na seção Complexity Tracking do plano ou ser revisado.
 
-**Version**: 3.1.0 | **Ratified**: 2026-08-11 | **Last Amended**: 2026-08-12
+**Version**: 3.1.1 | **Ratified**: 2026-08-11 | **Last Amended**: 2026-08-12
