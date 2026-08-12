@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { describe, expect, it } from "vitest";
 import { db } from "@/db";
 import { accounts, sessions, subscriptions, trialGrants, users, verificationTokens } from "@/db/schema";
+import { tokenAindaValido } from "@/lib/auth";
 import { createAccount, requestPasswordReset, resetPassword } from "@/server/actions/auth";
 
 function randomEmail() {
@@ -72,11 +73,17 @@ describe("reset de senha", () => {
     const [tokenRow] = await db.select().from(verificationTokens).where(eq(verificationTokens.identifier, email));
     expect(tokenRow).toBeDefined();
 
+    // JWT emitido antes do reset: válido agora, recusado depois (lib/auth.ts).
+    const emitidoEm = Date.now();
+    expect(await tokenAindaValido(account.userId, emitidoEm)).toBe(true);
+
     const resetForm = new FormData();
     resetForm.set("token", tokenRow.token);
     resetForm.set("senha", "novaSenha123");
     const resetResult = await resetPassword(resetForm);
     expect(resetResult.ok).toBe(true);
+
+    expect(await tokenAindaValido(account.userId, emitidoEm)).toBe(false);
 
     const remainingSessions = await db.select().from(sessions).where(eq(sessions.userId, account.userId));
     expect(remainingSessions).toHaveLength(0);

@@ -38,6 +38,8 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   emailVerified: timestamp("email_verified", { withTimezone: true }),
   passwordHash: text("password_hash").notNull(),
+  /** Sessões emitidas antes deste instante são recusadas no callback `jwt` (lib/auth.ts). */
+  passwordChangedAt: timestamp("password_changed_at", { withTimezone: true }).notNull().defaultNow(),
   name: text("name"),
   image: text("image"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

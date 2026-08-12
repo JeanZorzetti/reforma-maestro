@@ -174,7 +174,8 @@ export async function resetPassword(formData: FormData): Promise<ActionResult> {
   const passwordHash = await bcrypt.hash(parsed.data.senha, 12);
 
   await db.transaction(async (tx) => {
-    await tx.update(users).set({ passwordHash }).where(eq(users.id, user.id));
+    // passwordChangedAt derruba os JWTs já emitidos (callback jwt em lib/auth.ts).
+    await tx.update(users).set({ passwordHash, passwordChangedAt: new Date() }).where(eq(users.id, user.id));
     await tx
       .delete(verificationTokens)
       .where(eq(verificationTokens.token, parsed.data.token));
