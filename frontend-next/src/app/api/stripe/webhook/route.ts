@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { recordIncident } from "@/lib/incidents";
 import { stripe } from "@/lib/stripe";
 import { processStripeWebhookEvent } from "@/server/stripe/webhook";
 
@@ -11,7 +12,8 @@ export async function POST(req: Request) {
   let event;
   try {
     event = stripe.webhooks.constructEvent(rawBody, signature ?? "", process.env.STRIPE_WEBHOOK_SECRET!);
-  } catch {
+  } catch (error) {
+    await recordIncident("webhook_failed", "/api/stripe/webhook", error);
     return NextResponse.json({ error: "ASSINATURA_INVALIDA" }, { status: 400 });
   }
 

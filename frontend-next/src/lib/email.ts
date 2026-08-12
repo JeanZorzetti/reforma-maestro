@@ -1,10 +1,44 @@
 import { Resend } from "resend";
+import type { IncidentKind } from "@/lib/incidents";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = "Reforma Maestro <contato@reformamaestro.com.br>";
 
 async function sendEmail(to: string, subject: string, html: string) {
   await resend.emails.send({ from: FROM, to, subject, html });
+}
+
+interface IncidentEmailParams {
+  kind: IncidentKind;
+  route: string;
+  message: string;
+  count: number;
+  firstSeenAt: Date;
+  lastSeenAt: Date;
+  userId?: string;
+}
+
+/** Ausência de INCIDENT_EMAIL desliga só o envio — o registro em `incidents` já aconteceu. */
+export async function sendIncidentEmail(params: IncidentEmailParams) {
+  const to = process.env.INCIDENT_EMAIL;
+  if (!to) return;
+
+  const lines = [
+    `Tipo: ${params.kind}`,
+    `Rota: ${params.route}`,
+    `Mensagem: ${params.message}`,
+    `Ocorrências: ${params.count}`,
+    `Primeira ocorrência: ${params.firstSeenAt.toISOString()}`,
+    `Última ocorrência: ${params.lastSeenAt.toISOString()}`,
+  ];
+  if (params.userId) lines.push(`Usuário afetado: ${params.userId}`);
+
+  await resend.emails.send({
+    from: FROM,
+    to,
+    subject: `[Reforma Maestro] ${params.kind}: ${params.route}`,
+    text: lines.join("\n"),
+  });
 }
 
 export async function sendPasswordResetEmail(to: string, resetUrl: string) {

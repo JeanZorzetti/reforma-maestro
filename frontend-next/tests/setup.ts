@@ -30,7 +30,8 @@ export async function truncateAll() {
   await sql`
     truncate table
       audit_log, stripe_events, trial_grants, subscriptions,
-      lancamentos, obras, sessions, accounts, verification_tokens, users
+      parcelamentos, lancamentos, obras, sessions, accounts, verification_tokens, users,
+      incidents, heartbeats, auth_attempts
     restart identity cascade
   `;
 }

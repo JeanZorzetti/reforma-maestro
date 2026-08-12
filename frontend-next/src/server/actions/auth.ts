@@ -3,6 +3,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/db";
@@ -10,7 +11,19 @@ import { sessions, subscriptions, trialGrants, users, verificationTokens } from 
 import { logAudit } from "@/lib/audit";
 import { auth, signIn, signOut } from "@/lib/auth";
 import { sendPasswordResetEmail } from "@/lib/email";
+import { clearAttempts, consumeAttempt } from "@/lib/rate-limit";
+import { stripe } from "@/lib/stripe";
 import type { ActionResult } from "./types";
+
+/** headers() exige request scope; fora dele (script, teste), IP fica indisponível e o escopo login_ip é pulado. */
+async function clientIp(): Promise<string | null> {
+  try {
+    const h = await headers();
+    return h.get("x-forwarded-for")?.split(",")[0]?.trim() || null;
+  } catch {
+    return null;
+  }
+}
 
 const TRIAL_DAYS = Number(process.env.TRIAL_DAYS ?? 14);
 
@@ -104,12 +117,24 @@ export async function login(formData: FormData): Promise<ActionResult | undefine
   const senha = String(formData.get("senha") ?? "");
   const next = String(formData.get("next") ?? "/app");
 
+  const loginCheck = await consumeAttempt("login", email);
+  const ip = await clientIp();
+  const ipCheck = ip ? await consumeAttempt("login_ip", ip) : { allowed: true, retryAfterSeconds: 0 };
+
+  const blocked = !loginCheck.allowed ? loginCheck : !ipCheck.allowed ? ipCheck : null;
+  if (blocked) {
+    const scope = !loginCheck.allowed ? "login" : "login_ip";
+    await logAudit(null, "rate_limited", { scope, retryAfterSeconds: blocked.retryAfterSeconds });
+    return { ok: false, error: "MUITAS_TENTATIVAS", retryAfterSeconds: blocked.retryAfterSeconds };
+  }
+
   try {
     await signIn("credentials", { email, senha, redirect: false });
   } catch {
     return { ok: false, error: "CREDENCIAIS_INVALIDAS" };
   }
 
+  await clearAttempts("login", email);
   redirect(next);
 }
 
@@ -128,6 +153,14 @@ export async function requestPasswordReset(formData: FormData): Promise<ActionRe
   if (!parsed.success) return { ok: true, data: undefined };
 
   const email = normalizeEmail(parsed.data.email);
+
+  const check = await consumeAttempt("reset", email);
+  if (!check.allowed) {
+    await logAudit(null, "rate_limited", { scope: "reset", retryAfterSeconds: check.retryAfterSeconds });
+    // Mesma resposta do caminho aceito (FR-006) — só o e-mail deixa de sair.
+    return { ok: true, data: undefined };
+  }
+
   const [user] = await db.select().from(users).where(eq(users.email, email)).limit(1);
 
   if (user) {
@@ -188,6 +221,34 @@ export async function resetPassword(formData: FormData): Promise<ActionResult> {
 
 const deleteAccountSchema = z.object({ senha: z.string().min(1) });
 
+/**
+ * Núcleo puro: recebe `userId` direto em vez de ler `auth()` — testável sem
+ * request scope, mesmo motivo de `createAccount` (T028 do 001).
+ */
+export async function deleteAccountCore(userId: string, senha: string): Promise<ActionResult> {
+  const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+  if (!user) return { ok: false, error: "SESSAO_EXPIRADA" };
+
+  const valid = await bcrypt.compare(senha, user.passwordHash);
+  if (!valid) return { ok: false, error: "SENHA_INCORRETA", fields: { senha: "Senha incorreta." } };
+
+  // Cancela no Stripe ANTES de apagar: abortar aqui evita assinatura órfã
+  // cobrando cliente que não existe mais (contracts/server-actions.md).
+  const [sub] = await db.select().from(subscriptions).where(eq(subscriptions.userId, userId)).limit(1);
+  if (sub?.stripeSubscriptionId) {
+    try {
+      await stripe.subscriptions.cancel(sub.stripeSubscriptionId);
+    } catch {
+      return { ok: false, error: "STRIPE_INDISPONIVEL" };
+    }
+  }
+
+  await db.delete(users).where(eq(users.id, userId));
+  await logAudit(null, "account_deleted", {});
+
+  return { ok: true, data: undefined };
+}
+
 export async function deleteAccount(formData: FormData): Promise<ActionResult> {
   const session = await auth();
   if (!session?.user?.id) return { ok: false, error: "SESSAO_EXPIRADA" };
@@ -195,14 +256,9 @@ export async function deleteAccount(formData: FormData): Promise<ActionResult> {
   const parsed = deleteAccountSchema.safeParse({ senha: formData.get("senha") });
   if (!parsed.success) return { ok: false, error: "VALIDACAO" };
 
-  const [user] = await db.select().from(users).where(eq(users.id, session.user.id)).limit(1);
-  if (!user) return { ok: false, error: "SESSAO_EXPIRADA" };
+  const result = await deleteAccountCore(session.user.id, parsed.data.senha);
+  if (!result.ok) return result;
 
-  const valid = await bcrypt.compare(parsed.data.senha, user.passwordHash);
-  if (!valid) return { ok: false, error: "SENHA_INCORRETA", fields: { senha: "Senha incorreta." } };
-
-  await db.delete(users).where(eq(users.id, user.id));
-  await logAudit(null, "account_deleted", {});
-
-  return { ok: true, data: undefined };
+  await signOut({ redirect: false });
+  return result;
 }

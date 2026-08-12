@@ -25,7 +25,15 @@ export function EntrarForm({ next }: { next: string }) {
         <Label htmlFor="senha">Senha</Label>
         <Input id="senha" name="senha" type="password" required />
       </div>
-      {state && !state.ok && <p className="text-sm text-destructive">E-mail ou senha incorretos.</p>}
+      {state && !state.ok && state.error === "MUITAS_TENTATIVAS" && (
+        <p className="text-sm text-destructive">
+          Muitas tentativas. Tente novamente em {Math.ceil((state.retryAfterSeconds ?? 0) / 60)} minuto
+          {Math.ceil((state.retryAfterSeconds ?? 0) / 60) === 1 ? "" : "s"}.
+        </p>
+      )}
+      {state && !state.ok && state.error !== "MUITAS_TENTATIVAS" && (
+        <p className="text-sm text-destructive">E-mail ou senha incorretos.</p>
+      )}
       <Button type="submit" disabled={pending} className="w-full">
         {pending ? "Entrando..." : "Entrar"}
       </Button>

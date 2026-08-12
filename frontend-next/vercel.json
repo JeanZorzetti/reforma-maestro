@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/trial-warnings",
+      "schedule": "0 12 * * *"
+    },
+    {
+      "path": "/api/cron/watchdog",
+      "schedule": "0 18 * * *"
+    }
+  ]
+}

@@ -9,6 +9,7 @@ import { listObras } from "@/db/queries/obras";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckoutSuccessTracker } from "@/components/app/checkout-success-tracker";
+import { ContaDeleteDialog } from "@/components/app/conta-delete-dialog";
 
 const STATUS_LABEL: Record<string, string> = {
   trialing: "Em teste grátis",
@@ -89,6 +90,10 @@ export default async function ContaPage({
             ))}
           </div>
         )}
+
+        <div className="border-t pt-4">
+          <ContaDeleteDialog obras={obras.map((obra) => ({ id: obra.id, nome: obra.nome }))} />
+        </div>
       </CardContent>
     </Card>
   );

@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { stripeEvents, subscriptions, users } from "@/db/schema";
 import { logAudit } from "@/lib/audit";
 import { sendPaymentFailedEmail } from "@/lib/email";
+import { recordIncident } from "@/lib/incidents";
 import { mapStripeStatus, stripe } from "@/lib/stripe";
 
 type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
@@ -121,7 +122,7 @@ async function computeTransition(event: Stripe.Event, sub: SubscriptionRow): Pro
 
 type PipelineOutcome =
   | { kind: "duplicado" }
-  | { kind: "unmatched" }
+  | { kind: "unmatched"; userId: string | null }
   | { kind: "fora_de_ordem" }
   | { kind: "ignorado" }
   | { kind: "aplicado"; userId: string; type: string };
@@ -140,13 +141,13 @@ async function runPipeline(event: Stripe.Event): Promise<PipelineOutcome> {
     const userId = await resolveUserId(tx, extractIds(event));
     if (!userId) {
       await tx.update(stripeEvents).set({ unmatched: true }).where(eq(stripeEvents.id, event.id));
-      return { kind: "unmatched" };
+      return { kind: "unmatched", userId: null };
     }
 
     const [sub] = await tx.select().from(subscriptions).where(eq(subscriptions.userId, userId)).limit(1);
     if (!sub) {
       await tx.update(stripeEvents).set({ unmatched: true }).where(eq(stripeEvents.id, event.id));
-      return { kind: "unmatched" };
+      return { kind: "unmatched", userId };
     }
 
     const eventCreatedAt = new Date(event.created * 1000);
@@ -176,6 +177,10 @@ export async function processStripeWebhookEvent(event: Stripe.Event): Promise<We
       return { ignorado: true };
     case "unmatched":
       await logAudit(null, "webhook_unmatched", { eventId: event.id, type: event.type });
+      await recordIncident("webhook_failed", "/api/stripe/webhook", new Error(`unmatched: ${event.type}`), {
+        eventId: event.id,
+        ...(outcome.userId ? { userId: outcome.userId } : {}),
+      });
       return { unmatched: true };
     case "fora_de_ordem":
       return { fora_de_ordem: true };

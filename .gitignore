@@ -47,6 +47,7 @@ reforma-maestro-mcp-b6cbb65a8a5e.json
 *.json
 !package.json
 !tsconfig.json
+!vercel.json
 
 
 # System

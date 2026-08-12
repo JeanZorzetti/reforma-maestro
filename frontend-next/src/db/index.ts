@@ -7,5 +7,5 @@ if (!url) {
   throw new Error("DATABASE_URL não definida");
 }
 
-const client = postgres(url);
+const client = postgres(url, { max: 1, idle_timeout: 20, connect_timeout: 10 });
 export const db = drizzle(client, { schema });
