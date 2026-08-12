@@ -1,9 +1,21 @@
 <!--
 Sync Impact Report
-- Version change: 2.0.0 → 3.0.0 (MAJOR — remoção do requisito de TLS obrigatório do Princípio V)
+- Version change: 3.0.0 → 3.1.0 (MINOR — nova integração externa permitida e expansão do Princípio V)
 - Modified principles:
-  - V. Credential & Customer Data Safety: removida a exigência de sslmode=require em produção. O Postgres auto-hospedado (Easypanel, mesmo host de outros ~34 projetos) não isola namespace de IPC entre containers, e uma tentativa de habilitar TLS em 2026-08-11 gerou colisão de memória compartilhada com outro banco de produção ativo no mesmo host — risco maior do que o problema que resolvia. Decisão: aceitar sslmode=disable, alinhado ao padrão já usado nos demais projetos no mesmo host.
-- Removed follow-up TODOs: TODO(SSL_ENFORCEMENT) — descartado, não T080 pendente. Ver histórico do dia 2026-08-11 para o motivo.
+  - V. Credential & Customer Data Safety: expandido para cobrir telemetria. Com a entrada de um
+    serviço externo de captura de erro (spec 002-melhorias-v11, FR-001), stack trace e contexto de
+    erro passam a sair do perímetro do produto; a proibição de vazar segredo e dado financeiro do
+    cliente agora vale explicitamente para o que é enviado a esse serviço.
+- Modified sections:
+  - Technology & Integration Constraints: provedor de billing deixa de ser "a definir" e passa a
+    ser Stripe (assinatura recorrente já ativa em produção); Resend passa a constar como provedor
+    de e-mail transacional já integrado; serviço de captura de erro de servidor passa a ser
+    integração permitida — era o bloqueio declarado em `specs/002-melhorias-v11/spec.md`.
+- Added sections: nenhuma
+- Removed sections: nenhuma
+- Deferred: FR-032 (verificação automática do funil pago a cada publicação) fica como requisito da
+  spec 002, não como regra de governança; promover a Development Workflow só depois de existir e
+  se mostrar estável.
 -->
 
 # Reforma Maestro Constitution
@@ -51,7 +63,11 @@ uma tentativa de habilitar TLS colidiu com outro banco de produção ativo.
 Risco aceito conscientemente; não reabrir sem resolver o isolamento de IPC
 no host primeiro. Toda query que lê dados de obra MUST ser escopada ao
 usuário autenticado no servidor; isolamento por usuário é requisito de
-corretude, não de conveniência.
+corretude, não de conveniência. A mesma proibição vale para telemetria: log,
+alerta e evento enviado a serviço externo de captura de erro MUST NOT conter
+senha, hash de senha, token, chave de API, dado de cartão ou valor financeiro
+de obra de cliente — identificador de usuário e rota são suficientes para
+diagnóstico.
 
 ### VI. Data Ownership & Portability
 O cliente é dono dos dados da obra dele. O app MUST oferecer exportação
@@ -65,9 +81,14 @@ política declarada. Esse princípio preserva a promessa original do produto
 Stack: Next.js 16 (App Router), React 19, TypeScript, Tailwind, shadcn/ui,
 API routes/Server Actions e Postgres, hospedado na Vercel. O banco Postgres
 é auto-hospedado e acessado por connection string mantida fora do
-versionamento. Integrações externas limitadas a: provedor de billing
-recorrente (Kiwify recorrente ou Stripe — a definir), Google Analytics 4 e
-Google Search Console. Não existe nem está planejada integração SINAPI;
+versionamento. Integrações externas limitadas a: Stripe (assinatura recorrente,
+já em produção), Resend (e-mail transacional), serviço gerenciado de captura de
+erro de servidor, Google Analytics 4 e Google Search Console. Qualquer
+integração fora dessa lista exige emenda desta seção antes de entrar no código.
+O serviço de captura de erro MUST ser configurável por env var e MUST degradar
+sem derrubar requisição quando estiver indisponível — observabilidade não pode
+virar ponto único de falha do produto. Não existe nem está planejada integração
+SINAPI;
 menções de marketing a SINAPI são ilustrativas e MUST NOT sugerir
 integração real de dados.
 
@@ -99,4 +120,4 @@ Report atualizado no topo deste arquivo. Todo `/speckit-plan` que proponha
 trabalho conflitante com um Core Principle deve justificar o desvio
 explicitamente na seção Complexity Tracking do plano ou ser revisado.
 
-**Version**: 3.0.0 | **Ratified**: 2026-08-11 | **Last Amended**: 2026-08-11
+**Version**: 3.1.0 | **Ratified**: 2026-08-11 | **Last Amended**: 2026-08-12
