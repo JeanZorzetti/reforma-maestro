@@ -11,19 +11,31 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.7,
     }))
 
+    // Sem `lastModified` nas páginas estáticas: o sitemap é prerenderizado no
+    // build, então `new Date()` gravava a data do deploy e dizia ao Google que
+    // toda página mudou a cada deploy. Data ausente é melhor que data errada.
+    // Os artigos mantêm a sua, que é real (`post.date`).
     return [
         {
             url: baseUrl,
-            lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 1,
         },
         {
+            url: `${baseUrl}/sobre`,
+            changeFrequency: 'monthly',
+            priority: 0.8,
+        },
+        {
             url: `${baseUrl}/blog`,
-            lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 0.8,
         },
         ...posts,
+        {
+            url: `${baseUrl}/privacidade`,
+            changeFrequency: 'yearly',
+            priority: 0.3,
+        },
     ]
 }
