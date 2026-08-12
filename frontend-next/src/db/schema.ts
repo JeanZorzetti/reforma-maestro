@@ -31,6 +31,15 @@ export const subscriptionStatusEnum = pgEnum("subscription_status", [
   "expired",
 ]);
 
+export const incidentKindEnum = pgEnum("incident_kind", [
+  "server_error",
+  "webhook_failed",
+  "cron_failed",
+  "cron_missing",
+]);
+
+export const periodicidadeEnum = pgEnum("periodicidade", ["mensal", "quinzenal", "semanal"]);
+
 // --- Auth.js (@auth/drizzle-adapter) ---------------------------------------
 
 export const users = pgTable("users", {
@@ -98,6 +107,7 @@ export const obras = pgTable(
     orcamentoTetoCents: integer("orcamento_teto_cents").notNull(),
     reservaPct: numeric("reserva_pct", { precision: 5, scale: 2 }).notNull(),
     arquivadaEm: timestamp("arquivada_em", { withTimezone: true }),
+    exemplo: boolean("exemplo").notNull().default(false),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
@@ -124,16 +134,72 @@ export const lancamentos = pgTable(
     fornecedor: text("fornecedor"),
     previstoCents: integer("previsto_cents").notNull(),
     pagoCents: integer("pago_cents").notNull().default(0),
+    parcelamentoId: uuid("parcelamento_id").references(() => parcelamentos.id, { onDelete: "set null" }),
+    parcelaNum: integer("parcela_num"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
     index("lancamentos_obra_id_data_idx").on(table.obraId, table.data.desc()),
     index("lancamentos_obra_id_categoria_idx").on(table.obraId, table.categoria),
+    index("lancamentos_parcelamento_id_idx").on(table.parcelamentoId),
     check("previsto_cents_nao_negativo", sql`${table.previstoCents} >= 0`),
     check("pago_cents_nao_negativo", sql`${table.pagoCents} >= 0`),
+    check(
+      "parcela_num_consistente_com_parcelamento",
+      sql`(${table.parcelaNum} IS NULL) = (${table.parcelamentoId} IS NULL)`,
+    ),
   ],
 );
+
+// --- Operação (incidentes, rate limit, parcelamento) --------------------------
+
+export const parcelamentos = pgTable(
+  "parcelamentos",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    obraId: uuid("obra_id")
+      .notNull()
+      .references(() => obras.id, { onDelete: "cascade" }),
+    totalCents: integer("total_cents").notNull(),
+    parcelas: integer("parcelas").notNull(),
+    periodicidade: periodicidadeEnum("periodicidade").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    check("total_cents_positivo", sql`${table.totalCents} > 0`),
+    check("parcelas_entre_2_e_60", sql`${table.parcelas} BETWEEN 2 AND 60`),
+  ],
+);
+
+export const incidents = pgTable(
+  "incidents",
+  {
+    fingerprint: text("fingerprint").primaryKey(),
+    kind: incidentKindEnum("kind").notNull(),
+    route: text("route").notNull(),
+    message: text("message").notNull(),
+    detail: jsonb("detail").notNull().default({}),
+    count: integer("count").notNull().default(1),
+    firstSeenAt: timestamp("first_seen_at", { withTimezone: true }).notNull().defaultNow(),
+    lastSeenAt: timestamp("last_seen_at", { withTimezone: true }).notNull().defaultNow(),
+    notifiedAt: timestamp("notified_at", { withTimezone: true }),
+  },
+  (table) => [
+    index("incidents_notified_at_idx").on(table.notifiedAt, table.lastSeenAt),
+  ],
+);
+
+export const heartbeats = pgTable("heartbeats", {
+  name: text("name").primaryKey(),
+  lastRunAt: timestamp("last_run_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const authAttempts = pgTable("auth_attempts", {
+  key: text("key").primaryKey(),
+  windowStart: timestamp("window_start", { withTimezone: true }).notNull(),
+  count: integer("count").notNull().default(0),
+});
 
 // --- Assinatura ---------------------------------------------------------------
 

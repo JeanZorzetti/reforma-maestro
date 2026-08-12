@@ -9,9 +9,10 @@ export type AuditEvent =
   | "subscription_changed"
   | "access_denied"
   | "webhook_unmatched"
-  | "account_deleted";
+  | "account_deleted"
+  | "rate_limited";
 
-const FORBIDDEN_KEYS = ["password", "senha", "hash", "token", "chave", "key", "secret"];
+export const FORBIDDEN_KEYS = ["password", "senha", "hash", "token", "chave", "key", "secret"];
 
 /** `detail` nunca recebe senha, hash, token ou chave (FR-030). */
 export async function logAudit(

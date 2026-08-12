@@ -1,0 +1,14 @@
+ALTER TABLE "lancamentos" DROP CONSTRAINT "parcela_num_consistente_com_parcelamento";
+DROP INDEX "lancamentos_parcelamento_id_idx";
+ALTER TABLE "lancamentos" DROP CONSTRAINT "lancamentos_parcelamento_id_parcelamentos_id_fk";
+DROP INDEX "incidents_notified_at_idx";
+ALTER TABLE "parcelamentos" DROP CONSTRAINT "parcelamentos_obra_id_obras_id_fk";
+ALTER TABLE "obras" DROP COLUMN "exemplo";
+ALTER TABLE "lancamentos" DROP COLUMN "parcela_num";
+ALTER TABLE "lancamentos" DROP COLUMN "parcelamento_id";
+DROP TABLE "parcelamentos";
+DROP TABLE "incidents";
+DROP TABLE "heartbeats";
+DROP TABLE "auth_attempts";
+DROP TYPE "public"."periodicidade";
+DROP TYPE "public"."incident_kind";
