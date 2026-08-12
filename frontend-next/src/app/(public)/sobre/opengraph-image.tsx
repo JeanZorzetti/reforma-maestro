@@ -2,13 +2,13 @@ import { ogImage, ogSize, ogContentType } from "@/lib/og";
 
 export const size = ogSize;
 export const contentType = ogContentType;
-export const alt = "Sobre a Reforma Maestro | Nossa História e Missão";
+export const alt = "Sobre o Reforma Maestro | O que é, para quem é e o que não faz";
 
 export default async function Image() {
   return ogImage({
     eyebrow: "Sobre",
-    title: "A história por trás do Reforma Maestro",
+    title: "Controle do dinheiro da obra, não do cronograma",
     description:
-      "Como Maria Eduarda Zorzetti criou o Reforma Maestro para controlar obras sem planilhas complexas.",
+      "O que o Reforma Maestro faz, o que ele não faz e para quem foi construído.",
   });
 }

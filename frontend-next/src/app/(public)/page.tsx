@@ -5,7 +5,6 @@ import { Authority } from "@/components/Authority";
 import { FAQ } from "@/components/FAQ";
 import { Reviews } from "@/components/Reviews";
 import { Pricing } from "@/components/Pricing";
-import { Footer } from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -17,7 +16,6 @@ export default function Home() {
       <Reviews />
       <FAQ />
       <Pricing />
-      <Footer />
     </main>
   );
 }

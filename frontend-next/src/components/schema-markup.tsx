@@ -1,20 +1,20 @@
 import Script from "next/script";
 
 export function SchemaMarkup() {
+    // Sem `sameAs`: só entra aqui perfil que exista de verdade. URL de rede social
+    // inventada em structured data é sinal de spam para o Google, não de autoridade.
     const organizationSchema = {
         "@context": "https://schema.org",
+        "@id": "https://orcaobra.roilabs.com.br/#organization",
         "@type": "Organization",
         "name": "Reforma Maestro",
         "url": "https://orcaobra.roilabs.com.br",
-        "logo": "https://orcaobra.roilabs.com.br/images/logo.png", // Placeholder if no logo exists yet
+        "logo": "https://orcaobra.roilabs.com.br/og.png",
         "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "customer support",
             "email": "suporte@roilabs.com.br"
-        },
-        "sameAs": [
-            "https://www.instagram.com/reforma.maestro" // Placeholder
-        ]
+        }
     };
 
     const productSchema = {
@@ -24,7 +24,7 @@ export function SchemaMarkup() {
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Web",
         "image": [
-            "https://orcaobra.roilabs.com.br/images/hero-dashboard.png" // Placeholder
+            "https://orcaobra.roilabs.com.br/og.png"
         ],
         "description": "App de controle financeiro para obras e reformas. Cadastre a obra, lance os gastos e acompanhe o orçamento em um painel automático.",
         "brand": {

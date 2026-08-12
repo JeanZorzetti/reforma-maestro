@@ -20,7 +20,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://orcaobra.roilabs.com.br'),
-  alternates: { canonical: '/' },
+  // Sem `alternates.canonical` aqui: metadata do root é herdada por toda rota que
+  // não sobrescreva, e um canonical fixo em '/' declarava /sobre, /privacidade e
+  // todo o blog como duplicatas da home. Cada rota se auto-canonicaliza.
   title: "Reforma Maestro | Controle Financeiro de Obras e Reformas",
   description: "App de controle financeiro para obras e reformas. Cadastre a obra, lance os gastos e acompanhe o orçamento em um painel automático. Teste grátis por 14 dias.",
   keywords: "controle financeiro de obra, app orçamento obra, controle de gastos reforma, orçamento construção civil, painel financeiro obra",
