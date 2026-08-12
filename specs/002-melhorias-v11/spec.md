@@ -88,12 +88,10 @@ e precisa descobrir sozinho o que fazer. O uso real acontece no celular, em pé
 no canteiro, com a nota fiscal na mão — e ali a pessoa esbarra em um campo de
 data que exige digitar `12/08/2026` no teclado e em campos de dinheiro sem
 máscara, onde `1.200,00` é fácil de errar. Se o pagamento foi parcelado em seis
-vezes, ela precisa preencher o mesmo formulário seis vezes. E a nota fiscal, que
-é a prova do gasto, não tem onde ser guardada.
+vezes, ela precisa preencher o mesmo formulário seis vezes.
 
 Nesta história a pessoa entende o produto nos primeiros minutos, lança um gasto
-no celular sem lutar contra o teclado, registra um parcelamento de uma vez só e
-consegue guardar o comprovante junto do lançamento.
+no celular sem lutar contra o teclado e registra um parcelamento de uma vez só.
 
 **Why this priority**: São 14 dias de teste para provar valor. Cada atrito no
 primeiro lançamento é uma pessoa que não volta — e sem conversão do teste a
@@ -102,9 +100,8 @@ não faz sentido trazer mais gente para uma operação que falha em silêncio.
 
 **Independent Test**: Pode ser testada com uma conta nova de teste, sem tocar em
 nada de US1: cronometrar do cadastro até o primeiro gasto salvo em um celular
-real, registrar um parcelamento em seis vezes e conferir que as seis parcelas
-aparecem, e anexar um comprovante e recuperá-lo depois. Entrega ativação e
-retenção mesmo sem as outras histórias.
+real e registrar um parcelamento em seis vezes conferindo que as seis parcelas
+aparecem. Entrega ativação e retenção mesmo sem as outras histórias.
 
 **Acceptance Scenarios**:
 
@@ -132,14 +129,6 @@ retenção mesmo sem as outras histórias.
 7. **Given** um lançamento parcelado já criado, **When** a pessoa opta por
    excluir a série inteira, **Then** ela é avisada de quantas parcelas serão
    removidas antes de confirmar.
-8. **Given** uma pessoa com a nota fiscal em mãos, **When** ela anexa o
-   comprovante ao lançamento pela câmera ou pela galeria do celular, **Then** o
-   comprovante fica associado àquele lançamento e pode ser visualizado depois a
-   partir da lista de lançamentos.
-9. **Given** uma conta em acesso somente leitura, **When** ela abre um
-   lançamento com comprovante, **Then** ainda consegue ver e baixar o
-   comprovante — perder acesso de escrita não pode bloquear a leitura dos
-   próprios dados.
 
 ---
 
@@ -222,12 +211,6 @@ apresentabilidade por si só.
   a soma das parcelas e o total informado.
 - **Parcelamento longo**: um número de parcelas absurdo não pode gerar milhares
   de lançamentos de uma vez.
-- **Comprovante grande ou inválido**: arquivo acima do limite ou de tipo não
-  suportado precisa ser recusado com mensagem clara, sem perder o lançamento
-  que a pessoa já preencheu.
-- **Comprovantes e exclusão**: ao excluir um lançamento, uma obra ou a conta
-  inteira, os comprovantes associados precisam ser apagados junto — não podem
-  sobreviver ao dado que os originou.
 - **Relatório de obra muito grande**: gerar o documento de uma obra com centenas
   de lançamentos não pode estourar tempo de resposta nem entregar arquivo
   truncado.
@@ -269,9 +252,9 @@ apresentabilidade por si só.
 - **FR-011**: O sistema MUST avisar, antes de confirmar a exclusão, que os dados
   e a exportação são perdidos de forma irreversível, oferecendo o caminho para
   exportar antes.
-- **FR-012**: O sistema MUST apagar, junto com a conta, todas as obras,
-  lançamentos e comprovantes associados, mantendo no registro de auditoria
-  apenas o evento de exclusão sem dado pessoal identificável.
+- **FR-012**: O sistema MUST apagar, junto com a conta, todas as obras e
+  lançamentos associados, mantendo no registro de auditoria apenas o evento de
+  exclusão sem dado pessoal identificável.
 
 **Ativação e conversão (US2)**
 
@@ -297,50 +280,32 @@ apresentabilidade por si só.
   sendo informados de quantos lançamentos serão removidos antes de confirmar.
 - **FR-022**: O sistema MUST limitar o número de parcelas geradas em uma única
   operação a um teto documentado.
-- **FR-023**: Usuários MUST ser capazes de associar um comprovante a um
-  lançamento a partir da câmera ou da galeria do aparelho.
-  [NEEDS CLARIFICATION: guardar arquivos é uma capacidade que o produto ainda
-  não tem e que a constitution não prevê nas integrações externas permitidas.
-  O comprovante deve ser (a) arquivo hospedado pelo próprio produto, (b) apenas
-  um link para arquivo que o cliente já hospeda em outro serviço, ou (c) fora do
-  escopo desta entrega?]
-- **FR-024**: O sistema MUST recusar comprovantes acima do limite de tamanho ou
-  de tipo não suportado com mensagem clara, preservando o lançamento em
-  preenchimento.
-- **FR-025**: O sistema MUST permitir visualizar e baixar comprovantes mesmo em
-  contas com acesso somente leitura.
-- **FR-026**: O sistema MUST apagar os comprovantes associados quando o
-  lançamento, a obra ou a conta correspondente for excluído.
-
 **Profundidade e apresentação (US3)**
 
-- **FR-027**: O sistema MUST apresentar a evolução do consumo do orçamento ao
+- **FR-023**: O sistema MUST apresentar a evolução do consumo do orçamento ao
   longo do tempo comparada ao teto, na tela do painel da obra.
-- **FR-028**: O sistema MUST distinguir visualmente, nessa evolução, o que já foi
+- **FR-024**: O sistema MUST distinguir visualmente, nessa evolução, o que já foi
   pago do que está apenas previsto em data futura.
-- **FR-029**: O sistema MUST exibir uma mensagem explicativa quando não houver
+- **FR-025**: O sistema MUST exibir uma mensagem explicativa quando não houver
   lançamentos suficientes para formar a evolução.
-- **FR-030**: Usuários MUST ser capazes de arquivar e desarquivar uma obra,
+- **FR-026**: Usuários MUST ser capazes de arquivar e desarquivar uma obra,
   removendo-a da listagem principal sem perder dados nem exportação.
-- **FR-031**: O sistema MUST oferecer acesso às obras arquivadas em listagem
+- **FR-027**: O sistema MUST oferecer acesso às obras arquivadas em listagem
   própria.
-- **FR-032**: O sistema MUST NOT alterar o estado de acesso da conta em função de
+- **FR-028**: O sistema MUST NOT alterar o estado de acesso da conta em função de
   obras arquivadas.
-- **FR-033**: O sistema MUST navegar listas longas de lançamentos por avanço e
+- **FR-029**: O sistema MUST navegar listas longas de lançamentos por avanço e
   retorno, indicando a posição no total, sem enumerar todas as páginas.
-- **FR-034**: Usuários MUST ser capazes de gerar um relatório da obra em formato
+- **FR-030**: Usuários MUST ser capazes de gerar um relatório da obra em formato
   apresentável, legível sem software de planilha, contendo os indicadores do
   painel, a quebra por categoria e os lançamentos.
-- **FR-035**: O sistema MUST disponibilizar o relatório também para contas em
+- **FR-031**: O sistema MUST disponibilizar o relatório também para contas em
   acesso somente leitura, pelo mesmo princípio da exportação.
-- **FR-036**: O sistema MUST verificar automaticamente, a cada publicação, o
+- **FR-032**: O sistema MUST verificar automaticamente, a cada publicação, o
   percurso completo de cadastro, teste, assinatura e liberação de acesso.
 
 ### Key Entities *(include if feature involves data)*
 
-- **Comprovante**: evidência de um gasto, associada a exatamente um lançamento.
-  Guarda referência ao arquivo, tipo, tamanho e momento do anexo. Vive e morre
-  com o lançamento que o originou.
 - **Série de parcelas**: agrupamento que liga lançamentos gerados em um único
   preenchimento parcelado. Guarda o total original, a quantidade de parcelas e a
   periodicidade, permitindo tratar a série como unidade sem impedir a edição
@@ -407,6 +372,12 @@ apresentabilidade por si só.
   os filtros existentes funcionando sem alteração de semântica.
 - A periodicidade de parcelamento suportada é mensal, semanal e quinzenal — as
   formas usadas em obra (material parcelado no cartão, mão de obra semanal).
+- Anexar comprovante ao lançamento fica **fora do escopo desta entrega**.
+  Guardar arquivos exigiria uma integração externa que a constitution não prevê
+  e um custo por assinante que cresce com o uso — decisão que merece dado de uso
+  real antes de ser tomada. Segue como candidato a spec própria, mantendo o que
+  a spec 001 já registrava sobre o tema. Nada nesta entrega pode criar
+  impedimento a adicioná-lo depois.
 - A evolução de consumo não inclui projeção de estouro futuro: a obra não tem
   data de término cadastrada, e criar essa projeção exigiria um dado que o
   produto não coleta. Fica registrado como candidato a spec futura.
@@ -414,21 +385,19 @@ apresentabilidade por si só.
   e-mail automaticamente.
 - As quatro categorias fixas herdadas da planilha permanecem; categorias
   personalizadas seguem fora de escopo, como na spec 001.
-- A cobertura automatizada de FR-036 roda contra ambiente de teste do provedor de
+- A cobertura automatizada de FR-032 roda contra ambiente de teste do provedor de
   cobrança, nunca contra cobrança real.
 - Nenhuma mudança desta spec pode degradar as rotas públicas indexadas nem o
   structured data (Princípio II).
 - Toda leitura e escrita introduzida aqui segue escopada ao usuário autenticado
-  no servidor (Princípio V), e o relatório e os comprovantes seguem o direito de
-  portabilidade do Princípio VI.
+  no servidor (Princípio V), e o relatório segue o direito de portabilidade do
+  Princípio VI.
 
 ## Dependencies
 
-- Provedor de cobrança recorrente já integrado (necessário para FR-010 e FR-036).
+- Provedor de cobrança recorrente já integrado (necessário para FR-010 e FR-032).
 - Provedor de e-mail transacional já integrado (necessário para FR-002 e FR-003).
 - Serviço de captura de erro de servidor — capacidade nova, a definir em
-  `/speckit-plan`; é a única dependência externa nova exigida por US1.
-- Capacidade de armazenamento de arquivos — dependência nova condicionada à
-  resolução do [NEEDS CLARIFICATION] em FR-023. Se a resposta for arquivo
-  hospedado pelo produto, a seção Technology & Integration Constraints da
-  constitution precisa de emenda antes do plano.
+  `/speckit-plan`. É a **única** dependência externa nova de toda a spec, e
+  exige emenda da seção *Technology & Integration Constraints* da constitution,
+  que hoje limita integrações a cobrança recorrente, GA4 e Search Console.

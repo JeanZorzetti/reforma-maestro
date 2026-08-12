@@ -15,7 +15,7 @@
 
 ## Requirement Completeness
 
-- [ ] No [NEEDS CLARIFICATION] markers remain
+- [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)
@@ -58,3 +58,26 @@ orientação de fazer suposições informadas:
 - contagem de tentativas de login no banco existente, sem cache distribuído;
 - e-mail como canal de alerta de incidente, reaproveitando o provedor já
   integrado.
+
+### Iteração 2 — 2026-08-12
+
+Marcador de FR-023 resolvido pelo dono do produto: **opção C — comprovantes
+fora do escopo desta entrega**. Nenhuma integração de armazenamento de arquivo
+é introduzida; a decisão fica para spec própria, com dado de uso real na mesa.
+
+Alterações aplicadas:
+
+- FR-023 a FR-026 (comprovantes) removidos; o bloco de US3 renumerado de
+  FR-027..FR-036 para FR-023..FR-032. Total: 32 requisitos.
+- US2 perdeu os cenários 8 e 9 e a menção a comprovante na narrativa e no
+  Independent Test.
+- Duas edge cases de comprovante removidas; FR-012 não fala mais em apagar
+  comprovantes junto da conta.
+- Entidade **Comprovante** removida de Key Entities.
+- Assumptions ganhou o registro explícito do que ficou fora e por quê, com a
+  ressalva de que nada nesta entrega pode impedir a adição posterior.
+- Dependencies: armazenamento de arquivo eliminado. Resta **uma única**
+  dependência externa nova em toda a spec — captura de erro de servidor — que
+  ainda exige emenda da constitution antes do `/speckit-plan`.
+
+**16/16 itens passam. Spec pronta para `/speckit-plan`.**
