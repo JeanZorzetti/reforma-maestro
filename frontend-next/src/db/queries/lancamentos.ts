@@ -1,6 +1,7 @@
-import { and, desc, eq, getTableColumns, inArray, sql } from "drizzle-orm";
+import { and, desc, eq, getTableColumns, gte, inArray, lte, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { categoriaEnum, lancamentos, obras } from "@/db/schema";
+import type { Periodo } from "@/db/queries/painel";
 
 const PAGE_SIZE = 50;
 
@@ -46,13 +47,17 @@ export async function listLancamentos({
   return { items, total: count, page, pageSize: PAGE_SIZE };
 }
 
-/** Todos os lançamentos da obra, sem paginação — uso exclusivo da exportação (FR-026). */
-export async function listLancamentosParaExport(userId: string, obraId: string) {
+/** Todos os lançamentos da obra, sem paginação — uso da exportação (FR-026) e do relatório. */
+export async function listLancamentosParaExport(userId: string, obraId: string, periodo?: Periodo) {
+  const conditions = [eq(lancamentos.obraId, obraId), eq(obras.userId, userId)];
+  if (periodo?.de) conditions.push(gte(lancamentos.data, periodo.de));
+  if (periodo?.ate) conditions.push(lte(lancamentos.data, periodo.ate));
+
   return db
     .select(getTableColumns(lancamentos))
     .from(lancamentos)
     .innerJoin(obras, eq(obras.id, lancamentos.obraId))
-    .where(and(eq(lancamentos.obraId, obraId), eq(obras.userId, userId)))
+    .where(and(...conditions))
     .orderBy(desc(lancamentos.data));
 }
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export interface PaginacaoProps {
   page: number;
@@ -19,15 +20,27 @@ export function Paginacao({ page, pageSize, total, hrefForPage }: PaginacaoProps
 
   return (
     <div className="flex items-center justify-between gap-4">
-      <Button asChild variant="outline" size="sm" disabled={!temAnterior}>
-        {temAnterior ? <Link href={hrefForPage(page - 1)}>Anterior</Link> : <span>Anterior</span>}
-      </Button>
+      {temAnterior ? (
+        <Link href={hrefForPage(page - 1)} className={cn(buttonVariants({ variant: "outline", size: "sm" }))}>
+          Anterior
+        </Link>
+      ) : (
+        <span aria-disabled className={cn(buttonVariants({ variant: "outline", size: "sm" }), "pointer-events-none text-muted-foreground")}>
+          Anterior
+        </span>
+      )}
       <p className="text-sm text-muted-foreground">
         {inicio}–{fim} de {total}
       </p>
-      <Button asChild variant="outline" size="sm" disabled={!temProxima}>
-        {temProxima ? <Link href={hrefForPage(page + 1)}>Próxima</Link> : <span>Próxima</span>}
-      </Button>
+      {temProxima ? (
+        <Link href={hrefForPage(page + 1)} className={cn(buttonVariants({ variant: "outline", size: "sm" }))}>
+          Próxima
+        </Link>
+      ) : (
+        <span aria-disabled className={cn(buttonVariants({ variant: "outline", size: "sm" }), "pointer-events-none text-muted-foreground")}>
+          Próxima
+        </span>
+      )}
     </div>
   );
 }

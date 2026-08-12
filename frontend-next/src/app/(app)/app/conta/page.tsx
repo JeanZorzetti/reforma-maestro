@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { subscriptions } from "@/db/schema";
+import { getAccess, precisaAssinar } from "@/lib/access";
 import { createPortalSession } from "@/server/actions/assinatura";
 import { listObras } from "@/db/queries/obras";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ export default async function ContaPage({
     .where(eq(subscriptions.userId, session.user.id))
     .limit(1);
 
+  const access = await getAccess(session.user.id);
   const obras = await listObras(session.user.id);
 
   return (
@@ -74,11 +76,11 @@ export default async function ContaPage({
               Gerenciar assinatura
             </Button>
           </form>
-        ) : (
+        ) : precisaAssinar(access) ? (
           <Button asChild className="w-full">
             <Link href="/app/assinar">Assinar agora</Link>
           </Button>
-        )}
+        ) : null}
 
         {obras.length > 0 && (
           <div className="space-y-2 border-t pt-4">

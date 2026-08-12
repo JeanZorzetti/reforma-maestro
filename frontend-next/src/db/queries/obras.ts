@@ -2,7 +2,7 @@ import { and, eq, isNotNull, isNull } from "drizzle-orm";
 import { db } from "@/db";
 import { obras } from "@/db/schema";
 import { listLancamentosParaExport } from "@/db/queries/lancamentos";
-import { getPainelPorCategoria, getPainelTotais } from "@/db/queries/painel";
+import { getPainelPorCategoria, getPainelTotais, type Periodo } from "@/db/queries/painel";
 
 export async function listObras(userId: string) {
   return db
@@ -12,14 +12,14 @@ export async function listObras(userId: string) {
 }
 
 /** Dados do relatório apresentável (FR-030) — reusa as agregações do painel, nenhuma agregação nova. */
-export async function dadosRelatorio(userId: string, obraId: string) {
+export async function dadosRelatorio(userId: string, obraId: string, periodo?: Periodo) {
   const obra = await getObra(userId, obraId);
   if (!obra) return null;
 
   const [totais, porCategoria, lancamentosList] = await Promise.all([
-    getPainelTotais(userId, obraId),
-    getPainelPorCategoria(userId, obraId),
-    listLancamentosParaExport(userId, obraId),
+    getPainelTotais(userId, obraId, periodo),
+    getPainelPorCategoria(userId, obraId, periodo),
+    listLancamentosParaExport(userId, obraId, periodo),
   ]);
 
   return { obra, totais, porCategoria, lancamentos: lancamentosList };

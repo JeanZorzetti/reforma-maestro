@@ -31,19 +31,10 @@ export default async function PainelObraPage({ params }: { params: Promise<{ id:
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-xl font-semibold">{obra.nome}</h1>
+        <h1 className="text-xl font-semibold">Dashboard — {obra.nome}</h1>
         <div className="flex flex-wrap gap-2">
-          <Button asChild variant="outline" size="sm">
-            <Link href={`/app/obras/${id}/editar`}>Editar</Link>
-          </Button>
           <Button asChild size="sm">
-            <Link href={`/app/obras/${id}/lancamentos`}>Lançamentos</Link>
-          </Button>
-          <Button asChild variant="outline" size="sm">
-            <a href={`/api/obras/${id}/export`}>Exportar CSV</a>
-          </Button>
-          <Button asChild variant="outline" size="sm">
-            <Link href={`/app/obras/${id}/relatorio`}>Relatório</Link>
+            <Link href={`/app/obras/${id}/lancamentos/novo`}>Novo lançamento</Link>
           </Button>
           <ObraArchiveButton obraId={id} />
         </div>

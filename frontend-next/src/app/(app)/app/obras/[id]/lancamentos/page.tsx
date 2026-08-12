@@ -5,8 +5,10 @@ import { getObra } from "@/db/queries/obras";
 import { countsByParcelamento, listLancamentos } from "@/db/queries/lancamentos";
 import { diferencaCents, statusLancamento } from "@/lib/calc";
 import { formatCents } from "@/lib/money";
+import { lancamentosUrl } from "@/lib/lancamentos-url";
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { LancamentoRowActions } from "@/components/app/lancamento-row-actions";
 import { Paginacao } from "@/components/app/paginacao";
@@ -51,15 +53,8 @@ export default async function LancamentosPage({
   const parcelamentoIds = [...new Set(result.items.map((l) => l.parcelamentoId).filter((v): v is string => !!v))];
   const serieCounts = await countsByParcelamento(session.user.id, id, parcelamentoIds);
 
-  function filterUrl(next: { categoria?: string; status?: string; page?: number }) {
-    const params = new URLSearchParams();
-    const c = next.categoria ?? categoria;
-    const s = next.status ?? status;
-    if (c) params.set("categoria", c);
-    if (s) params.set("status", s);
-    if (next.page && next.page > 1) params.set("page", String(next.page));
-    const query = params.toString();
-    return `/app/obras/${id}/lancamentos${query ? `?${query}` : ""}`;
+  function filterUrl(next: { categoria?: string | null; status?: string | null; page?: number | null }) {
+    return lancamentosUrl(id, { categoria, status }, next);
   }
 
   return (
@@ -71,29 +66,31 @@ export default async function LancamentosPage({
         </Button>
       </div>
 
-      <div className="flex flex-wrap gap-4">
-        <div className="flex flex-wrap gap-2 text-sm">
-          <Link href={filterUrl({ categoria: undefined, page: 1 })} className={!categoria ? "font-semibold" : "text-muted-foreground"}>
-            Todas as categorias
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs text-muted-foreground">Categoria:</span>
+          <Link href={filterUrl({ categoria: null, page: 1 })} className={cn(buttonVariants({ variant: categoria ? "outline" : "default", size: "sm" }))}>
+            Todas
           </Link>
           {Object.entries(LABELS).map(([value, label]) => (
             <Link
               key={value}
               href={filterUrl({ categoria: value, page: 1 })}
-              className={categoria === value ? "font-semibold" : "text-muted-foreground"}
+              className={cn(buttonVariants({ variant: categoria === value ? "default" : "outline", size: "sm" }))}
             >
               {label}
             </Link>
           ))}
         </div>
-        <div className="flex flex-wrap gap-2 text-sm">
-          <Link href={filterUrl({ status: undefined, page: 1 })} className={!status ? "font-semibold" : "text-muted-foreground"}>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs text-muted-foreground">Status:</span>
+          <Link href={filterUrl({ status: null, page: 1 })} className={cn(buttonVariants({ variant: status ? "outline" : "default", size: "sm" }))}>
             Todos
           </Link>
-          <Link href={filterUrl({ status: "Pago", page: 1 })} className={status === "Pago" ? "font-semibold" : "text-muted-foreground"}>
+          <Link href={filterUrl({ status: "Pago", page: 1 })} className={cn(buttonVariants({ variant: status === "Pago" ? "default" : "outline", size: "sm" }))}>
             Pago
           </Link>
-          <Link href={filterUrl({ status: "Pendente", page: 1 })} className={status === "Pendente" ? "font-semibold" : "text-muted-foreground"}>
+          <Link href={filterUrl({ status: "Pendente", page: 1 })} className={cn(buttonVariants({ variant: status === "Pendente" ? "default" : "outline", size: "sm" }))}>
             Pendente
           </Link>
         </div>

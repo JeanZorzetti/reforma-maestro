@@ -43,6 +43,11 @@ export async function requireUser(): Promise<SessionUser | null> {
   return { id: session.user.id, email: session.user.email };
 }
 
+/** `false` quando o acesso já é uma assinatura ativa — não oferecer checkout. */
+export function precisaAssinar(access: Access): boolean {
+  return !(access.tier === "full" && access.status === "active");
+}
+
 /**
  * `true` ⇒ tier `full`. `false` ⇒ caller devolve `{ ok: false, error: 'ACESSO_SOMENTE_LEITURA' }`
  * (o form deve linkar `/app/assinar`). Toda negação grava `access_denied` em audit_log (FR-030, T064).

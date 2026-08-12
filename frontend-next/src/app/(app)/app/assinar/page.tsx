@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { getAccess } from "@/lib/access";
+import { getAccess, precisaAssinar } from "@/lib/access";
 import { createCheckoutSession } from "@/server/actions/assinatura";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +9,7 @@ export default async function AssinarPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/entrar");
   const access = await getAccess(session.user.id);
-  if (access.tier === "full" && access.status === "active") redirect("/app");
+  if (!precisaAssinar(access)) redirect("/app");
 
   return (
     <Card className="mx-auto max-w-md">

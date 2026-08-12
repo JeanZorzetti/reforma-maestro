@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { db } from "@/db";
 import { subscriptions, users } from "@/db/schema";
-import { getAccess } from "@/lib/access";
+import { getAccess, precisaAssinar } from "@/lib/access";
 
 async function seed(status: (typeof subscriptions.status.enumValues)[number], accessUntil: Date) {
   const [user] = await db
@@ -54,5 +54,27 @@ describe("getAccess — tabela-verdade R4", () => {
   it("expired ⇒ readonly mesmo com access_until no futuro", async () => {
     const userId = await seed("expired", future);
     expect((await getAccess(userId)).tier).toBe("readonly");
+  });
+});
+
+describe("precisaAssinar", () => {
+  it("active + access futuro ⇒ false (não oferecer checkout)", () => {
+    expect(precisaAssinar({ tier: "full", status: "active", accessUntil: future })).toBe(false);
+  });
+
+  it("trialing ⇒ true", () => {
+    expect(precisaAssinar({ tier: "full", status: "trialing", accessUntil: future })).toBe(true);
+  });
+
+  it("past_due vencido ⇒ true", () => {
+    expect(precisaAssinar({ tier: "readonly", status: "past_due", accessUntil: past })).toBe(true);
+  });
+
+  it("expired ⇒ true", () => {
+    expect(precisaAssinar({ tier: "readonly", status: "expired", accessUntil: past })).toBe(true);
+  });
+
+  it("canceled vencido ⇒ true", () => {
+    expect(precisaAssinar({ tier: "readonly", status: "canceled", accessUntil: past })).toBe(true);
   });
 });
