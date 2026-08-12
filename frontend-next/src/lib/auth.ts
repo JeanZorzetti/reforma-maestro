@@ -12,6 +12,10 @@ import { logAudit } from "@/lib/audit";
  * substitui o `delete from sessions` que a estratégia `database` permitia.
  */
 export async function tokenAindaValido(userId: string, emitidoEm: number): Promise<boolean> {
+  // Token sem o claim vira NaN aqui, e toda comparação com NaN é false — sem
+  // esta guarda um JWT antigo passaria e nunca poderia ser revogado.
+  if (!Number.isFinite(emitidoEm)) return false;
+
   const [row] = await db
     .select({ passwordChangedAt: users.passwordChangedAt })
     .from(users)

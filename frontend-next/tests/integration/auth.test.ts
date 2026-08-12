@@ -85,6 +85,9 @@ describe("reset de senha", () => {
 
     expect(await tokenAindaValido(account.userId, emitidoEm)).toBe(false);
 
+    // Token sem o claim (emitido antes desta versão) não pode passar batido.
+    expect(await tokenAindaValido(account.userId, Number(undefined))).toBe(false);
+
     const remainingSessions = await db.select().from(sessions).where(eq(sessions.userId, account.userId));
     expect(remainingSessions).toHaveLength(0);
 
