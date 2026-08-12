@@ -144,6 +144,7 @@ export async function signOutAction(): Promise<void> {
     await logAudit(session.user.id, "logout", {});
   }
   await signOut({ redirect: false });
+  redirect("/");
 }
 
 const requestResetSchema = z.object({ email: z.string().email() });
