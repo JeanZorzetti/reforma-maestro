@@ -1,9 +1,16 @@
 import Link from "next/link";
+import { Metadata } from "next";
 import { blogPosts } from "@/data/blog-posts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "Blog do Reforma Maestro | Dicas de controle financeiro de obra",
+    description: "Dicas práticas, tutoriais e alertas para você reformar sem estourar o orçamento e sem dor de cabeça.",
+    alternates: { canonical: "/blog" },
+};
 
 export default function BlogPage() {
     return (

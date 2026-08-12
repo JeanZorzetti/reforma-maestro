@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { blogPosts } from "@/data/blog-posts";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -16,6 +17,24 @@ export async function generateStaticParams() {
     return blogPosts.map((post) => ({
         slug: post.slug,
     }));
+}
+
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+    const { slug } = await params;
+    const post = blogPosts.find((p) => p.slug === slug);
+    if (!post) return {};
+
+    return {
+        title: `${post.title} | Reforma Maestro`,
+        description: post.excerpt,
+        alternates: { canonical: `/blog/${post.slug}` },
+        openGraph: {
+            title: post.title,
+            description: post.excerpt,
+            type: "article",
+            publishedTime: post.date,
+        },
+    };
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
